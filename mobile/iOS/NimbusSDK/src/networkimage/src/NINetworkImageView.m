@@ -22,13 +22,15 @@
 #import "AFNetworking.h"
 #import "NIImageProcessing.h"
 
-
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 @interface NINetworkImageView()
-@property (nonatomic, readwrite, retain) NSOperation* operation;
+@property (nonatomic, readwrite, NI_STRONG) NSOperation* operation;
 @end
 
 
@@ -392,6 +394,12 @@
        } failure:^(NSURLRequest *errorRequest, NSHTTPURLResponse *response, NSError *error) {
          [self _didFailToLoadWithError:error];
        }];
+        
+      [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+          if ([self.delegate respondsToSelector:@selector(networkImageView:readBytes:totalBytes:)]) {
+              [self.delegate networkImageView:self readBytes:totalBytesRead totalBytes:totalBytesExpectedToRead];
+          }
+      }];
 
       // We handle image scaling ourselves in the image processing method, so we need to disable
       // AFNetworking from doing so as well.
@@ -493,7 +501,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)isLoading {
-  return nil != self.operation;
+  return [self.operation isExecuting];
 }
 
 

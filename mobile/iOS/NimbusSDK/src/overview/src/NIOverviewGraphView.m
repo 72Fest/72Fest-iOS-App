@@ -18,6 +18,9 @@
 
 #import <QuartzCore/QuartzCore.h>
 
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,6 +47,9 @@
 
   CGFloat xRange = [self.dataSource graphViewXRange:self];
   CGFloat yRange = [self.dataSource graphViewYRange:self];
+  if (xRange == 0 || yRange == 0) {
+    return;
+  }
 
   [self.dataSource resetPointIterator];
 

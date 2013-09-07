@@ -28,12 +28,33 @@
 // UITextAlignmentJustify is deprecated in iOS 6.0. Please use NSTextAlignmentJustified instead.
 #endif
 
+#if defined __cplusplus
+extern "C" {
+#endif
+
+/**
+ * Calculates the ideal dimensions of an attributed string fitting a given size.
+ *
+ * This calculation is performed off the raw attributed string so this calculation may differ
+ * slightly from NIAttributedLabel's use of it due to lack of link and image attributes.
+ *
+ * This method is used in NIAttributedLabel to calculate its size after all additional
+ * styling attributes have been set.
+ */
+CGSize NISizeOfAttributedStringConstrainedToSize(NSAttributedString *attributedString, CGSize size, NSInteger numberOfLines);
+
+#if defined __cplusplus
+};
+#endif
+
 // Vertical alignments for NIAttributedLabel.
 typedef enum {
   NIVerticalTextAlignmentTop = 0,
   NIVerticalTextAlignmentMiddle,
   NIVerticalTextAlignmentBottom,
 } NIVerticalTextAlignment;
+
+extern NSString * const kNILinkAttributeName;
 
 @protocol NIAttributedLabelDelegate;
 
@@ -42,21 +63,28 @@ typedef enum {
  *
  * Differences between UILabel and NIAttributedLabel:
  *
- * - @c UILineBreakModeHeadTruncation, @c UILineBreakModeTailTruncation, and
- *   @c UILineBreakModeMiddleTruncation only apply to single lines and will not wrap the label
- *   regardless of the @c numberOfLines property. To wrap lines with any of these line break modes
- *   you must explicitly add newline characters to the string.
+ * - @c NSLineBreakByTruncatingHead and @c NSLineBreakByTruncatingMiddle only apply to single
+ *   lines and will not wrap the label regardless of the @c numberOfLines property. To wrap lines
+ *   with any of these line break modes you must explicitly add newline characters to the string.
  * - When you assign an NSString to the text property the attributed label will create an
  *   attributed string that inherits all of the label's current styles.
  * - Text is aligned vertically to the top of the bounds by default rather than centered. You can
  *   change this behavior using @link NIAttributedLabel::verticalTextAlignment verticalTextAlignment@endlink.
+ * - CoreText fills the frame with glyphs until they no longer fit. This is an important difference
+ *   from UILabel because it means that CoreText will not add any glyphs that won't fit in the
+ *   frame, while UILabel does. This can result in empty NIAttributedLabels if your frame is too
+ *   small where UILabel would draw clipped text. It is recommended that you use sizeToFit to get
+ *   the correct dimensions of the attributed label before setting the frame.
+ *
+ * NIAttributedLabel implements the UIAccessibilityContainer methods to expose each link as an
+ * accessibility item.
  *
  *      @ingroup NimbusAttributedLabel
  */
 @interface NIAttributedLabel : UILabel
 
 // When building for iOS 6.0 and higher use attributedText.
-@property (nonatomic, copy) NSAttributedString* attributedString NS_DEPRECATED_IOS(2_0, 6_0);
+@property (nonatomic, copy) NSAttributedString* attributedString;
 
 @property (nonatomic, assign) BOOL autoDetectLinks; // Default: NO
 @property (nonatomic, assign) NSTextCheckingType dataDetectorTypes; // Default: NSTextCheckingTypeLink
@@ -65,17 +93,19 @@ typedef enum {
 - (void)addLink:(NSURL *)urlLink range:(NSRange)range;
 - (void)removeAllExplicitLinks; // Removes all links that were added by addLink:range:. Does not remove autodetected links.
 
-@property (nonatomic, retain) UIColor* linkColor; // Default: [UIColor blueColor]
-@property (nonatomic, retain) UIColor* highlightedLinkBackgroundColor; // Default: [UIColor colorWithWhite:0.5 alpha:0.5
+@property (nonatomic, NI_STRONG) UIColor* linkColor; // Default: [UIColor blueColor]
+@property (nonatomic, NI_STRONG) UIColor* highlightedLinkBackgroundColor; // Default: [UIColor colorWithWhite:0.5 alpha:0.5
 @property (nonatomic, assign) BOOL linksHaveUnderlines; // Default: NO
-@property (nonatomic, retain) NSDictionary *attributesForLinks; // Default: nil
+@property (nonatomic, copy) NSDictionary *attributesForLinks; // Default: nil
+@property (nonatomic, copy) NSDictionary *attributesForHighlightedLink; // Default: nil
+@property (nonatomic, assign) CGFloat lineHeight;
 
 @property (nonatomic, assign) NIVerticalTextAlignment verticalTextAlignment; // Default: NIVerticalTextAlignmentTop
 @property (nonatomic, assign) CTUnderlineStyle underlineStyle;
 @property (nonatomic, assign) CTUnderlineStyleModifiers underlineStyleModifier;
 @property (nonatomic, assign) CGFloat shadowBlur; // Default: 0
 @property (nonatomic, assign) CGFloat strokeWidth;
-@property (nonatomic, retain) UIColor* strokeColor;
+@property (nonatomic, NI_STRONG) UIColor* strokeColor;
 @property (nonatomic, assign) CGFloat textKern;
 
 - (void)setTextColor:(UIColor *)textColor range:(NSRange)range;
@@ -85,7 +115,11 @@ typedef enum {
 - (void)setStrokeColor:(UIColor *)color range:(NSRange)range;
 - (void)setTextKern:(CGFloat)kern range:(NSRange)range;
 
-@property (nonatomic, assign) IBOutlet id<NIAttributedLabelDelegate> delegate;
+- (void)insertImage:(UIImage *)image atIndex:(NSInteger)index;
+- (void)insertImage:(UIImage *)image atIndex:(NSInteger)index margins:(UIEdgeInsets)margins;
+- (void)insertImage:(UIImage *)image atIndex:(NSInteger)index margins:(UIEdgeInsets)margins verticalTextAlignment:(NIVerticalTextAlignment)verticalTextAlignment;
+
+@property (nonatomic, NI_WEAK) IBOutlet id<NIAttributedLabelDelegate> delegate;
 @end
 
 /**
@@ -100,18 +134,18 @@ typedef enum {
 /** @name Managing Selections */
 
 /**
- * Informs the delegate that a data detector result has been selected.
+ * Informs the receiver that a data detector result has been selected.
  *
- *      @param attributedLabel An attributed label informing the delegate of the selection.
+ *      @param attributedLabel An attributed label informing the receiver of the selection.
  *      @param result The data detector result that was selected.
  *      @param point The point within @c attributedLabel where the result was tapped.
  */
 - (void)attributedLabel:(NIAttributedLabel *)attributedLabel didSelectTextCheckingResult:(NSTextCheckingResult *)result atPoint:(CGPoint)point;
 
 /**
- * Asks the delegate whether an action sheet should be displayed at the given point.
+ * Asks the receiver whether an action sheet should be displayed at the given point.
  *
- * If this method is not implemented by the delegate then @c actionSheet will always be displayed.
+ * If this method is not implemented by the receiver then @c actionSheet will always be displayed.
  *
  * @c actionSheet will be populated with actions that match the data type that was selected. For
  * example, a link will have the actions "Open in Safari" and "Copy URL". A phone number will have
@@ -150,7 +184,7 @@ typedef enum {
 /** @name Accessing and Detecting Links */
 
 /**
- * Whether to automatically detect links in the string.
+ * A Booelan value indicating whether to automatically detect links in the string.
  *
  * By default this is disabled.
  *
@@ -211,8 +245,8 @@ typedef enum {
 /**
  * The text color of detected links.
  *
- * The default text is [UIColor blueColor]. If linkColor is assigned nil then the link text color
- * attributes will not be changed.
+ * The default color is [UIColor blueColor]. If linkColor is assigned nil then the link attributes
+ * will not be changed.
  *
  *  @image html NIAttributedLabelLinkAttributes.png "Link attributes"
  *
@@ -242,12 +276,21 @@ typedef enum {
  */
 
 /**
- * A dictionary of attributes to apply to links.
+ * A dictionary of CoreText attributes to apply to links.
  *
  * This dictionary must contain CoreText attributes. These attributes are applied after the color
- * and link styles have been applied to the link.
+ * and underline styles have been applied to the link.
  *
  *      @fn NIAttributedLabel::attributesForLinks
+ */
+
+/**
+ * A dictionary of CoreText attributes to apply to the highlighted link.
+ *
+ * This dictionary must contain CoreText attributes. These attributes are applied after
+ * attributesForLinks have been applied to the highlighted link.
+ *
+ *      @fn NIAttributedLabel::attributesForHighlightedLink
  */
 
 /** @name Modifying Rich Text Styles for All Text */
@@ -265,7 +308,7 @@ typedef enum {
  */
 
 /**
- * The underline style for the whole text.
+ * The underline style for the entire label.
  *
  * By default this is @c kCTUnderlineStyleNone.
  *
@@ -275,7 +318,7 @@ typedef enum {
  */
 
 /**
- * The underline style modifier for the whole text.
+ * The underline style modifier for the entire label.
  *
  * By default this is @c kCTUnderlinePatternSolid.
  *
@@ -309,6 +352,16 @@ typedef enum {
  * By default this is nil.
  *
  *      @fn NIAttributedLabel::strokeColor
+ */
+
+/**
+ * Sets the line height for the text.
+ *
+ * By default this is zero.
+ *
+ * Setting this value to zero will make the label use the default line height for the text's font.
+ *
+ *      @fn NIAttributedLabel::lineHeight
  */
 
 /**
@@ -370,13 +423,51 @@ typedef enum {
  *      @fn NIAttributedLabel::setTextKern:range:
  */
 
+/** @name Adding Inline Images */
+
+/**
+ * Inserts the given image inline at the given index in the receiver's text.
+ *
+ * The image will have no margins.
+ * The image's vertical text alignment will be NIVerticalTextAlignmentBottom.
+ *
+ *      @param image The image to add to the receiver.
+ *      @param index The index into the receiver's text at which to insert the image.
+ *      @fn NIAttributedLabel::insertImage:atIndex:
+ */
+
+/**
+ * Inserts the given image inline at the given index in the receiver's text.
+ *
+ * The image's vertical text alignment will be NIVerticalTextAlignmentBottom.
+ *
+ *      @param image The image to add to the receiver.
+ *      @param index The index into the receiver's text at which to insert the image.
+ *      @param margins The space around the image on all sides in points.
+ *      @fn NIAttributedLabel::insertImage:atIndex:margins:
+ */
+
+/**
+ * Inserts the given image inline at the given index in the receiver's text.
+ *
+ *      @attention
+ *      Images do not currently support NIVerticalTextAlignmentTop and the receiver will fire
+ *      multiple debug assertions if you attempt to use it.
+ *
+ *      @param image The image to add to the receiver.
+ *      @param index The index into the receiver's text at which to insert the image.
+ *      @param margins The space around the image on all sides in points.
+ *      @param verticalTextAlignment The position of the text relative to the image.
+ *      @fn NIAttributedLabel::insertImage:atIndex:margins:verticalTextAlignment:
+ */
+
 /** @name Accessing the Delegate */
 
 /**
  * The delegate of the attributed-label object.
  *
  * The delegate must adopt the NIAttributedLabelDelegate protocol. The NIAttributedLabel class,
- * which does not retain the delegate, invokes each protocol method the delegate implements.
+ * which does not strong the delegate, invokes each protocol method the delegate implements.
  *
  *      @fn NIAttributedLabel::delegate
  */

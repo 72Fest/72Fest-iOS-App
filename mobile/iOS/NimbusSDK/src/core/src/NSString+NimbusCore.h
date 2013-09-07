@@ -22,15 +22,11 @@
 // Documentation for these additions is found in the .m file.
 @interface NSString (NimbusCore)
 
-#pragma mark Checking String Contents
-
-- (BOOL)isWhitespaceAndNewlines;
-
 #pragma mark Display
 
 - (CGFloat)heightWithFont: (UIFont*)font
        constrainedToWidth: (CGFloat)width
-            lineBreakMode: (UILineBreakMode)lineBreakMode;
+            lineBreakMode: (NSLineBreakMode)lineBreakMode;
 
 #pragma mark URL queries
 

@@ -29,10 +29,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [_photosList release];
-    [super dealloc];
-}
 
 - (void)viewDidLoad
 {
@@ -101,7 +97,7 @@
         
     }
     
-    [imgDict retain]; //Is this stuff needed?
+     //Is this stuff needed?
     
     //TODO: cache large photo as well
     dispatch_queue_t largePhotoQueue = dispatch_queue_create("Large Photo Queue", NULL);
@@ -118,15 +114,11 @@
             //we found it in the disk cache, lets save the pull from the
             //network and grab it from the disk cache
             imgData = [[DiskCacheManager defaultManager] retrieveFromCache:[[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent]];
-            if (imgData) {
-                [imgData retain];
-            }
         } else {
             //pull it from the network, but then save to the cache
             imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[imgDict valueForKey:XML_TAG_FULL_URL]]];
             
             if (imgData) {
-                [imgData retain];
                 [[DiskCacheManager defaultManager] saveToCache:imgData withFilename:[[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent]];
             }
         }
@@ -135,12 +127,9 @@
         
         if (loadedImg == nil) {
             NSLog(@"*****PhotDetailView:loadedImg == nil!");
-            [imgData release];
             return;
         }
         
-        [imgData release];
-        [loadedImg retain];
         
         dispatch_async(dispatch_get_main_queue(), ^ {
             
@@ -149,11 +138,9 @@
                                     photoSize: NIPhotoScrollViewPhotoSizeOriginal];
         });
         
-        [loadedImg release];
         *isLoading = NO;
     });
     
-    [imgDict release];
     
     dispatch_release(largePhotoQueue);
         

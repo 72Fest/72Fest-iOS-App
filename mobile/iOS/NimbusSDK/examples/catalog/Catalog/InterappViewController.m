@@ -57,8 +57,9 @@
 
 // This method is the short form of adding a cell object with an action.
 - (id)objectWithAction:(BOOL (^)())action title:(NSString *)title subtitle:(NSString *)subtitle {
-  return [self.actions attachTapAction:
-          ^BOOL(id object, UIViewController *controller) {
+  return [self.actions attachToObject:[NISubtitleCellObject objectWithTitle:title subtitle:subtitle]
+                             tapBlock:
+          ^BOOL(id object, UIViewController *controller, NSIndexPath* indexPath) {
             if (!action()) {
               UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"We've givin' her all she's got, cap'n!"
                                                               message:@"The app you tried to open does not appear to be installed on this device."
@@ -68,7 +69,7 @@
               [alert show];
             }
             return YES;
-          } toObject:[NISubtitleCellObject objectWithTitle:title subtitle:subtitle]];
+          }];
 }
 
 // Prepares an Instagram image for sharing and then uses the UIDocumentInteractionController
@@ -96,7 +97,7 @@
   if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
     self.title = @"All Actions";
     
-    _actions = [[NITableViewActions alloc] initWithController:self];
+    _actions = [[NITableViewActions alloc] initWithTarget:self];
 
     NSArray* sectionedObjects =
     [NSArray arrayWithObjects:
