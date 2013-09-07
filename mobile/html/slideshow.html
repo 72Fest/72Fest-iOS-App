@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/vendor/jquery.mobile.min.css" />
+        <link rel="stylesheet" href="css/vendor/swipe.css" />
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <style>
+            .swipe {
+                overflow: hidden;
+                visibility:hidden;
+                position: relative;
+            }
+            .swipe-wrap {
+                overflow: hidden;
+                position: relative;
+            }
+            .swipe-wrap > div {
+                float: left;
+                width:100%;
+                position; relative;
+            }
+        </style>
+
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="js/vendor/jquery.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div data-role="page">
+            <div data-role="content">
+                <div id="slider" class='swipe'>
+                    <div id="swipe-wrap" class='swipe-wrap'>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/vendor/swipe.js"></script>
+        <script>
+            $(document).ready(function() {
+                $.post('/list', function(data) {
+                    var curData;
+                    var curElement;
+                    for (idx = 0; idx < data.length; idx++) {
+                        curData = data[idx];
+                        alert(curData, curData.photo_path);
+                        curElement = "<div class='galleryPhotoContainer'>" +
+                            "<a href='/photos/" + curData.photo_path  + "'>" +
+                            "<img class='galleryPhoto' src='/photos/" + curData.large_thumb_path + "'/>" +
+                            "</a></div>";
+
+                            
+                        $("#swipe-wrap").append(curElement);
+                    }
+
+                    window.swipe = new Swipe(document.getElementById('slider'), {
+                        startSlide: 2,
+                        speed: 400,
+                        auto: 3000,
+                        continuous: true
+                    });
+                });
+            });
+
+        </script>
+    </body>
+</html>

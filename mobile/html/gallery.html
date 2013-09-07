@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/vendor/jquery.mobile.min.css" />
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/gallery.css">
+        <link rel="stylesheet" href="js/vendor/fancybox/jquery.fancybox.css"  media="screen" />
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="js/vendor/jquery.min.js"></script>
+        <script src="js/vendor/jquery.mobile.min.js"></script>
+        <script src="js/vendor/jquery.lazyload.min.js"></script>
+        <script src="js/vendor/fancybox/jquery.fancybox.js"></script>
+        <script src="js/vendor/socket.io.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div data-role="page">
+            <div data-role="header">
+                <h1>Photo Gallery</h1>
+            </div>
+            <div data-role="content" class="galleryContent">
+                <div id="galleryContainer">
+                </div>
+            </div>
+            <div data-role="footer" data-id="footerId" data-position="fixed">
+               <div data-role="navbar">
+                   <ul>
+                       <li><a href="/gallery" rel="external"  data-theme="b">Gallery</a></li>
+                       <li><a href="/submit" rel="external" data-theme="a">Share</a></li>
+                   </ul>
+               </div>
+            </div>
+        </div>
+
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            $(document).ready(function() {
+                //setup image popup
+                $(".galleryPhotoLink").fancybox();
+
+
+                var url="/list?no_cache=" + new Date().getTime();
+                $.post(url, function(data) {
+                    var curData;
+                    var curElement;
+                    for (idx = 0; idx < data.length; idx++) {
+                        curData = data[idx];
+                        curElement = genPhotoDiv(curData, true);
+                            
+                        $("#galleryContainer").append(curElement);
+                    }
+                    //setup lazy loading
+                    $(".galleryPhoto").lazyload();
+                });
+
+                //set up web socket
+                var socket = io.connect('http://' + window.location.hostname + ':8080');
+                socket.on('photoUpdateEvent', function (data) {
+                    console.log("we got a new photo");
+                    newPhoto = genPhotoDiv(data, false);
+                    //add photo to begining of the gallery
+                    $("#galleryContainer").prepend(newPhoto);
+                    //alert("This is a new photo!" + data.thumb_path);
+                });
+            });
+
+            function genPhotoDiv(photoData, isLazy) {
+                photoDiv = "<div class='galleryPhotoContainer'>" +
+                           "<a href='/photos/" + photoData.large_thumb_path  + 
+                           "' data-ajax='false' class='galleryPhotoLink'>" +
+                           "<img class='galleryPhoto' " +
+                           ((isLazy) ?
+                           "src='assets/loadingAnimation.gif' data-original='/photos/" :
+                           "src='/photos/" 
+                           ) + 
+                           photoData.thumb_path + "'/>" + "</a></div>";
+
+                return photoDiv;
+            }
+        </script>
+    </body>
+</html>

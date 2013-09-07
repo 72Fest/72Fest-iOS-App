@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/vendor/jquery.mobile.min.css" />
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/submit.css">
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="js/vendor/jquery.min.js"></script>
+        <script src="js/jquery.mobile.config.js"></script>
+        <script src="js/vendor/jquery.mobile.min.js"></script>
+        <script src="js/vendor/jquery.form.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+
+        <div data-role="page">
+            <div data-role="header">
+                <h1>Share a Photo</h1>
+            </div>
+            <div data-role="content">
+                <div data-role="popup" data-position-to=window class="ui-content" id="popupSuccess">
+                    <p>Your upload succeeded!<p>
+                </div>
+                <form id="photoForm" type='POST' enctype="multipart/form-data">
+                    <h2>Select a photo to share:</h2> 
+                    <input data-role="button" id="photo" name="photoData" type="file" accept="image/*;capture=camera"/>
+                    <br/>
+                    <br/>
+                    <!---
+                    <br/>
+                    Enter an optional message: <br/>
+                    <input id="photoCaption" type="text" name="photoCaption"/>
+                    -->
+                    <br/>
+
+                    <input data-role="button" data-theme="d" data-ajax="false" id="photoSubmitBtn" type="submit" value="Share Photo"/>
+                </form>
+                <div id="statusBarContainer">
+                    <div id="statusBar"></div>
+                    <div id="statusBarText">0</div>
+                </div>
+           </div>
+           <div data-role="footer"  data-id="footerId" data-position="fixed">
+               <div data-role="navbar">
+                   <ul>
+                       <li><a href="/gallery" rel="external"  data-theme="a">Gallery</a></li>
+                       <li><a href="/submit" rel="external" data-theme="b">Share</a></li>
+                   </ul>
+               </div>
+           </div>
+       </div>
+
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            var baseFormURL = "/upload";
+            function clearForm() {
+                $("$photoCaption").value = "";
+            }
+
+            function genPostURL() {
+                return baseFormURL + "?nocache=" + new Date().getTime();
+            }
+
+            $(document).ready(function() {
+                var formOptions =  {
+                    type:"POST",
+                    url:genPostURL(),
+                    target:'#statusBarText',
+                    resetForm:true,
+                    beforeSend:function() {
+                        //display status bar
+                        $('#statusBarContainer').css("display", "block");
+                        $('#statusBar').css("width", 0);
+                        $('#statusBarText').html("0");
+                    }, 
+                    uploadProgress: formUploadProgress,
+                    success:formSuccess 
+                };
+
+                function formSuccess(data) {
+                    formOptions.url = genPostURL();
+                    //hide status bar
+                    $('#statusBarContainer').css("display", "none");
+
+                    //reset the form options to avoid caching
+                    $('#photoForm').ajaxForm(formOptions);
+                    $('#popupSuccess').popup("open");
+                }
+
+                function formUploadProgress(event, position, total, percentComplete) {
+                    var percentCompleteFloat = parseFloat(percentComplete);
+                    var maxWidth = parseFloat($('#statusBarContainer').css("width"));
+                    var curWidth = maxWidth * (percentCompleteFloat/100.0);
+                    $('#statusBar').css("width", curWidth);
+                    //alert("total:" + maxWidth + " value:" + curWidth);
+                    $('#statusBarText').html(percentComplete + " %");
+                }
+
+                $('#photoForm').ajaxForm(formOptions);
+            });
+        </script>
+    </body>
+</html>
