@@ -16,6 +16,38 @@
 
 #import "NICellCatalog.h"
 
+#import "NimbusCore.h"
+
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+@implementation NIDrawRectBlockCellObject
+
+@synthesize block = _block;
+@synthesize object = _object;
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (id)initWithBlock:(NICellDrawRectBlock)block object:(id)object {
+  if ((self = [super initWithCellClass:[NIDrawRectBlockCell class]])) {
+    _block = block;
+    _object = object;
+  }
+  return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++ (id)objectWithBlock:(NICellDrawRectBlock)block object:(id)object {
+  return [[self alloc] initWithBlock:block object:object];
+}
+
+@end
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,6 +118,10 @@
   return [self initWithTitle:title subtitle:subtitle image:nil];
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (id)initWithTitle:(NSString *)title image:(UIImage *)image {
+  return [self initWithTitle:title subtitle:nil image:image];
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)objectWithTitle:(NSString *)title subtitle:(NSString *)subtitle image:(UIImage *)image {
@@ -109,7 +145,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-  if ((self = [super initWithStyle:style reuseIdentifier:[reuseIdentifier stringByAppendingFormat:@"%d", style]])) {
+  if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
   }
   return self;
@@ -138,6 +174,87 @@
     self.detailTextLabel.text = subtitleObject.subtitle;
   }
   return YES;
+}
+
+@end
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+@interface NIDrawRectBlockView : UIView
+@property (nonatomic, copy) NICellDrawRectBlock block;
+@property (nonatomic, NI_STRONG) id object;
+@property (nonatomic, assign) UITableViewCell* cell;
+@end
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+@implementation NIDrawRectBlockView
+
+@synthesize block = _block;
+@synthesize object = _object;
+@synthesize cell = _cell;
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (id)initWithFrame:(CGRect)frame {
+    if ((self = [super initWithFrame:frame])) {
+        self.backgroundColor = [UIColor clearColor];
+    }
+    return self;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)drawRect:(CGRect)rect {
+  if (nil != self.block) {
+    self.block(rect, self.object, self.cell);
+  }
+}
+
+@end
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+@implementation NIDrawRectBlockCell
+
+@synthesize blockView = _blockView;
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+  if ((self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier])) {
+    self.selectionStyle = UITableViewCellSelectionStyleBlue;
+
+    _blockView = [[NIDrawRectBlockView alloc] initWithFrame:self.contentView.bounds];
+    _blockView.autoresizingMask = UIViewAutoresizingFlexibleDimensions;
+    _blockView.contentMode = UIViewContentModeRedraw;
+    [self.contentView addSubview:_blockView];
+
+    [self.textLabel removeFromSuperview];
+    [self.imageView removeFromSuperview];
+    [self.detailTextLabel removeFromSuperview];
+  }
+  return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL)shouldUpdateCellWithObject:(NIDrawRectBlockCellObject *)object {
+  NIDrawRectBlockView* blockView = (NIDrawRectBlockView *)self.blockView;
+  blockView.block = object.block;
+  blockView.object = object.object;
+  blockView.cell = self;
+  [blockView setNeedsDisplay];
+  return YES;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++ (CGFloat)heightForObject:(NIDrawRectBlockCellObject *)object atIndexPath:(NSIndexPath *)indexPath tableView:(UITableView *)tableView {
+  return object.block(tableView.bounds, object.object, nil);
 }
 
 @end

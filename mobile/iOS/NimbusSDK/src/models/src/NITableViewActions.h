@@ -17,148 +17,54 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-typedef BOOL (^NITableViewActionBlock)(id object, UIViewController* controller);
+#import "NimbusCore.h"
 
 /**
- * Returns a block that pushes an instance of the controllerClass onto the navigation stack.
+ * The NITableViewActions class provides an interface for attaching actions to objects in a
+ * NITableViewModel.
  *
- * Allocates an instance of the controller class and calls the init selector.
+ * <h2>Basic Use</h2>
  *
- *      @param controllerClass The class of controller to instantiate.
- */
-NITableViewActionBlock NIPushControllerAction(Class controllerClass);
-
-/**
- * An object that can be used to easily implement actions in table view controllers.
+ * NITableViewModel and NITableViewActions cooperate to solve two related tasks: data
+ * representation and user actions, respectively. A NITableViewModel is composed of objects and
+ * NITableViewActions maintains a mapping of actions to these objects. The object's attached actions
+ * are executed when the user interacts with the cell representing an object.
  *
- * This object provides support for the three primary types of actions that can be taken on cells
- * in UITableViews:
+ * <h3>Delegate Forwarding</h3>
  *
- * - Tapping a cell.
- * - Tapping the details button.
- * - Navigating from a cell.
+ * NITableViewActions will apply the correct accessoryType and selectionStyle values to the cell
+ * when the cell is displayed using a mechanism known as <i>delegate chaining</i>. This effect is
+ * achieved by invoking @link NITableViewActions::forwardingTo: forwardingTo:@endlink on the
+ * NITableViewActions instance and providing the appropriate object to forward to (generally
+ * @c self).
  *
- * This object will automatically apply the correct accessoryType and selectionStyle values to the
- * cell when it is displayed. This allows you to write cells without any knowledge of "actions",
- * greatly simplifying the logic that goes into your cells.
+@code
+tableView.delegate = [self.actions forwardingTo:self];
+@endcode
+ *
+ * The dataSource property of the table view must be an instance of NITableViewModel.
  *
  *      @ingroup ModelTools
  */
-@interface NITableViewActions : NSObject <UITableViewDelegate>
-
-// Designated initializer.
-- (id)initWithController:(UIViewController *)controller;
-
-#pragma mark Mapping Objects 
-
-- (id)attachTapAction:(NITableViewActionBlock)action toObject:(id)object;
-- (id)attachDetailAction:(NITableViewActionBlock)action toObject:(id)object;
-- (id)attachNavigationAction:(NITableViewActionBlock)action toObject:(id)object;
-
-#pragma mark Object State
-
-- (BOOL)isObjectActionable:(id)object;
+@interface NITableViewActions : NIActions <UITableViewDelegate>
 
 #pragma mark Forwarding
 
-@property (nonatomic, readwrite, assign) UITableViewCellSelectionStyle tableViewCellSelectionStyle;
 - (id<UITableViewDelegate>)forwardingTo:(id<UITableViewDelegate>)forwardDelegate;
 - (void)removeForwarding:(id<UITableViewDelegate>)forwardDelegate;
 
+#pragma mark Object state
+
+- (UITableViewCellAccessoryType)accessoryTypeForObject:(id)object;
+- (UITableViewCellSelectionStyle)selectionStyleForObject:(id)object;
+
+#pragma mark Configurable Properties
+
+@property (nonatomic, assign) UITableViewCellSelectionStyle tableViewCellSelectionStyle;
+
 @end
 
-/** @name Creating Table View Actions */
-
-/**
- * Initializes a newly allocated table view actions object with the given controller.
- *
- * This is the designated initializer.
- *
- * The given controller is stored as a weak reference internally.
- *
- *      @param controller The controller that will be used in action blocks.
- *      @fn NITableViewActions::initWithController:
- */
-
-/** @name Mapping Objects */
-
-/**
- * Attaches a tap action to the given object.
- *
- * When a cell with a tap action is displayed, its selectionStyle will be set to
- * tableViewCellSelectionStyle.
- *
- * When a cell with a tap action is tapped, the action block will be executed. If the action block
- * returns YES then the cell will be deselected immediately after the block completes execution.
- * If NO is returned then the selection will remain.
- *
- * You should return NO if you use the tap action to present a modal view controller. This will
- * ensure that the cell selection remains when the modal controller is dismissed, providing a visual
- * cue to the user as to which cell was tapped.
- *
- * If a navigation action also exists for this object then the tap action will be executed first,
- * followed by the navigation action.
- *
- *      @param object The object to attach the action to. This object must be contained within
- *                    an NITableViewModel.
- *      @param action The tap action block.
- *      @returns The object that you attached this action to.
- *      @fn NITableViewActions::attachTapAction:toObject:
- */
-
-/**
- * Attaches a detail action to the given object.
- *
- * When a cell with a detail action is displayed, its accessoryType will be set to
- * UITableViewCellAccessoryDetailDisclosureButton.
- *
- * When a cell's detail button is tapped, the detail action block will be executed. The return
- * value of the block is ignored.
- *
- *      @param object The object to attach the action to. This object must be contained within
- *                    an NITableViewModel.
- *      @param action The detail action block.
- *      @returns The object that you attached this action to.
- *      @fn NITableViewActions::attachDetailAction:toObject:
- */
-
-/**
- * Attaches a navigation action to the given object.
- *
- * When a cell with a navigation action is displayed, its accessoryType will be set to
- * UITableViewCellAccessoryDisclosureIndicator if there is no detail action, otherwise the
- * detail disclosure indicator takes precedence.
- *
- * When a cell with a navigation action is tapped the navigation block will be executed.
- *
- * If a tap action also exists for this object then the tap action will be executed first, followed
- * by the navigation action.
- *
- *      @param object The object to attach the action to. This object must be contained within
- *                    an NITableViewModel.
- *      @param action The navigation action block.
- *      @returns The object that you attached this action to.
- *      @fn NITableViewActions::attachNavigationAction:toObject:
- */
-
-/** @name Object State */
-
-/**
- * Returns whether or not the object has any actions attached to it.
- *
- *      @fn NITableViewActions::isObjectActionable:
- */
-
 /** @name Forwarding */
-
-/**
- * The cell selection style that will be applied to the cell when it is displayed using
- * delegate forwarding.
- *
- * By default this is UITableViewCellSelectionStyleBlue.
- *
- *      @fn NITableViewActions::tableViewCellSelectionStyle
- */
 
 /**
  * Sets the delegate that table view methods should be forwarded to.
@@ -187,4 +93,35 @@ self.tableView.delegate = [self.actions forwardingTo:self.tableView.delegate];
  *
  *      @param forwardDelegate The delegate to stop forwarding invocations to.
  *      @fn NITableViewActions::removeForwarding:
+ */
+
+/** @name Object State */
+
+/**
+ * Returns the accessory type this actions object will apply to a cell for the
+ * given object when it is displayed.
+ *
+ *      @param object The object to determine the accessory type for.
+ *      @returns the accessory type this object's cell will have.
+ *      @fn NITableViewActions::accessoryTypeForObject:
+ */
+
+/**
+ * Returns the cell selection style this actions object will apply to a cell
+ * for the given object when it is displayed.
+ *
+ *      @param object The object to determine the selection style for.
+ *      @returns the selection style this object's cell will have.
+ *      @fn NITableViewActions::selectionStyleForObject:
+ */
+
+/** @name Configurable Properties */
+
+/**
+ * The cell selection style that will be applied to the cell when it is displayed using
+ * delegate forwarding.
+ *
+ * By default this is UITableViewCellSelectionStyleBlue.
+ *
+ *      @fn NITableViewActions::tableViewCellSelectionStyle
  */

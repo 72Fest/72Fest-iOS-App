@@ -18,7 +18,11 @@
 
 #import "NimbusCore.h"
 
-NI_FIX_CATEGORY_BUG(NSAttributedStringNimbusAttributedLabel)
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
+
+NI_FIX_CATEGORY_BUG(NSMutableAttributedStringNimbusAttributedLabel)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,40 +31,66 @@ NI_FIX_CATEGORY_BUG(NSAttributedStringNimbusAttributedLabel)
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setTextAlignment:(CTTextAlignment)textAlignment 
-           lineBreakMode:(CTLineBreakMode)lineBreakMode 
+- (void)setTextAlignment:(CTTextAlignment)textAlignment
+           lineBreakMode:(CTLineBreakMode)lineBreakMode
+              lineHeight:(CGFloat)lineHeight
                    range:(NSRange)range {
-  CTParagraphStyleSetting paragraphStyles[2] = {
-		{.spec = kCTParagraphStyleSpecifierAlignment,
-      .valueSize = sizeof(CTTextAlignment),
-      .value = (const void*)&textAlignment},
-		{.spec = kCTParagraphStyleSpecifierLineBreakMode,
-      .valueSize = sizeof(CTLineBreakMode),
-      .value = (const void*)&lineBreakMode},
-	};
-	CTParagraphStyleRef style = CTParagraphStyleCreate(paragraphStyles, 2);
-  [self addAttribute:(NSString*)kCTParagraphStyleAttributeName
-               value:(__bridge id)style 
-               range:range];
-  CFRelease(style);
+    
+    CTParagraphStyleRef style;
+    
+    if ( lineHeight == 0 ) {
+        CTParagraphStyleSetting paragraphStyles[2] = {
+            {.spec = kCTParagraphStyleSpecifierAlignment,
+                .valueSize = sizeof(CTTextAlignment),
+                .value = (const void*)&textAlignment},
+            {.spec = kCTParagraphStyleSpecifierLineBreakMode,
+                .valueSize = sizeof(CTLineBreakMode),
+                .value = (const void*)&lineBreakMode},
+        };
+        style = CTParagraphStyleCreate(paragraphStyles, 2);
+    } else {
+        CTParagraphStyleSetting paragraphStyles[4] = {
+            {.spec = kCTParagraphStyleSpecifierAlignment,
+                .valueSize = sizeof(CTTextAlignment),
+                .value = (const void*)&textAlignment},
+            {.spec = kCTParagraphStyleSpecifierLineBreakMode,
+                .valueSize = sizeof(CTLineBreakMode),
+                .value = (const void*)&lineBreakMode},
+            {.spec = kCTParagraphStyleSpecifierMinimumLineHeight,
+                .valueSize = sizeof(lineHeight),
+                .value = (const void*)&lineHeight},
+            {.spec = kCTParagraphStyleSpecifierMaximumLineHeight,
+                .valueSize = sizeof(lineHeight),
+                .value = (const void*)&lineHeight},
+        };
+        style = CTParagraphStyleCreate(paragraphStyles, 4);
+    }
+    [self addAttribute:(NSString *)kCTParagraphStyleAttributeName
+                 value:(__bridge id)style
+                 range:range];
+    CFRelease(style);
 }
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setTextAlignment:(CTTextAlignment)textAlignment 
-           lineBreakMode:(CTLineBreakMode)lineBreakMode {
-  [self setTextAlignment:textAlignment 
-           lineBreakMode:lineBreakMode 
-                   range:NSMakeRange(0, self.length)];
+- (void)setTextAlignment:(CTTextAlignment)textAlignment
+           lineBreakMode:(CTLineBreakMode)lineBreakMode
+              lineHeight:(CGFloat)lineHeight {
+    [self setTextAlignment:textAlignment
+             lineBreakMode:lineBreakMode
+                lineHeight:lineHeight
+                     range:NSMakeRange(0, self.length)];
 }
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setTextColor:(UIColor*)color range:(NSRange)range {
-  if (nil != color) {
+  if (nil != color.CGColor) {
     [self removeAttribute:(NSString *)kCTForegroundColorAttributeName range:range];
 
-    [self addAttribute:(NSString*)kCTForegroundColorAttributeName
+    [self addAttribute:(NSString *)kCTForegroundColorAttributeName
                  value:(id)color.CGColor
                  range:range];
   }
@@ -79,8 +109,10 @@ NI_FIX_CATEGORY_BUG(NSAttributedStringNimbusAttributedLabel)
     [self removeAttribute:(NSString*)kCTFontAttributeName range:range];
 
     CTFontRef fontRef = CTFontCreateWithName((__bridge CFStringRef)font.fontName, font.pointSize, nil);
-    [self addAttribute:(__bridge NSString*)kCTFontAttributeName value:(__bridge id)fontRef range:range];
-    CFRelease(fontRef);
+    if (nil != fontRef) {
+      [self addAttribute:(__bridge NSString *)kCTFontAttributeName value:(__bridge id)fontRef range:range];
+      CFRelease(fontRef);
+    }
   }
 }
 
@@ -95,8 +127,8 @@ NI_FIX_CATEGORY_BUG(NSAttributedStringNimbusAttributedLabel)
 - (void)setUnderlineStyle:(CTUnderlineStyle)style
                  modifier:(CTUnderlineStyleModifiers)modifier
                     range:(NSRange)range {
-  [self removeAttribute:(NSString*)kCTUnderlineColorAttributeName range:range]; 
-  [self addAttribute:(NSString*)kCTUnderlineStyleAttributeName 
+  [self removeAttribute:(NSString *)kCTUnderlineColorAttributeName range:range]; 
+  [self addAttribute:(NSString *)kCTUnderlineStyleAttributeName 
                value:[NSNumber numberWithInt:(style|modifier)]
                range:range];
 }
@@ -114,7 +146,7 @@ NI_FIX_CATEGORY_BUG(NSAttributedStringNimbusAttributedLabel)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setStrokeWidth:(CGFloat)width range:(NSRange)range {
   [self removeAttribute:(NSString*)kCTStrokeWidthAttributeName range:range]; 
-  [self addAttribute:(NSString*)kCTStrokeWidthAttributeName 
+  [self addAttribute:(NSString *)kCTStrokeWidthAttributeName 
                value:[NSNumber numberWithFloat:width] 
                range:range];
 }
@@ -128,10 +160,10 @@ NI_FIX_CATEGORY_BUG(NSAttributedStringNimbusAttributedLabel)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setStrokeColor:(UIColor *)color range:(NSRange)range {
-  if (nil != color) {
-    [self removeAttribute:(NSString*)kCTStrokeColorAttributeName range:range];
+  if (nil != color.CGColor) {
+    [self removeAttribute:(NSString *)kCTStrokeColorAttributeName range:range];
 
-    [self addAttribute:(NSString*)kCTStrokeColorAttributeName
+    [self addAttribute:(NSString *)kCTStrokeColorAttributeName
                  value:(id)color.CGColor 
                  range:range];
   }
@@ -146,8 +178,8 @@ NI_FIX_CATEGORY_BUG(NSAttributedStringNimbusAttributedLabel)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setKern:(CGFloat)kern range:(NSRange)range {
-  [self removeAttribute:(NSString*)kCTKernAttributeName range:range]; 
-  [self addAttribute:(NSString*)kCTKernAttributeName 
+  [self removeAttribute:(NSString *)kCTKernAttributeName range:range]; 
+  [self addAttribute:(NSString *)kCTKernAttributeName
                value:[NSNumber numberWithFloat:kern] 
                range:range];
 }

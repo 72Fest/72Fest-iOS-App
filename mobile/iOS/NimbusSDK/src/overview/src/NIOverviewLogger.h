@@ -18,7 +18,9 @@
 
 #import "NimbusCore.h"
 
+extern NSString* const NIOverviewLoggerDidAddDeviceLog;
 extern NSString* const NIOverviewLoggerDidAddConsoleLog;
+extern NSString* const NIOverviewLoggerDidAddEventLog;
 
 @class NIOverviewDeviceLogEntry;
 @class NIOverviewConsoleLogEntry;
@@ -40,6 +42,7 @@ extern NSString* const NIOverviewLoggerDidAddConsoleLog;
   NILinkedList* _consoleLogs;
   NILinkedList* _eventLogs;
   NSTimeInterval _oldestLogAge;
+  NSTimer* _heartbeatTimer;
 }
 
 #pragma mark Configuration Settings /** @name Configuration Settings */
@@ -52,6 +55,9 @@ extern NSString* const NIOverviewLoggerDidAddConsoleLog;
  * By default this is 1 minute.
  */
 @property (nonatomic, readwrite, assign) NSTimeInterval oldestLogAge;
+
+
++ (NIOverviewLogger*)sharedLogger;
 
 
 #pragma mark Adding Log Entries /** @name Adding Log Entries */
@@ -85,21 +91,21 @@ extern NSString* const NIOverviewLoggerDidAddConsoleLog;
  *
  * Log entries are in increasing chronological order.
  */
-@property (nonatomic, readonly, retain) NILinkedList* deviceLogs;
+@property (nonatomic, readonly, NI_STRONG) NILinkedList* deviceLogs;
 
 /**
  * The linked list of console logs.
  *
  * Log entries are in increasing chronological order.
  */
-@property (nonatomic, readonly, retain) NILinkedList* consoleLogs;
+@property (nonatomic, readonly, NI_STRONG) NILinkedList* consoleLogs;
 
 /**
  * The linked list of events.
  *
  * Log entries are in increasing chronological order.
  */
-@property (nonatomic, readonly, retain) NILinkedList* eventLogs;
+@property (nonatomic, readonly, NI_STRONG) NILinkedList* eventLogs;
 
 @end
 

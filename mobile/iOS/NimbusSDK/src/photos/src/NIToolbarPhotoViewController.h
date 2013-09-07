@@ -110,19 +110,22 @@
 
 #pragma mark Views
 
-@property (nonatomic, readonly, strong) UIToolbar* toolbar;
-@property (nonatomic, readonly, strong) NIPhotoAlbumScrollView* photoAlbumView;
-@property (nonatomic, readonly, strong) NIPhotoScrubberView* photoScrubberView;
+@property (nonatomic, readonly, NI_STRONG) UIToolbar* toolbar;
+@property (nonatomic, readonly, NI_STRONG) NIPhotoAlbumScrollView* photoAlbumView;
+@property (nonatomic, readonly, NI_STRONG) NIPhotoScrubberView* photoScrubberView;
+- (void)refreshChromeState;
 
 
 #pragma mark Toolbar Buttons
 
-@property (nonatomic, readonly, strong) UIBarButtonItem* nextButton;
-@property (nonatomic, readonly, strong) UIBarButtonItem* previousButton;
+@property (nonatomic, readonly, NI_STRONG) UIBarButtonItem* nextButton;
+@property (nonatomic, readonly, NI_STRONG) UIBarButtonItem* previousButton;
 
 #pragma mark Subclassing
 
 - (void)setChromeVisibility:(BOOL)isVisible animated:(BOOL)animated;
+- (void)setChromeTitle;
+
 
 @end
 

@@ -19,7 +19,14 @@
 #import "NICSSParser.h"
 #import "NimbusCore.h"
 
+// TODO selected/highlighted states for buttons
+
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
+
 static NSString* const kTextColorKey = @"color";
+static NSString* const kHighlightedTextColorKey = @"-ios-highlighted-color";
 static NSString* const kTextAlignmentKey = @"text-align";
 static NSString* const kFontKey = @"font";
 static NSString* const kFontSizeKey = @"font-size";
@@ -43,6 +50,9 @@ static NSString* const kActivityIndicatorStyleKey = @"-ios-activity-indicator-st
 static NSString* const kAutoresizingKey = @"-ios-autoresizing";
 static NSString* const kTableViewCellSeparatorStyleKey = @"-ios-table-view-cell-separator-style";
 static NSString* const kScrollViewIndicatorStyleKey = @"-ios-scroll-view-indicator-style";
+static NSString* const kPaddingKey = @"padding";
+static NSString* const kHPaddingKey = @"-mobile-hpadding";
+static NSString* const kVPaddingKey = @"-mobile-vpadding";
 
 // This color table is generated on-demand and is released when a memory warning is encountered.
 static NSDictionary* sColorTable = nil;
@@ -54,6 +64,21 @@ static NSDictionary* sColorTable = nil;
 + (UITextAlignment)textAlignmentFromCssValues:(NSArray *)cssValues;
 @end
 
+
+// Maintain sanity with a preprocessor macro for the common cases
+#define RULE_ELEMENT(name,Name,cssKey,type,converter) \
+static NSString* const k ## Name ## Key = cssKey; \
+-(BOOL)has ## Name { \
+return nil != [_ruleset objectForKey: k ## Name ## Key]; \
+} \
+-(type)name { \
+NIDASSERT([self has ## Name]); \
+if (!_is.cached.Name) { \
+_##name = [[self class] converter:[_ruleset objectForKey:k##Name##Key]]; \
+_is.cached.Name = YES; \
+} \
+return _##name; \
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,6 +123,11 @@ static NSDictionary* sColorTable = nil;
   }
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(id)cssRuleForKey:(NSString *)key
+{
+    return [_ruleset objectForKey:key];
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)hasTextColor {
@@ -118,6 +148,24 @@ static NSDictionary* sColorTable = nil;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+- (BOOL)hasHighlightedTextColor {
+    return nil != [_ruleset objectForKey:kHighlightedTextColorKey];
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (UIColor *)highlightedTextColor {
+  NIDASSERT([self hasHighlightedTextColor]);
+  if (!_is.cached.HighlightedTextColor) {
+    _highlightedTextColor = [[self class] colorFromCssValues:[_ruleset objectForKey:kHighlightedTextColorKey]
+                                      numberOfConsumedTokens:nil];
+    _is.cached.HighlightedTextColor = YES;
+  }
+  return _highlightedTextColor;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)hasTextAlignment {
   return nil != [_ruleset objectForKey:kTextAlignmentKey];
 }
@@ -133,6 +181,56 @@ static NSDictionary* sColorTable = nil;
   return _textAlignment;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(BOOL)hasHorizontalPadding {
+  return nil != [_ruleset objectForKey:kPaddingKey] || nil != [_ruleset objectForKey:kHPaddingKey];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(NICSSUnit)horizontalPadding {
+  NIDASSERT([self hasHorizontalPadding]);
+  NSArray *css = [_ruleset objectForKey:kHPaddingKey];
+  if (css && css.count > 0) {
+    return [NICSSRuleset unitFromCssValues:css];
+  }
+  css = [_ruleset objectForKey:kPaddingKey];
+  if (css && css.count > 1) {
+    return [NICSSRuleset unitFromCssValues:css offset:1];
+  }
+  if (css && css.count == 1) {
+    return [NICSSRuleset unitFromCssValues:css];
+  } else {
+    NICSSUnit unit;
+    NIDASSERT([css count] > 0);
+    unit.type = CSS_PIXEL_UNIT;
+    unit.value = 0;
+    return unit;
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(BOOL)hasVerticalPadding {
+  return nil != [_ruleset objectForKey:kPaddingKey] || nil != [_ruleset objectForKey:kVPaddingKey];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(NICSSUnit)verticalPadding {
+  NIDASSERT([self hasVerticalPadding]);
+  NSArray *css = [_ruleset objectForKey:kVPaddingKey];
+  if (css && css.count > 0) {
+    return [NICSSRuleset unitFromCssValues:css];
+  }
+  css = [_ruleset objectForKey:kPaddingKey];
+  if (css && css.count > 0) {
+    return [NICSSRuleset unitFromCssValues:css];
+  } else {
+    NICSSUnit unit;
+    NIDASSERT([css count] > 0);
+    unit.type = CSS_PIXEL_UNIT;
+    unit.value = 0;
+    return unit;
+  }
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)hasFont {
@@ -229,7 +327,7 @@ static NSDictionary* sColorTable = nil;
   } else if (fontIsItalic && fontIsBold) {
     // There is no easy way to create a bold italic font using the exposed UIFont methods.
     // Please consider using the exact font name instead. E.g. font-name: Helvetica-BoldObliquei
-    NIDASSERT(NO);
+    NIDASSERT(!(fontIsItalic && fontIsBold));
     font = [UIFont systemFontOfSize:fontSize];
 
   } else if (fontIsItalic) {
@@ -301,26 +399,26 @@ static NSDictionary* sColorTable = nil;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (UILineBreakMode)lineBreakMode {
+- (NSLineBreakMode)lineBreakMode {
   NIDASSERT([self hasLineBreakMode]);
   if (!_is.cached.LineBreakMode) {
     NSArray* values = [_ruleset objectForKey:kLineBreakModeKey];
     NIDASSERT([values count] == 1);
     NSString* value = [values objectAtIndex:0];
     if ([value isEqualToString:@"wrap"]) {
-      _lineBreakMode = UILineBreakModeWordWrap;
+      _lineBreakMode = NSLineBreakByWordWrapping;
     } else if ([value isEqualToString:@"character-wrap"]) {
-      _lineBreakMode = UILineBreakModeCharacterWrap;
+      _lineBreakMode = NSLineBreakByCharWrapping;
     } else if ([value isEqualToString:@"clip"]) {
-      _lineBreakMode = UILineBreakModeClip;
+      _lineBreakMode = NSLineBreakByClipping;
     } else if ([value isEqualToString:@"head-truncate"]) {
-      _lineBreakMode = UILineBreakModeHeadTruncation;
+      _lineBreakMode = NSLineBreakByTruncatingHead;
     } else if ([value isEqualToString:@"tail-truncate"]) {
-      _lineBreakMode = UILineBreakModeTailTruncation;
+      _lineBreakMode = NSLineBreakByTruncatingTail;
     } else if ([value isEqualToString:@"middle-truncate"]) {
-      _lineBreakMode = UILineBreakModeMiddleTruncation;
+      _lineBreakMode = NSLineBreakByTruncatingMiddle;
     } else {
-      _lineBreakMode = UILineBreakModeWordWrap;
+      _lineBreakMode = NSLineBreakByWordWrapping;
     }
     _is.cached.LineBreakMode = YES;
   }
@@ -552,6 +650,34 @@ static NSDictionary* sColorTable = nil;
   return _borderWidth;
 }
 
+RULE_ELEMENT(width,Width,@"width",NICSSUnit,unitFromCssValues)
+RULE_ELEMENT(height,Height,@"height",NICSSUnit,unitFromCssValues)
+RULE_ELEMENT(top,Top,@"top",NICSSUnit,unitFromCssValues)
+RULE_ELEMENT(bottom,Bottom,@"bottom",NICSSUnit,unitFromCssValues)
+RULE_ELEMENT(right,Right,@"right",NICSSUnit,unitFromCssValues)
+RULE_ELEMENT(left,Left,@"left",NICSSUnit,unitFromCssValues)
+RULE_ELEMENT(minWidth, MinWidth, @"min-width", NICSSUnit, unitFromCssValues)
+RULE_ELEMENT(minHeight, MinHeight, @"min-height", NICSSUnit, unitFromCssValues)
+RULE_ELEMENT(maxWidth, MaxWidth, @"max-width", NICSSUnit, unitFromCssValues)
+RULE_ELEMENT(maxHeight, MaxHeight, @"max-height", NICSSUnit, unitFromCssValues)
+RULE_ELEMENT(frameHorizontalAlign,FrameHorizontalAlign,@"-mobile-halign",UITextAlignment,textAlignmentFromCssValues)
+RULE_ELEMENT(frameVerticalAlign,FrameVerticalAlign,@"-mobile-valign",UIViewContentMode,verticalAlignFromCssValues)
+RULE_ELEMENT(backgroundStretchInsets,BackgroundStretchInsets,@"-mobile-background-stretch",UIEdgeInsets,edgeInsetsFromCssValues)
+RULE_ELEMENT(backgroundImage,BackgroundImage,@"background-image", NSString*,imageStringFromCssValues)
+RULE_ELEMENT(image, Image, @"-mobile-image", NSString*, imageStringFromCssValues)
+RULE_ELEMENT(visible, Visible, @"visibility", BOOL, visibilityFromCssValues)
+RULE_ELEMENT(titleInsets, TitleInsets, @"-mobile-title-insets", UIEdgeInsets, edgeInsetsFromCssValues)
+RULE_ELEMENT(contentInsets, ContentInsets, @"-mobile-content-insets", UIEdgeInsets, edgeInsetsFromCssValues)
+RULE_ELEMENT(imageInsets, ImageInsets, @"-mobile-image-insets", UIEdgeInsets, edgeInsetsFromCssValues)
+RULE_ELEMENT(relativeToId, RelativeToId, @"-mobile-relative", NSString*, stringFromCssValue)
+RULE_ELEMENT(marginTop, MarginTop, @"margin-top", NICSSUnit, unitFromCssValues)
+RULE_ELEMENT(marginBottom, MarginBottom, @"margin-bottom", NICSSUnit, unitFromCssValues)
+RULE_ELEMENT(marginLeft, MarginLeft, @"margin-left", NICSSUnit, unitFromCssValues)
+RULE_ELEMENT(marginRight, MarginRight, @"margin-right", NICSSUnit, unitFromCssValues)
+RULE_ELEMENT(textKey, TextKey, @"-mobile-text-key", NSString*, stringFromCssValue)
+RULE_ELEMENT(buttonAdjust, ButtonAdjust, @"-ios-button-adjust", NICSSButtonAdjust, buttonAdjustFromCssValue)
+RULE_ELEMENT(verticalAlign, VerticalAlign, @"-mobile-content-valign", UIControlContentVerticalAlignment, controlVerticalAlignFromCssValues)
+RULE_ELEMENT(horizontalAlign, HorizontalAlign, @"-mobile-content-halign", UIControlContentHorizontalAlignment, controlHorizontalAlignFromCssValues)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)hasTintColor {
@@ -931,6 +1057,83 @@ static NSDictionary* sColorTable = nil;
   return sColorTable;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
++ (NICSSUnit)unitFromCssValues:(NSArray*)cssValues {
+  return [self unitFromCssValues:cssValues offset: 0];
+}
+
++ (NICSSUnit)unitFromCssValues:(NSArray*)cssValues offset: (int) offset {
+  NICSSUnit returnUnits;
+  NSString *unitValue = [cssValues objectAtIndex:offset];
+	if ([unitValue caseInsensitiveCompare:@"auto"] == NSOrderedSame) {
+    returnUnits.type = CSS_AUTO_UNIT;
+    returnUnits.value = 0;
+  } else if ([unitValue hasSuffix:@"%"]) {
+    returnUnits.type = CSS_PERCENTAGE_UNIT;
+    NSDecimalNumber *nv = [NSDecimalNumber decimalNumberWithString: [unitValue substringToIndex:unitValue.length-1]];
+    returnUnits.value = [nv decimalNumberByDividingBy:[NSDecimalNumber decimalNumberWithMantissa:1 exponent:2 isNegative:NO]].floatValue;
+  } else if ([unitValue hasSuffix:@"px"]) {
+    returnUnits.type = CSS_PIXEL_UNIT;
+    returnUnits.value = [NSDecimalNumber decimalNumberWithString: [unitValue substringToIndex:unitValue.length-1]].floatValue;
+  } else if ([unitValue isEqualToString:@"0"]) {
+    returnUnits.type = CSS_PIXEL_UNIT;
+    returnUnits.value = 0;
+  } else {
+    NIDERROR(@"Unknown unit: %@", unitValue);
+  }
+  return returnUnits;
+}
+
++(UIViewContentMode) verticalAlignFromCssValues:(NSArray*)cssValues
+{
+  NSString *unitValue = [cssValues objectAtIndex:0];
+	if ([unitValue caseInsensitiveCompare:@"middle"] == NSOrderedSame) {
+    return UIViewContentModeCenter;
+  } else if ([unitValue caseInsensitiveCompare:@"top"] == NSOrderedSame) {
+    return UIViewContentModeTop;
+  }  else if ([unitValue caseInsensitiveCompare:@"bottom"] == NSOrderedSame) {
+    return UIViewContentModeBottom;
+  } else {
+    NIDERROR(@"Unknown vertical alignment: %@", unitValue);
+    return UIViewContentModeCenter;
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++(UIControlContentVerticalAlignment) controlVerticalAlignFromCssValues:(NSArray*)cssValues
+{
+  NSString *unitValue = [cssValues objectAtIndex:0];
+	if ([unitValue caseInsensitiveCompare:@"middle"] == NSOrderedSame) {
+    return UIControlContentVerticalAlignmentCenter;
+  } else if ([unitValue caseInsensitiveCompare:@"top"] == NSOrderedSame) {
+    return UIControlContentVerticalAlignmentTop;
+  }  else if ([unitValue caseInsensitiveCompare:@"bottom"] == NSOrderedSame) {
+    return UIControlContentVerticalAlignmentBottom;
+  } else if ([unitValue caseInsensitiveCompare:@"fill"] == NSOrderedSame) {
+    return UIControlContentVerticalAlignmentFill;
+  } else {
+    NIDERROR(@"Unknown content vertical alignment: %@", unitValue);
+    return UIControlContentVerticalAlignmentCenter;
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++(UIControlContentHorizontalAlignment) controlHorizontalAlignFromCssValues:(NSArray*)cssValues
+{
+  NSString *unitValue = [cssValues objectAtIndex:0];
+	if ([unitValue caseInsensitiveCompare:@"center"] == NSOrderedSame) {
+    return UIControlContentHorizontalAlignmentCenter;
+  } else if ([unitValue caseInsensitiveCompare:@"left"] == NSOrderedSame) {
+    return UIControlContentHorizontalAlignmentLeft;
+  }  else if ([unitValue caseInsensitiveCompare:@"right"] == NSOrderedSame) {
+    return UIControlContentHorizontalAlignmentRight;
+  } else if ([unitValue caseInsensitiveCompare:@"fill"] == NSOrderedSame) {
+    return UIControlContentHorizontalAlignmentFill;
+  } else {
+    NIDERROR(@"Unknown content horizontal alignment: %@", unitValue);
+    return UIControlContentHorizontalAlignmentCenter;
+  }
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (UIColor *)colorFromCssValues:(NSArray *)cssValues numberOfConsumedTokens:(NSInteger *)pNumberOfConsumedTokens {
@@ -955,6 +1158,11 @@ static NSDictionary* sColorTable = nil;
                      [[cssValues objectAtIndex:3] floatValue]);
     *pNumberOfConsumedTokens = 5;
     
+  } else if ([cssValues count] == 1 && [[cssValues objectAtIndex:0] hasPrefix:@"url("]) {
+      NSString *image = [cssValues objectAtIndex:0];
+      image = [image substringWithRange:NSMakeRange(4, image.length - 5)];
+      image = [image stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" '\""]];
+      color = [UIColor colorWithPatternImage:[UIImage imageNamed:image]];
   } else if ([cssValues count] >= 1) {
     NSString* cssString = [cssValues objectAtIndex:0];
 
@@ -976,7 +1184,9 @@ static NSDictionary* sColorTable = nil;
       color = RGBCOLOR(((colorValue & 0xFF0000) >> 16),
                        ((colorValue & 0xFF00) >> 8),
                        (colorValue & 0xFF));
-
+    } else if ([cssString caseInsensitiveCompare:@"none"] == NSOrderedSame) {
+      // Special case to "undo" a color that was set by some other rule
+      color = nil;
     } else {
       color = [[self colorTable] objectForKey:cssString];
     }
@@ -986,6 +1196,85 @@ static NSDictionary* sColorTable = nil;
   return color;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
++(BOOL)visibilityFromCssValues: (NSArray*) values
+{
+  NSString *v = [values objectAtIndex:0];
+  if ([v caseInsensitiveCompare:@"hidden"] == NSOrderedSame) {
+    return NO;
+  }
+  return YES;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++(NSString*)imageStringFromCssValues:(NSArray*) cssValues
+{
+  NSString *bg = [cssValues objectAtIndex:0];
+  if ([bg hasPrefix:@"url("]) {
+    bg = [bg substringWithRange: NSMakeRange(4, bg.length - 5)];
+  }
+  if ([bg characterAtIndex:0] == '\'' || [bg characterAtIndex:0] == '"') {
+    bg = [bg substringWithRange:NSMakeRange(1, bg.length-2)];
+  }
+  return bg;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++(NSString*)stringFromCssValue:(NSArray*) cssValues
+{
+  NSString *s = [cssValues objectAtIndex:0];
+  if ([s characterAtIndex:0] == '\"') {
+    s = [s substringWithRange:NSMakeRange(1, s.length-2)];
+  }
+  return s;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++(UIEdgeInsets)edgeInsetsFromCssValues: (NSArray*) cssValues
+{
+  // top, left, bottom, right
+  NSString *top = [cssValues objectAtIndex:0], *left, *right, *bottom;
+  if (cssValues.count > 1) {
+    left = [cssValues objectAtIndex:1];
+    if (cssValues.count > 2) {
+      bottom = [cssValues objectAtIndex:2];
+      if (cssValues.count > 3) {
+        right = [cssValues objectAtIndex:3];
+      }
+    } else {
+      bottom = top;
+      right = left;
+    }
+  } else {
+    left = right = bottom = top;
+  }
+  return UIEdgeInsetsMake(
+                          [NSDecimalNumber decimalNumberWithString:top].floatValue,
+                          [NSDecimalNumber decimalNumberWithString:left].floatValue,
+                          [NSDecimalNumber decimalNumberWithString:bottom].floatValue,
+                          [NSDecimalNumber decimalNumberWithString:right].floatValue
+                          );
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++(CGFloat)pixelsFromCssValue: (NSArray*) cssValues
+{
+  return [[cssValues objectAtIndex:0] floatValue];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++(NICSSButtonAdjust)buttonAdjustFromCssValue: (NSArray*) cssValues
+{
+  NICSSButtonAdjust a = NICSSButtonAdjustNone;
+  for (NSString* token in cssValues) {
+    if ([token caseInsensitiveCompare:@"highlighted"] == NSOrderedSame) {
+      a |= NICSSButtonAdjustHighlighted;
+    } else if ([token caseInsensitiveCompare:@"disabled"] == NSOrderedSame) {
+      a |= NICSSButtonAdjustDisabled;
+    }
+  }
+  return a;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (UITextAlignment)textAlignmentFromCssValues:(NSArray *)cssValues {
@@ -1000,12 +1289,20 @@ static NSDictionary* sColorTable = nil;
   
   if ([value isEqualToString:@"center"]) {
     textAlignment = UITextAlignmentCenter;
-
   } else if ([value isEqualToString:@"right"]) {
     textAlignment = UITextAlignmentRight;
+  } else if ([value isEqualToString:@"left"]) {
+    textAlignment = UITextAlignmentLeft;
+  } else {
+    NIDERROR(@"Unknown horizontal alignment %@", value);
   }
 
   return textAlignment;
+}
+
+-(NSString *)description
+{
+    return [_ruleset description];
 }
 
 @end

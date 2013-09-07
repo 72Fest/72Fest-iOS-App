@@ -18,8 +18,12 @@
 
 #import "NimbusCore.h"
 
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
+
 @interface NICellFactory()
-@property (nonatomic, readwrite, copy) NSMutableDictionary* objectToCellMap;
+@property (nonatomic, copy) NSMutableDictionary* objectToCellMap;
 @end
 
 
@@ -47,6 +51,11 @@
   UITableViewCell* cell = nil;
 
   NSString* identifier = NSStringFromClass(cellClass);
+
+  if ([cellClass respondsToSelector:@selector(shouldAppendObjectClassToReuseIdentifier)]
+      && [cellClass shouldAppendObjectClassToReuseIdentifier]) {
+    identifier = [identifier stringByAppendingFormat:@".%@", NSStringFromClass([object class])];
+  }
 
   cell = [tableView dequeueReusableCellWithIdentifier:identifier];
 
@@ -90,25 +99,45 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (UITableViewCell *)tableViewModel: (NITableViewModel *)tableViewModel
-                   cellForTableView: (UITableView *)tableView
-                        atIndexPath: (NSIndexPath *)indexPath
-                         withObject: (id)object {
-  UITableViewCell* cell = nil;
-
+- (Class)cellClassFromObject:(id)object {
+  if (nil == object) {
+    return nil;
+  }
   Class objectClass = [object class];
   Class cellClass = [self.objectToCellMap objectForKey:objectClass];
 
-  // Explicit mappings override implicit mappings.
+  BOOL hasExplicitMapping = (nil != cellClass && cellClass != [NSNull class]);
+
+  if (!hasExplicitMapping && [object respondsToSelector:@selector(cellClass)]) {
+    cellClass = [object cellClass];
+  }
+
+  if (nil == cellClass) {
+    cellClass = [NIActions objectFromKeyClass:objectClass map:self.objectToCellMap];
+  }
+
+  return cellClass;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (UITableViewCell *)tableViewModel:(NITableViewModel *)tableViewModel
+                   cellForTableView:(UITableView *)tableView
+                        atIndexPath:(NSIndexPath *)indexPath
+                         withObject:(id)object {
+  UITableViewCell* cell = nil;
+
+  Class cellClass = [self cellClassFromObject:object];
+
+  // If this assertion fires then your app is about to crash. You need to either add an explicit
+  // binding in a NICellFactory object or implement the NICellObject protocol on this object and
+  // return a cell class.
+  NIDASSERT(nil != cellClass);
+
   if (nil != cellClass) {
     cell = [[self class] cellWithClass:cellClass tableView:tableView object:object];
-
-  } else {
-    cell = [[self class] tableViewModel:tableViewModel
-                       cellForTableView:tableView
-                            atIndexPath:indexPath
-                             withObject:object];
   }
+  
   return cell;
 }
 
@@ -119,6 +148,40 @@
 }
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath model:(NITableViewModel *)model {
+  CGFloat height = tableView.rowHeight;
+  id object = [model objectAtIndexPath:indexPath];
+  Class cellClass = [self cellClassFromObject:object];
+  if ([cellClass respondsToSelector:@selector(heightForObject:atIndexPath:tableView:)]) {
+    CGFloat cellHeight = [cellClass heightForObject:object
+                                        atIndexPath:indexPath tableView:tableView];
+    if (cellHeight > 0) {
+      height = cellHeight;
+    }
+  }
+  return height;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++ (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath model:(NITableViewModel *)model {
+  CGFloat height = tableView.rowHeight;
+  id object = [model objectAtIndexPath:indexPath];
+  Class cellClass = nil;
+  if ([object respondsToSelector:@selector(cellClass)]) {
+    cellClass = [object cellClass];
+  }
+  if ([cellClass respondsToSelector:@selector(heightForObject:atIndexPath:tableView:)]) {
+    CGFloat cellHeight = [cellClass heightForObject:object
+                                        atIndexPath:indexPath tableView:tableView];
+    if (cellHeight > 0) {
+      height = cellHeight;
+    }
+  }
+  return height;
+}
+
 @end
 
 
@@ -126,8 +189,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 @interface NICellObject()
-@property (nonatomic, readwrite, assign) Class cellClass;
-@property (nonatomic, readwrite, retain) id userInfo;
+@property (nonatomic, assign) Class cellClass;
+@property (nonatomic, NI_STRONG) id userInfo;
 @end
 
 

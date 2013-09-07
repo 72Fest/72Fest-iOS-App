@@ -21,15 +21,19 @@
 #import "NimbusCore.h"
 #import <objc/runtime.h>
 
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
+
 static const NSInteger kInvalidSelection = NSIntegerMin;
 
 @interface NIRadioGroup()
-@property (nonatomic, readonly, assign) UIViewController* controller;
-@property (nonatomic, readonly, retain) NSMutableDictionary* objectMap;
-@property (nonatomic, readonly, retain) NSMutableSet* objectSet;
-@property (nonatomic, readonly, retain) NSMutableArray* objectOrder;
-@property (nonatomic, readwrite, assign) BOOL hasSelection;
-@property (nonatomic, readonly, retain) NSMutableSet* forwardDelegates;
+@property (nonatomic, readonly, NI_WEAK) UIViewController* controller;
+@property (nonatomic, readonly, NI_STRONG) NSMutableDictionary* objectMap;
+@property (nonatomic, readonly, NI_STRONG) NSMutableSet* objectSet;
+@property (nonatomic, readonly, NI_STRONG) NSMutableArray* objectOrder;
+@property (nonatomic, assign) BOOL hasSelection;
+@property (nonatomic, readonly, NI_STRONG) NSMutableSet* forwardDelegates;
 @end
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,6 +133,20 @@ static const NSInteger kInvalidSelection = NSIntegerMin;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)selector {
+  NSMethodSignature *signature = [super methodSignatureForSelector:selector];
+  if (signature == nil) {
+    for (id delegate in self.forwardDelegates) {
+      if ([delegate respondsToSelector:selector]) {
+        signature = [delegate methodSignatureForSelector:selector];
+      }
+    }
+  }
+  return signature;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)forwardInvocation:(NSInvocation *)invocation {
   BOOL didForward = NO;
 
@@ -156,7 +174,7 @@ static const NSInteger kInvalidSelection = NSIntegerMin;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)removeForwarding:(id<UITableViewDelegate>)forwardDelegate; {
+- (void)removeForwarding:(id<UITableViewDelegate>)forwardDelegate {
   [self.forwardDelegates removeObject:forwardDelegate];
 }
 
@@ -300,12 +318,15 @@ static const NSInteger kInvalidSelection = NSIntegerMin;
       NIRadioGroupController* controller = [[NIRadioGroupController alloc] initWithRadioGroup:self tappedCell:(id<NICell>)[tableView cellForRowAtIndexPath:indexPath]];
       controller.title = self.controllerTitle;
 
+      BOOL shouldPush = YES;
       // Notify the delegate that the controller is about to appear.
       if ([self.delegate respondsToSelector:@selector(radioGroup:radioGroupController:willAppear:)]) {
-        [self.delegate radioGroup:self radioGroupController:controller willAppear:YES];
+        shouldPush = [self.delegate radioGroup:self radioGroupController:controller willAppear:YES];
       }
 
-      [self.controller.navigationController pushViewController:controller animated:YES];
+      if (shouldPush) {
+        [self.controller.navigationController pushViewController:controller animated:YES];
+      }
 
     } else if ([self isObjectInRadioGroup:object]) {
       NSInteger newSelection = [self identifierForObject:object];

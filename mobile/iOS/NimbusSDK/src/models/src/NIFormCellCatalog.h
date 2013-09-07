@@ -34,14 +34,14 @@
 // Designated initializer
 + (id)elementWithID:(NSInteger)elementID;
 
-@property (nonatomic, readwrite, assign) NSInteger elementID;
+@property (nonatomic, assign) NSInteger elementID;
 
 @end
 
 /**
  * A text input form element.
  *
- * This element is similar to HTML's <input type="text">. It presents a simple text field
+ * This element is similar to HTML's &lt;input type="text">. It presents a simple text field
  * control with optional placeholder text. You can assign a delegate to this object that will
  * be assigned to the text field, allowing you to receive text field delegate notifications.
  *
@@ -58,10 +58,10 @@
 + (id)passwordInputElementWithID:(NSInteger)elementID placeholderText:(NSString *)placeholderText value:(NSString *)value delegate:(id<UITextFieldDelegate>)delegate;
 + (id)passwordInputElementWithID:(NSInteger)elementID placeholderText:(NSString *)placeholderText value:(NSString *)value;
 
-@property (nonatomic, readwrite, copy) NSString* placeholderText;
-@property (nonatomic, readwrite, copy) NSString* value;
-@property (nonatomic, readwrite, assign) BOOL isPassword;
-@property (nonatomic, readwrite, assign) id<UITextFieldDelegate> delegate;
+@property (nonatomic, copy) NSString* placeholderText;
+@property (nonatomic, copy) NSString* value;
+@property (nonatomic, assign) BOOL isPassword;
+@property (nonatomic, assign) id<UITextFieldDelegate> delegate;
 
 @end
 
@@ -81,10 +81,10 @@
 + (id)switchElementWithID:(NSInteger)elementID labelText:(NSString *)labelText value:(BOOL)value didChangeTarget:(id)target didChangeSelector:(SEL)selector;
 + (id)switchElementWithID:(NSInteger)elementID labelText:(NSString *)labelText value:(BOOL)value;
 
-@property (nonatomic, readwrite, copy) NSString* labelText;
-@property (nonatomic, readwrite, assign) BOOL value;
-@property (nonatomic, readwrite, assign) id didChangeTarget;
-@property (nonatomic, readwrite, assign) SEL didChangeSelector;
+@property (nonatomic, copy) NSString* labelText;
+@property (nonatomic, assign) BOOL value;
+@property (nonatomic, assign) id didChangeTarget;
+@property (nonatomic, assign) SEL didChangeSelector;
 
 @end
 
@@ -104,12 +104,12 @@
 + (id)sliderElementWithID:(NSInteger)elementID labelText:(NSString *)labelText value:(float)value minimumValue:(float)minimumValue maximumValue:(float)maximumValue didChangeTarget:(id)target didChangeSelector:(SEL)selector;
 + (id)sliderElementWithID:(NSInteger)elementID labelText:(NSString *)labelText value:(float)value minimumValue:(float)minimumValue maximumValue:(float)maximumValue;
 
-@property (nonatomic, readwrite, copy) NSString* labelText;
-@property (nonatomic, readwrite, assign) float value;
-@property (nonatomic, readwrite, assign) float minimumValue;
-@property (nonatomic, readwrite, assign) float maximumValue;
-@property (nonatomic, readwrite, assign) id didChangeTarget;
-@property (nonatomic, readwrite, assign) SEL didChangeSelector;
+@property (nonatomic, copy) NSString* labelText;
+@property (nonatomic, assign) float value;
+@property (nonatomic, assign) float minimumValue;
+@property (nonatomic, assign) float maximumValue;
+@property (nonatomic, NI_WEAK) id didChangeTarget;
+@property (nonatomic, assign) SEL didChangeSelector;
 
 @end
 
@@ -153,11 +153,11 @@
  */
 + (id)segmentedControlElementWithID:(NSInteger)elementID labelText:(NSString *)labelText segments:(NSArray *)segments selectedIndex:(NSInteger)selectedIndex;
 
-@property (nonatomic, readwrite, copy) NSString *labelText;
-@property (nonatomic, readwrite, assign) NSInteger selectedIndex;
-@property (nonatomic, readwrite, retain) NSArray *segments;
-@property (nonatomic, readwrite, assign) id didChangeTarget;
-@property (nonatomic, readwrite, assign) SEL didChangeSelector;
+@property (nonatomic, copy) NSString *labelText;
+@property (nonatomic, assign) NSInteger selectedIndex;
+@property (nonatomic, NI_STRONG) NSArray *segments;
+@property (nonatomic, NI_WEAK) id didChangeTarget;
+@property (nonatomic, assign) SEL didChangeSelector;
 
 @end
 
@@ -199,11 +199,11 @@
  */
 + (id)datePickerElementWithID:(NSInteger)elementID labelText:(NSString *)labelText date:(NSDate *)date datePickerMode:(UIDatePickerMode)datePickerMode;
 
-@property (nonatomic, readwrite, copy) NSString *labelText;
-@property (nonatomic, readwrite, retain) NSDate *date;
-@property (nonatomic, readwrite, assign) UIDatePickerMode datePickerMode;
-@property (nonatomic, readwrite, assign) id didChangeTarget;
-@property (nonatomic, readwrite, assign) SEL didChangeSelector;
+@property (nonatomic, copy) NSString *labelText;
+@property (nonatomic, NI_STRONG) NSDate *date;
+@property (nonatomic, assign) UIDatePickerMode datePickerMode;
+@property (nonatomic, NI_WEAK) id didChangeTarget;
+@property (nonatomic, assign) SEL didChangeSelector;
 
 @end
 
@@ -219,7 +219,7 @@
  *      @ingroup TableCellCatalog
  */
 @interface NIFormElementCell : UITableViewCell <NICell>
-@property (nonatomic, readonly, retain) NIFormElement* element;
+@property (nonatomic, readonly, NI_STRONG) NIFormElement* element;
 @end
 
 /**
@@ -232,7 +232,7 @@
  *      @ingroup TableCellCatalog
  */
 @interface NITextInputFormElementCell : NIFormElementCell <UITextFieldDelegate>
-@property (nonatomic, readonly, retain) UITextField* textField;
+@property (nonatomic, readonly, NI_STRONG) UITextField* textField;
 @end
 
 /**
@@ -245,7 +245,7 @@
  *      @ingroup TableCellCatalog
  */
 @interface NISwitchFormElementCell : NIFormElementCell <UITextFieldDelegate>
-@property (nonatomic, readonly, retain) UISwitch* switchControl;
+@property (nonatomic, readonly, NI_STRONG) UISwitch* switchControl;
 @end
 
 /**
@@ -258,7 +258,7 @@
  *      @ingroup TableCellCatalog
  */
 @interface NISliderFormElementCell : NIFormElementCell <UITextFieldDelegate>
-@property (nonatomic, readonly, retain) UISlider* sliderControl;
+@property (nonatomic, readonly, NI_STRONG) UISlider* sliderControl;
 @end
 
 @interface NITableViewModel (NIFormElementSearch)
@@ -276,7 +276,7 @@
  *      @ingroup TableCellCatalog
  */
 @interface NISegmentedControlFormElementCell : NIFormElementCell
-@property (nonatomic, readonly, retain) UISegmentedControl *segmentedControl;
+@property (nonatomic, readonly, NI_STRONG) UISegmentedControl *segmentedControl;
 @end
 
 /**
@@ -287,7 +287,7 @@
  *      @ingroup TableCellCatalog
  */
 @interface NIDatePickerFormElementCell : NIFormElementCell <UITextFieldDelegate>
-@property (nonatomic, readonly, retain) UITextField *dateField;
-@property (nonatomic, readonly, retain) UIDatePicker *datePicker;
+@property (nonatomic, readonly, NI_STRONG) UITextField *dateField;
+@property (nonatomic, readonly, NI_STRONG) UIDatePicker *datePicker;
 @end
 
