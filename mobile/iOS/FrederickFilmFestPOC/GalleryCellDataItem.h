@@ -12,7 +12,7 @@
 
 - (void)setThumb:(UIImage *)img;
 
-@property (nonatomic, retain) NSIndexPath *itemIndexPath;
-@property (nonatomic, retain) NSURL *fullImageURL;
+@property (nonatomic, strong) NSIndexPath *itemIndexPath;
+@property (nonatomic, strong) NSURL *fullImageURL;
 
 @end

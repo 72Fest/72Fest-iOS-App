@@ -14,8 +14,8 @@
 - (NSArray *)dataItems;
 - (void)clearItems;
 
-@property (nonatomic, retain) IBOutlet GalleryCellDataItem *dataItem0;
-@property (nonatomic, retain) IBOutlet GalleryCellDataItem *dataItem1;
-@property (nonatomic, retain) IBOutlet GalleryCellDataItem *dataItem2;
-@property (nonatomic, retain) IBOutlet GalleryCellDataItem *dataItem3;
+@property (nonatomic, strong) IBOutlet GalleryCellDataItem *dataItem0;
+@property (nonatomic, strong) IBOutlet GalleryCellDataItem *dataItem1;
+@property (nonatomic, strong) IBOutlet GalleryCellDataItem *dataItem2;
+@property (nonatomic, strong) IBOutlet GalleryCellDataItem *dataItem3;
 @end

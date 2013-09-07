@@ -11,7 +11,7 @@
 static ImageCache *_sharedImageCache;
 
 @interface ImageCache() 
-@property (nonatomic, retain) NSMutableDictionary *hashTable;
+@property (nonatomic, strong) NSMutableDictionary *hashTable;
 @end
 
 @implementation ImageCache
@@ -21,16 +21,12 @@ static ImageCache *_sharedImageCache;
 - (id)init {
     self = [super init];
     if (self) {
-        self.hashTable = [[[NSMutableDictionary alloc] init] autorelease];
+        self.hashTable = [[NSMutableDictionary alloc] init];
     }
     
     return self;
 }
 
-- (void)dealloc {
-    [_hashTable release];
-    [super dealloc];
-}
 
 + (ImageCache *)sharedImageCache {
     if (!_sharedImageCache) {

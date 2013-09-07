@@ -10,7 +10,7 @@
 
 @interface PhotoDetailViewController : NIToolbarPhotoViewController <NIPhotoAlbumScrollViewDataSource>
 
-@property (nonatomic, retain) NSArray *photosList;
+@property (nonatomic, strong) NSArray *photosList;
 @property (nonatomic, assign) NSInteger selectedPhotIndex;
 
 @end

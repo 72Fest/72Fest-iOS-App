@@ -109,7 +109,7 @@ typedef enum {
 
 #pragma mark Subclassing
 
-@property (nonatomic, readonly, retain) UIScrollView* pagingScrollView;
+@property (nonatomic, readonly, strong) UIScrollView* pagingScrollView;
 @property (nonatomic, readonly, copy) NSMutableSet* visiblePages; // Set of UIView<NIPagingScrollViewPage>*
 
 - (void)willDisplayPage:(UIView<NIPagingScrollViewPage> *)pageView;

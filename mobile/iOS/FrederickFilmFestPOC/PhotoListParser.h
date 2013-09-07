@@ -25,7 +25,7 @@
 - (void)loadURL:(NSURL *)url;
 
 
-@property (nonatomic, retain) NSMutableArray *photoList;
-@property (nonatomic, assign) id delegate;
+@property (nonatomic, strong) NSMutableArray *photoList;
+@property (nonatomic, weak) id delegate;
 
 @end

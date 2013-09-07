@@ -13,7 +13,6 @@
 		072176E3162245BD00A65C50 /* photoBacker@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 072176E1162245BD00A65C50 /* photoBacker@2x.png */; };
 		072176E6162247D400A65C50 /* Archive.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072176E5162247D400A65C50 /* Archive.otf */; };
 		072B81B2162B552A00D63833 /* DiskCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 072B81B1162B552A00D63833 /* DiskCacheManager.m */; };
-		07322E97160FC0190047956B /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 07322E96160FB62D0047956B /* JSONKit.m */; };
 		0740DCBC160BE08F00A7CDAB /* digit0.png in Resources */ = {isa = PBXBuildFile; fileRef = 0740DCB6160BE08F00A7CDAB /* digit0.png */; };
 		0740DCBD160BE08F00A7CDAB /* digit0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0740DCB7160BE08F00A7CDAB /* digit0@2x.png */; };
 		0740DCBE160BE08F00A7CDAB /* digit1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0740DCB8160BE08F00A7CDAB /* digit1.png */; };
@@ -141,8 +140,6 @@
 		072176E5162247D400A65C50 /* Archive.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Archive.otf; sourceTree = "<group>"; };
 		072B81B0162B552A00D63833 /* DiskCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskCacheManager.h; sourceTree = "<group>"; };
 		072B81B1162B552A00D63833 /* DiskCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiskCacheManager.m; sourceTree = "<group>"; };
-		07322E95160FB62D0047956B /* JSONKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
-		07322E96160FB62D0047956B /* JSONKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		0740DCB6160BE08F00A7CDAB /* digit0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = digit0.png; sourceTree = "<group>"; };
 		0740DCB7160BE08F00A7CDAB /* digit0@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "digit0@2x.png"; sourceTree = "<group>"; };
 		0740DCB8160BE08F00A7CDAB /* digit1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = digit1.png; sourceTree = "<group>"; };
@@ -345,15 +342,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		07322E93160FB61A0047956B /* JSONKit */ = {
-			isa = PBXGroup;
-			children = (
-				07322E95160FB62D0047956B /* JSONKit.h */,
-				07322E96160FB62D0047956B /* JSONKit.m */,
-			);
-			name = JSONKit;
-			sourceTree = "<group>";
-		};
 		0740DCDF160BEFF600A7CDAB /* digits */ = {
 			isa = PBXGroup;
 			children = (
@@ -492,7 +480,6 @@
 		8AC0A301141D773800F0E4B0 /* FrederickFilmFestPOC */ = {
 			isa = PBXGroup;
 			children = (
-				07322E93160FB61A0047956B /* JSONKit */,
 				8AFCC2D0159D51CB0067181B /* Nimbus */,
 				8AEA3A86159AC6780006891F /* Data */,
 				8A430B20142C29D4007B72F5 /* Network */,
@@ -805,7 +792,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				07322E97160FC0190047956B /* JSONKit.m in Sources */,
 				8AC0A309141D773800F0E4B0 /* main.m in Sources */,
 				8AC0A30C141D773800F0E4B0 /* FrederickFilmFestPOCAppDelegate.m in Sources */,
 				8AC0A31E141D7B7300F0E4B0 /* PhotoUploadViewController.m in Sources */,
@@ -923,6 +909,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -947,6 +934,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
