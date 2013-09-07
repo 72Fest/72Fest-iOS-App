@@ -52,8 +52,4 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (void)dealloc {
-    [_spinner release];
-    [super dealloc];
-}
 @end

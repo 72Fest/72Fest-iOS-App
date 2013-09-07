@@ -45,8 +45,8 @@
  */
 @interface NIOperation : NSOperation
 
-@property (readwrite, assign) id<NIOperationDelegate> delegate;
-@property (readonly, retain) NSError* lastError;
+@property (readwrite, weak) id<NIOperationDelegate> delegate;
+@property (readonly, strong) NSError* lastError;
 @property (readwrite, assign) NSInteger tag;
 
 #if NS_BLOCKS_AVAILABLE

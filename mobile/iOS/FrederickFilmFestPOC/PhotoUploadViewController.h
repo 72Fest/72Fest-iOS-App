@@ -49,17 +49,17 @@
 - (IBAction)selectPhotoFromSourcePressed:(id)sender;
 - (IBAction)uploadBtnPressed:(id)sender;
 
-@property (nonatomic, retain) UIImage *curImage;
-@property (nonatomic, retain) UIImage *fullSizeImage;
-@property (nonatomic, retain) NSURLConnection *curConnection;
-@property (nonatomic, retain) IBOutlet UIButton *selectPhotoFromSource;
-@property (nonatomic, retain) IBOutlet UIButton *uploadBtn;
-@property (nonatomic, retain) IBOutlet UILabel *uploadTxt;
-@property (nonatomic, retain) IBOutlet UIProgressView *progressView;
-@property (nonatomic, retain) IBOutlet UIImageView *selectedImage;
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (retain, nonatomic) IBOutlet CountDownView *countDownTimer;
-@property (nonatomic, retain) UITabBar *parentTabBar;
-@property (retain, nonatomic) IBOutlet UITextView *uploadTextView;
+@property (nonatomic, strong) UIImage *curImage;
+@property (nonatomic, strong) UIImage *fullSizeImage;
+@property (nonatomic, strong) NSURLConnection *curConnection;
+@property (nonatomic, strong) IBOutlet UIButton *selectPhotoFromSource;
+@property (nonatomic, strong) IBOutlet UIButton *uploadBtn;
+@property (nonatomic, strong) IBOutlet UILabel *uploadTxt;
+@property (nonatomic, strong) IBOutlet UIProgressView *progressView;
+@property (nonatomic, strong) IBOutlet UIImageView *selectedImage;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (strong, nonatomic) IBOutlet CountDownView *countDownTimer;
+@property (nonatomic, strong) UITabBar *parentTabBar;
+@property (strong, nonatomic) IBOutlet UITextView *uploadTextView;
 
 @end

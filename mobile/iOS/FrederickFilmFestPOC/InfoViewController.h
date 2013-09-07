@@ -21,6 +21,6 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 - (IBAction)bannerPressed:(id)sender;
 
-@property (retain, nonatomic) IBOutlet UIImageView *siteBannerBtn;
+@property (strong, nonatomic) IBOutlet UIImageView *siteBannerBtn;
 
 @end

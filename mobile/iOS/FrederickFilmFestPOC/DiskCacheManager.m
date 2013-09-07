@@ -30,17 +30,11 @@ static DiskCacheManager *_diskCacheManager;
     if (self) {
         NSArray* cachePathArray = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         cachePath = [cachePathArray objectAtIndex:0];
-        [cachePath retain];
     }
     
     return self;
 }
 
-- (void)dealloc {
-    [cachePath release];
-    [_diskCacheManager release];
-    [super dealloc];
-}
 
 
 - (BOOL)existsInCache:(NSString *)fileName {
