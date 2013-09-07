@@ -12,14 +12,6 @@
 
 @synthesize dataItem0=_dataItem0, dataItem1=_dataItem1, dataItem2=_dataItem2, dataItem3=_dataItem3;
 
--(void)dealloc {
-    [_dataItem0 release];
-    [_dataItem1 release];
-    [_dataItem2 release];
-    [_dataItem3 release];
-    
-    [super dealloc];
-}
 
 - (NSArray *)dataItems {
     return [NSArray arrayWithObjects:_dataItem0, _dataItem1, _dataItem2, _dataItem3, nil];

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface LoaderBoxViewController : UIViewController
-@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 
 - (void)setLoading:(BOOL)isLoading;
 @end

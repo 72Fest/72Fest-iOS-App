@@ -17,14 +17,14 @@
 }
 
 - (void)layoutDigits:(CGRect)frame;
-- (UILabel *)initLabel:(CGRect)frame;
+- (UILabel *)setupLabel:(CGRect)frame;
 - (UIImage *)imageForDigit:(NSInteger)digit;
 
-@property (nonatomic, retain) UIImageView *digit1a;
-@property (nonatomic, retain) UIImageView *digit1b;
+@property (nonatomic, strong) UIImageView *digit1a;
+@property (nonatomic, strong) UIImageView *digit1b;
 
-@property (nonatomic, retain) UIImageView *digit2a;
-@property (nonatomic, retain) UIImageView *digit2b;
+@property (nonatomic, strong) UIImageView *digit2a;
+@property (nonatomic, strong) UIImageView *digit2b;
 
 @end
 
@@ -55,13 +55,13 @@
     curDigit1 = 0;
     curDigit2 = 0;
     
-    self.digit1a = [[[UIImageView alloc] initWithImage:[self imageForDigit:0]] autorelease];
-    self.digit1b = [[[UIImageView alloc] initWithImage:[self imageForDigit:0]] autorelease];
+    self.digit1a = [[UIImageView alloc] initWithImage:[self imageForDigit:0]];
+    self.digit1b = [[UIImageView alloc] initWithImage:[self imageForDigit:0]];
     [self.digit1a setFrame:frame1];
     [self.digit1b setFrame:frame1];
     
-    self.digit2a = [[[UIImageView alloc] initWithImage:[self imageForDigit:0]] autorelease];
-    self.digit2b = [[[UIImageView alloc] initWithImage:[self imageForDigit:0]] autorelease];;
+    self.digit2a = [[UIImageView alloc] initWithImage:[self imageForDigit:0]];
+    self.digit2b = [[UIImageView alloc] initWithImage:[self imageForDigit:0]];;
     [self.digit2a setFrame:frame2];
     [self.digit2b setFrame:frame2];
     
@@ -75,8 +75,8 @@
     return [UIImage imageNamed:[NSString stringWithFormat:@"digit%d",digit]];
 }
 
-- (UILabel *)initLabel:(CGRect)frame {
-    UILabel *lbl = [[[UILabel alloc] initWithFrame:frame] autorelease];
+- (UILabel *)setupLabel:(CGRect)frame {
+    UILabel *lbl = [[UILabel alloc] initWithFrame:frame];
     
     [lbl setAdjustsFontSizeToFitWidth:YES];
     return lbl;
@@ -111,12 +111,4 @@
 }
 */
 
-- (void)dealloc {
-    [_digit1a release];
-    [_digit1b release];
-    [_digit2a release];
-    [_digit2b release];
-    
-    [super dealloc];
-}
 @end

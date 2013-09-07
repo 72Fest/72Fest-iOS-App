@@ -32,7 +32,7 @@
 - (id)initWithFrame:(CGRect)frame andCountDownDate:(NSDate *) countdownDate;
 - (void)timerHandler;
 
-@property (nonatomic, retain) NSDate *countDownDate;
-@property (nonatomic, retain) NSString *caption;
+@property (nonatomic, strong) NSDate *countDownDate;
+@property (nonatomic, strong) NSString *caption;
 
 @end

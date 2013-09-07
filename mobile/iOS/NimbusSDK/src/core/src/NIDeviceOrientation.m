@@ -23,6 +23,9 @@
 #import "NIDebuggingTools.h"
 #import "NISDKAvailability.h"
 
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 BOOL NIIsSupportedOrientation(UIInterfaceOrientation orientation) {
@@ -54,6 +57,12 @@ UIInterfaceOrientation NIInterfaceOrientation(void) {
   NIDASSERT(UIDeviceOrientationUnknown != orient);
 
   return orient;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+BOOL NIIsLandscapePhoneOrientation(UIInterfaceOrientation orientation) {
+  return NIIsPhone() && UIInterfaceOrientationIsLandscape(orientation);
 }
 
 

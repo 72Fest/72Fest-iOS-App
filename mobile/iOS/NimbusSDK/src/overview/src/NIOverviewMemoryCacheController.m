@@ -20,13 +20,22 @@
 #import "NimbusModels.h"
 #import "NimbusCore.h"
 
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
+
 @interface NIMemoryCache(Private)
-@property (nonatomic, readwrite, retain) NILinkedList* lruCacheObjects;
+@property (nonatomic, readwrite, NI_STRONG) NILinkedList* lruCacheObjects;
+@end
+
+// Anonymous private category for LRU cache objects.
+@interface NSObject(Private)
+- (NSDate *)lastAccessTime;
 @end
 
 @interface NIOverviewMemoryCacheController()
-@property (nonatomic, readonly, retain) NIMemoryCache* cache;
-@property (nonatomic, readwrite, retain) NITableViewModel* model;
+@property (nonatomic, readonly, NI_STRONG) NIMemoryCache* cache;
+@property (nonatomic, readwrite, NI_STRONG) NITableViewModel* model;
 @end
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,10 +167,13 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < NIIOS_6_0
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
   return NIIsSupportedOrientation(toInterfaceOrientation);
 }
 
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////

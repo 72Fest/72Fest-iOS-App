@@ -19,6 +19,10 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#if defined __cplusplus
+extern "C" {
+#endif
+
 /**
  * For dealing with device orientations.
  *
@@ -61,12 +65,26 @@ BOOL NIIsSupportedOrientation(UIInterfaceOrientation orientation);
 UIInterfaceOrientation NIInterfaceOrientation(void);
 
 /**
+ * Returns YES if the device is a phone and the orientation is landscape.
+ *
+ * This is a useful check for phone landscape mode which often requires
+ * additional logic to handle the smaller vertical real estate.
+ *
+ *      @returns YES if the device is a phone and orientation is landscape.
+ */
+BOOL NIIsLandscapePhoneOrientation(UIInterfaceOrientation orientation);
+
+/**
  * Creates an affine transform for the given device orientation.
  *
  * This is useful for creating a transformation matrix for a view that has been added
  * directly to the window and doesn't automatically have its transformation modified.
  */
 CGAffineTransform NIRotateTransformForOrientation(UIInterfaceOrientation orientation);
+
+#if defined __cplusplus
+};
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /**@}*/// End of Device Orientation ///////////////////////////////////////////////////////////////

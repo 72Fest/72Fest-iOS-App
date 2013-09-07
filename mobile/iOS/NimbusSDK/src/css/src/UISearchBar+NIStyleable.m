@@ -20,8 +20,11 @@
 #import "NICSSRuleset.h"
 #import "NimbusCore.h"
 
-NI_FIX_CATEGORY_BUG(UISearchBar_NIStyleable)
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
 
+NI_FIX_CATEGORY_BUG(UISearchBar_NIStyleable)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,15 +32,18 @@ NI_FIX_CATEGORY_BUG(UISearchBar_NIStyleable)
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)applySearchBarStyleWithRuleSet:(NICSSRuleset *)ruleSet {
+- (void)applySearchBarStyleWithRuleSet:(NICSSRuleset *)ruleSet inDOM:(NIDOM*) dom {
   if ([ruleSet hasTintColor]) { self.tintColor = ruleSet.tintColor; }
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)applyViewStyleWithRuleSet:(NICSSRuleset *)ruleSet inDOM:(NIDOM *)dom {
+    [self applyViewStyleWithRuleSet:ruleSet inDOM:dom];
+    [self applySearchBarStyleWithRuleSet:ruleSet inDOM:dom];
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)applyStyleWithRuleSet:(NICSSRuleset *)ruleSet {
-  [self applyViewStyleWithRuleSet:ruleSet];
-  [self applySearchBarStyleWithRuleSet:ruleSet];
 }
 
 

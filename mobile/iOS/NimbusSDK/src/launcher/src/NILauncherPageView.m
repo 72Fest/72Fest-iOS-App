@@ -16,8 +16,12 @@
 
 #import "NILauncherPageView.h"
 
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
+
 @interface NILauncherPageView()
-@property (nonatomic, readwrite, retain) NSMutableArray* mutableRecyclableViews;
+@property (nonatomic, readwrite, NI_STRONG) NSMutableArray* mutableRecyclableViews;
 @end
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

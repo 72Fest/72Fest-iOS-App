@@ -19,14 +19,14 @@
 
 -(UILabel *)genLabelWithText:(NSString *)labelTxt;
 
-@property (nonatomic, retain) NSTimer *timer;
-@property (nonatomic, retain) UIImage *bgImg;
-@property (nonatomic, retain) DigitCountView *daysCDView;
-@property (nonatomic, retain) DigitCountView *hoursCDView;
-@property (nonatomic, retain) DigitCountView *minsCDView;
-@property (nonatomic, retain) DigitCountView *secsCDView;
+@property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, strong) UIImage *bgImg;
+@property (nonatomic, strong) DigitCountView *daysCDView;
+@property (nonatomic, strong) DigitCountView *hoursCDView;
+@property (nonatomic, strong) DigitCountView *minsCDView;
+@property (nonatomic, strong) DigitCountView *secsCDView;
 
-@property (nonatomic, retain) UILabel *captionLbl;
+@property (nonatomic, strong) UILabel *captionLbl;
 
 @end
 
@@ -76,8 +76,6 @@
 
 
 - (void)setCountDownDate:(NSDate *)countDownDate {
-    [countDownDate retain];
-    [_countDownDate release];
    _countDownDate = countDownDate;
     
     [self initCountDown:_countDownDate];
@@ -89,9 +87,7 @@
 
 
 - (void)setCaption:(NSString *)caption {
-    [caption retain];
     
-    [_caption release];
     
     _caption = caption;
     
@@ -99,7 +95,7 @@
 }
 
 -(UILabel *)genLabelWithText:(NSString *)labelTxt {
-    UILabel *lbl = [[[UILabel alloc] init] autorelease];
+    UILabel *lbl = [[UILabel alloc] init];
     [lbl setTextColor:LABEL_CLR];
     [lbl setBackgroundColor:[UIColor clearColor]];
     //[lbl setFont:[UIFont systemFontOfSize:LABEL_FONT_SIZE]];
@@ -232,20 +228,4 @@
     [self.bgImg drawInRect:rect];
 }
 
-- (void)dealloc {
-    [_timer release];
-    [_countDownDate release];
-
-    [_bgImg release];
-    
-    [_caption release];
-    [_captionLbl release];
-    
-    [_daysCDView release];
-    [_hoursCDView release];
-    [_minsCDView release];
-    [_secsCDView release];
-    
-    [super dealloc];
-}
 @end
