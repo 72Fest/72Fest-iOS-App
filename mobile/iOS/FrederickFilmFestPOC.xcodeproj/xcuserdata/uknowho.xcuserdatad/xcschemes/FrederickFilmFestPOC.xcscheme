@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8AC0A2F6141D773800F0E4B0"
-               BuildableName = "Emily &amp; Tim.app"
+               BuildableName = "72Fest.app"
                BlueprintName = "FrederickFilmFestPOC"
                ReferencedContainer = "container:FrederickFilmFestPOC.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8AC0A2F6141D773800F0E4B0"
-            BuildableName = "Emily &amp; Tim.app"
+            BuildableName = "72Fest.app"
             BlueprintName = "FrederickFilmFestPOC"
             ReferencedContainer = "container:FrederickFilmFestPOC.xcodeproj">
          </BuildableReference>
@@ -65,7 +65,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8AC0A2F6141D773800F0E4B0"
-            BuildableName = "Emily &amp; Tim.app"
+            BuildableName = "72Fest.app"
             BlueprintName = "FrederickFilmFestPOC"
             ReferencedContainer = "container:FrederickFilmFestPOC.xcodeproj">
          </BuildableReference>

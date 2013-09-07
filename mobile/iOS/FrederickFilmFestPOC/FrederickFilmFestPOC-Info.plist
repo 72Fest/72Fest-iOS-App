@@ -35,7 +35,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0</string>
+	<string>3.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -44,20 +44,20 @@
 	<true/>
 	<key>NSMainNibFile</key>
 	<string>MainWindow</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Archive.otf</string>
+	</array>
+	<key>UIApplicationExitsOnSuspend</key>
+	<true/>
 	<key>UIPrerenderedIcon</key>
 	<true/>
 	<key>UIStatusBarHidden</key>
 	<false/>
-	<key>UIApplicationExitsOnSuspend</key>
-	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
-    <key>UIAppFonts</key>
-    <array>
-        <string>Archive.otf</string>
-    </array>
 </dict>
 </plist>
