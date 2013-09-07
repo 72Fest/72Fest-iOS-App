@@ -47,52 +47,28 @@ typedef enum {
  *
  *      @ingroup NimbusPagingScrollView
  */
-@interface NIPagingScrollView : UIView <UIScrollViewDelegate> {
-@private
-  // Views
-  UIScrollView* _pagingScrollView;
-
-  // Pages
-  NSMutableSet* _visiblePages;
-  NIViewRecycler* _viewRecycler;
-
-  // Configurable Properties
-  CGFloat _pageMargin;
-
-  // State Information
-  NSInteger _firstVisiblePageIndexBeforeRotation;
-  CGFloat _percentScrolledIntoFirstVisiblePage;
-  BOOL _isModifyingContentOffset;
-  BOOL _isAnimatingToPage;
-  NSInteger _centerPageIndex;
-
-  // Cached Data Source Information
-  NSInteger _numberOfPages;
-
-  __unsafe_unretained id<NIPagingScrollViewDataSource> _dataSource;
-  __unsafe_unretained id<NIPagingScrollViewDelegate> _delegate;
-}
+@interface NIPagingScrollView : UIView <UIScrollViewDelegate>
 
 #pragma mark Data Source
 
 - (void)reloadData;
-@property (nonatomic, readwrite, assign) id<NIPagingScrollViewDataSource> dataSource;
-@property (nonatomic, readwrite, assign) id<NIPagingScrollViewDelegate> delegate;
+@property (nonatomic, NI_WEAK) id<NIPagingScrollViewDataSource> dataSource;
+@property (nonatomic, NI_WEAK) id<NIPagingScrollViewDelegate> delegate;
 
 // It is highly recommended that you use this method to manage view recycling.
 - (UIView<NIPagingScrollViewPage> *)dequeueReusablePageWithIdentifier:(NSString *)identifier;
 
 #pragma mark State
 
-@property (nonatomic, readwrite, assign) NSInteger centerPageIndex; // Use moveToPageAtIndex:animated: to animate to a given page.
-- (void)setCenterPageIndex:(NSInteger)centerPageIndex animated:(BOOL)animated __NI_DEPRECATED_METHOD;
+- (UIView<NIPagingScrollViewPage> *)centerPageView;
+@property (nonatomic, assign) NSInteger centerPageIndex; // Use moveToPageAtIndex:animated: to animate to a given page.
 
 @property (nonatomic, readonly, assign) NSInteger numberOfPages;
 
 #pragma mark Configuring Presentation
 
-@property (nonatomic, readwrite, assign) CGFloat pageMargin;
-@property (nonatomic, readwrite, assign) NIPagingScrollViewType type; // Default: NIPagingScrollViewHorizontal
+@property (nonatomic, assign) CGFloat pageMargin;
+@property (nonatomic, assign) NIPagingScrollViewType type; // Default: NIPagingScrollViewHorizontal
 
 #pragma mark Changing the Visible Page
 
@@ -109,11 +85,8 @@ typedef enum {
 
 #pragma mark Subclassing
 
-@property (nonatomic, readonly, strong) UIScrollView* pagingScrollView;
+@property (nonatomic, readonly, NI_STRONG) UIScrollView* pagingScrollView;
 @property (nonatomic, readonly, copy) NSMutableSet* visiblePages; // Set of UIView<NIPagingScrollViewPage>*
-
-- (void)willDisplayPage:(UIView<NIPagingScrollViewPage> *)pageView;
-- (void)didRecyclePage:(UIView<NIPagingScrollViewPage> *)pageView;
 
 @end
 
@@ -184,6 +157,14 @@ typedef enum {
 
 
 /** @name State */
+
+/**
+ * The current center page view.
+ *
+ * If no pages exist then this will return nil.
+ *
+ *      @fn NIPagingScrollView::centerPageView
+ */
 
 /**
  * The current center page index.
@@ -286,20 +267,4 @@ typedef enum {
  * Meant to be used by subclasses only.
  *
  *      @fn NIPagingScrollView::visiblePages
- */
-
-/**
- * Called before the page is about to be shown and after its frame has been set.
- *
- * Meant to be subclassed. By default this method does nothing.
- *
- *      @fn NIPagingScrollView::willDisplayPage:
- */
-
-/**
- * Called immediately after the page is removed from the paging scroll view.
- *
- * Meant to be subclassed. By default this method does nothing.
- *
- *      @fn NIPagingScrollView::didRecyclePage:
  */

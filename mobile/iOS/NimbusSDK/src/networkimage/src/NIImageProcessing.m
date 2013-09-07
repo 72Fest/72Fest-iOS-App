@@ -17,6 +17,10 @@
 #import "NIImageProcessing.h"
 #import "NimbusCore.h"
 
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
+
 @implementation NIImageProcessing
 
 /**
@@ -306,7 +310,7 @@
         if ([[UIImage class] respondsToSelector:@selector(imageWithCGImage:scale:orientation:)]) {
           resultImage = [UIImage imageWithCGImage: resultImageRef
                                             scale: screenScale
-                                      orientation: UIImageOrientationUp];
+                                      orientation: src.imageOrientation];
 
         } else {
           resultImage = [UIImage imageWithCGImage: resultImageRef];

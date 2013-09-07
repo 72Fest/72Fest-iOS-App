@@ -18,11 +18,15 @@
 
 #import "NimbusCore+Additions.h"
 
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NIInterapp
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,6 +42,26 @@
 
 }
 
+#pragma mark Chrome vs Safari
+
+BOOL sPreferGoogleChrome = NO;
++ (void)setPreferGoogleChrome:(BOOL)preferGoogleChrome
+{
+    sPreferGoogleChrome = preferGoogleChrome;
+}
++ (BOOL)preferGoogleChrome {
+    return sPreferGoogleChrome;
+}
+
++ (BOOL)openPreferredBrowserWithURL:(NSURL *)url
+{
+    if (sPreferGoogleChrome && [NIInterapp googleChromeIsInstalled]) {
+        return [NIInterapp googleChromeWithURL:url];
+    }
+    else {
+        return [NIInterapp safariWithURL:url];
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,49 +78,183 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
+#pragma mark Google Chrome
+
+/**
+ * Based on https://developers.google.com/chrome/mobile/docs/ios-links
+ */
+
+static NSString* const sGoogleChromeHttpScheme = @"googlechrome:";
+static NSString* const sGoogleChromeHttpsScheme = @"googlechomes:";
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++ (BOOL)googleChromeIsInstalled {
+    return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:sGoogleChromeHttpScheme]];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++ (BOOL)googleChromeWithURL:(NSURL *)url {
+    NSString *chromeScheme = nil;
+    if ([url.scheme isEqualToString:@"http"]) {
+        chromeScheme = sGoogleChromeHttpScheme;
+    } else if ([url.scheme isEqualToString:@"https"]) {
+        chromeScheme = sGoogleChromeHttpsScheme;
+    }
+    
+    if (chromeScheme) {
+        NSRange rangeForScheme = [[url absoluteString] rangeOfString:@":"];
+        NSString *urlNoScheme =  [[url absoluteString] substringFromIndex:rangeForScheme.location + 1];
+        NSString *chromeUrlString = [chromeScheme stringByAppendingString:urlNoScheme];
+        NSURL *chromeUrl = [NSURL URLWithString:chromeUrlString];
+        
+        BOOL didOpen = [[UIApplication sharedApplication] openURL:chromeUrl];
+        if (!didOpen) {
+            didOpen = [self appStoreWithAppId:[self googleChromeAppStoreId]];
+        }
+        
+        return didOpen;
+    }
+
+    return NO;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++ (NSString *)googleChromeAppStoreId {
+    return @"535886823";
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark -
 #pragma mark Google Maps
 
 /**
  * Source for URL information: http://mapki.com/wiki/Google_Map_Parameters
  */
 
+static NSString* const sGoogleMapsScheme = @"comgooglemaps:";
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-+ (BOOL)googleMapAtLocation:(CLLocationCoordinate2D)location {
-  NSString* urlPath = [NSString stringWithFormat:
-                       @"http://maps.google.com/maps?q=%f,%f",
-                       location.latitude, location.longitude];
-  return [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlPath]];
++ (BOOL)googleMapsIsInstalled {
+    return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:sGoogleMapsScheme]];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++ (BOOL)googleMaps {
+    BOOL didOpen = [[UIApplication sharedApplication] openURL:[NSURL URLWithString:sGoogleMapsScheme]];
+    
+    if (!didOpen) {
+        didOpen = [self appStoreWithAppId:[self googleMapsAppStoreId]];
+    }
+    
+    return didOpen;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++ (NSString *)googleMapsAppStoreId {
+    return @"585027354";
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
++ (BOOL)openBestGoogleMapUrl:(NSString*)urlString{
+    
+    if ([NIInterapp googleMapsIsInstalled]) {
+        NSURL * url = [NSURL URLWithString:[NSString stringWithFormat:@"comgooglemaps://%@",urlString]];
+        return [[UIApplication sharedApplication] openURL:url];
+    }
+    else {
+        NSURL * url = [NSURL URLWithString:[NSString stringWithFormat:@"http://maps.google.com/maps%@",urlString]];
+        return [NIInterapp openPreferredBrowserWithURL:url];
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++ (BOOL)googleMapAtLocation:(CLLocationCoordinate2D)location {
+    
+    NSString* urlPath = [NSString stringWithFormat:
+                   @"?q=%f,%f",
+                   location.latitude, location.longitude];
+    return [NIInterapp openBestGoogleMapUrl:urlPath];
+ 
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 + (BOOL)googleMapAtLocation: (CLLocationCoordinate2D)location
                       title: (NSString *)title {
+
   NSString* urlPath = [NSString stringWithFormat:
-                       @"http://maps.google.com/maps?q=%@@%f,%f",
-                       [title stringByAddingPercentEscapesForURLParameter], location.latitude, location.longitude];
-  return [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlPath]];
+                         @"?q=%@@%f,%f",
+                         [title stringByAddingPercentEscapesForURLParameter], location.latitude, location.longitude];
+  return [NIInterapp openBestGoogleMapUrl:urlPath];
+
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (BOOL)googleMapDirectionsFromLocation: (CLLocationCoordinate2D)fromLocation
                              toLocation: (CLLocationCoordinate2D)toLocation {
-  NSString* urlPath = [NSString stringWithFormat:
-                       @"http://maps.google.com/maps?saddr=%f,%f&daddr=%f,%f",
-                       fromLocation.latitude, fromLocation.longitude,
-                       toLocation.latitude, toLocation.longitude];
-  return [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlPath]];
+    return [NIInterapp googleMapDirectionsFromLocation:fromLocation toLocation:toLocation withMode:nil];
+ }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++ (BOOL)googleMapDirectionsFromLocation: (CLLocationCoordinate2D)fromLocation
+                             toLocation: (CLLocationCoordinate2D)toLocation
+                                withMode:(NSString *)directionsMode
+{
+    NSString *saddr = [NSString stringWithFormat:@"%f,%f",fromLocation.latitude, fromLocation.longitude];
+    NSString *daddr = [NSString stringWithFormat:@"%f,%f",toLocation.latitude, toLocation.longitude];
+    
+    return [NIInterapp googleMapDirectionsFromSourceAddress:saddr toDestAddress:daddr withMode:directionsMode];
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
++ (BOOL)googleMapDirectionsToLocation: (CLLocationCoordinate2D)toLocation
+                               withMode:(NSString *)directionsMode
+{
+    NSString *daddr = [NSString stringWithFormat:@"%f,%f",toLocation.latitude, toLocation.longitude];
+    
+    return [NIInterapp googleMapDirectionsFromSourceAddress:nil toDestAddress:daddr withMode:directionsMode];
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++ (BOOL)googleMapDirectionsToDestAddress: (NSString*)destAddr withMode:(NSString *)directionsMode {
+    return [NIInterapp googleMapDirectionsFromSourceAddress:nil toDestAddress:destAddr withMode:directionsMode];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++ (BOOL)googleMapDirectionsFromSourceAddress: (NSString*)srcAddr toDestAddress: (NSString*)destAddr withMode:(NSString *)directionsMode {
+
+    NSString* urlPath;
+    // source can be left blank  == get current users location
+    if ([srcAddr length] > 0) {
+        urlPath = [NSString stringWithFormat:
+                         @"?saddr=%@&daddr=%@",
+                             srcAddr,destAddr];
+    }
+    else {
+        urlPath = [NSString stringWithFormat:
+                   @"?daddr=%@",
+                   destAddr];
+    }
+    if ([directionsMode length] > 0) {
+        urlPath = [NSString stringWithFormat:@"%@&directionsmode=%@",urlPath,directionsMode];
+    }
+    return [NIInterapp openBestGoogleMapUrl:urlPath];
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (BOOL)googleMapWithQuery:(NSString *)query {
   NSString* urlPath = [NSString stringWithFormat:
-                       @"http://maps.google.com/maps?q=%@",
+                       @"?q=%@",
                        [query stringByAddingPercentEscapesForURLParameter]];
-  return [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlPath]];
+  return [NIInterapp openBestGoogleMapUrl:urlPath ];
 }
 
 
@@ -502,6 +660,17 @@ static NSString* const sInstagramScheme = @"instagram:";
   return [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlPath]];
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
++ (BOOL)appStoreGiftWithAppId:(NSString *)appId {
+    NSString* urlPath = [NSString stringWithFormat:@"itms-appss://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/giftSongsWizard?gift=1&salableAdamId=%@&productType=C&pricingParameter=STDQ&mt=8&ign-mscache=1", appId];
+    return [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlPath]];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++ (BOOL)appStoreReviewWithAppId:(NSString *)appId {
+    NSString* urlPath = [@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=" stringByAppendingString:appId];
+    return [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlPath]];
+}
 
 @end
 

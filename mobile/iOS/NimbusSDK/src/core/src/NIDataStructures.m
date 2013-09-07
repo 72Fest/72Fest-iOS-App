@@ -19,11 +19,15 @@
 #import "NIDebuggingTools.h"
 #import "NIPreprocessorMacros.h"
 
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
+
 // The internal representation of a single node.
 @interface NILinkedListNode : NSObject
-@property (nonatomic, readwrite, strong) id object;
-@property (nonatomic, readwrite, strong) NILinkedListNode* prev;
-@property (nonatomic, readwrite, strong) NILinkedListNode* next;
+@property (nonatomic, readwrite, NI_STRONG) id object;
+@property (nonatomic, readwrite, NI_STRONG) NILinkedListNode* prev;
+@property (nonatomic, readwrite, NI_STRONG) NILinkedListNode* next;
 @end
 
 @implementation NILinkedListNode
@@ -35,7 +39,7 @@
 @interface NILinkedListLocation()
 + (id)locationWithNode:(NILinkedListNode *)node;
 - (id)initWithNode:(NILinkedListNode *)node;
-@property (nonatomic, readwrite, weak) NILinkedListNode* node;
+@property (nonatomic, readwrite, NI_WEAK) NILinkedListNode* node;
 @end
 
 @implementation NILinkedListLocation
@@ -44,7 +48,7 @@
   return [[self alloc] initWithNode:node];
 }
 - (id)initWithNode:(NILinkedListNode *)node {
-  if (self = [super init]) {
+  if ((self = [super init])) {
     _node = node;
   }
   return self;
@@ -57,8 +61,8 @@
 
 @interface NILinkedList()
 // Exposed so that the linked list enumerator can iterate over the nodes directly.
-@property (nonatomic, readonly, strong) NILinkedListNode* head;
-@property (nonatomic, readonly, strong) NILinkedListNode* tail;
+@property (nonatomic, readonly, NI_STRONG) NILinkedListNode* head;
+@property (nonatomic, readonly, NI_STRONG) NILinkedListNode* tail;
 @property (nonatomic, readwrite, assign) NSUInteger count;
 @property (nonatomic, readwrite, assign) unsigned long modificationNumber;
 @end
@@ -103,7 +107,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithLinkedList:(NILinkedList *)ll {
-  if (self = [super init]) {
+  if ((self = [super init])) {
     _ll = ll;
     _iterator = ll.head;
   }

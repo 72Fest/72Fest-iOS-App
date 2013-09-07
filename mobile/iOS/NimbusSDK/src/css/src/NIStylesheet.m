@@ -21,7 +21,12 @@
 #import "NIStyleable.h"
 #import "NimbusCore.h"
 
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
+
 NSString* const NIStylesheetDidChangeNotification = @"NIStylesheetDidChangeNotification";
+static Class _rulesetClass;
 
 @interface NIStylesheet()
 @property (nonatomic, readonly, copy) NSDictionary* rawRulesets;
@@ -221,6 +226,24 @@ NSString* const NIStylesheetDidChangeNotification = @"NIStylesheetDidChangeNotif
   }
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (NSString*)descriptionForView:(UIView *)view withClassName:(NSString *)className inDOM:(NIDOM *)dom andViewName:(NSString *)viewName {
+  NSMutableString *description = [[NSMutableString alloc] init];
+  NICSSRuleset *ruleset = [self rulesetForClassName:className];
+  if (nil != ruleset) {
+    NSRange r = [className rangeOfString:@":"];
+    if ([view respondsToSelector:@selector(descriptionWithRuleSet:forPseudoClass:inDOM:withViewName:)]) {
+      if (r.location != NSNotFound) {
+        [description appendString:[(id<NIStyleable>)view descriptionWithRuleSet:ruleset forPseudoClass:[className substringFromIndex:r.location+1] inDOM:dom withViewName:viewName]];
+      } else {
+        [description appendString:[(id<NIStyleable>)view descriptionWithRuleSet:ruleset forPseudoClass:nil inDOM:dom withViewName:viewName]];
+      }
+    } else {
+      [description appendFormat:@"// Description not supported for %@ with selector %@\n", view, className];
+    }
+  }
+  return description;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -228,51 +251,75 @@ NSString* const NIStylesheetDidChangeNotification = @"NIStylesheetDidChangeNotif
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)applyRuleSet:(NICSSRuleset *)ruleSet toView:(UIView *)view {
+- (void)applyRuleSet:(NICSSRuleset *)ruleSet toView:(UIView *)view inDOM: (NIDOM*)dom {
+  if ([view respondsToSelector:@selector(applyStyleWithRuleSet:inDOM:)]) {
+    [(id<NIStyleable>)view applyStyleWithRuleSet:ruleSet inDOM:dom];
+  }
   if ([view respondsToSelector:@selector(applyStyleWithRuleSet:)]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     [(id<NIStyleable>)view applyStyleWithRuleSet:ruleSet];
+#pragma clang diagnostic pop
   }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)applyStyleToView:(UIView *)view withClassName:(NSString *)className {
+- (void)applyStyleToView:(UIView *)view withClassName:(NSString *)className inDOM:(NIDOM *)dom {
   NICSSRuleset *ruleset = [self rulesetForClassName:className];
   if (nil != ruleset) {
-    [self applyRuleSet:ruleset toView:view];
+    NSRange r = [className rangeOfString:@":"];
+    if (r.location != NSNotFound && [view respondsToSelector:@selector(applyStyleWithRuleSet:forPseudoClass:inDOM:)]) {
+      [(id<NIStyleable>)view applyStyleWithRuleSet:ruleset forPseudoClass: [className substringFromIndex:r.location+1] inDOM:dom];
+    } else {
+      [self applyRuleSet:ruleset toView:view inDOM:dom];
+    }
   }
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (NICSSRuleset *)rulesetForClassName:(NSString *)className {
-  NICSSRuleset* ruleSet = nil;
-
-  NSArray* selectors = [_significantScopeToScopes objectForKey:className];
+- (NICSSRuleset*) addSelectors: (NSArray*) selectors toRuleset: (NICSSRuleset*) ruleSet forClassName: (NSString*) className
+{
   if ([selectors count] > 0) {
     // Gather all of the rule sets for this view into a composite rule set.
-    ruleSet = [_ruleSets objectForKey:className];
-
+    ruleSet = ruleSet ?: [_ruleSets objectForKey:className];
+    
     if (nil == ruleSet) {
-      ruleSet = [[NICSSRuleset alloc] init];
-
+      ruleSet = [[[NIStylesheet rulesetClass] alloc] init];
+      
       // Composite the rule sets into one.
       for (NSString* selector in selectors) {
         [ruleSet addEntriesFromDictionary:[_rawRulesets objectForKey:selector]];
       }
-
+      
       NIDASSERT(nil != _ruleSets);
       [_ruleSets setObject:ruleSet forKey:className];
     }
   }
-
+  
   return ruleSet;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (NICSSRuleset *)rulesetForClassName:(NSString *)className {
+  NSArray* selectors = [_significantScopeToScopes objectForKey:className];
+  return [self addSelectors:selectors toRuleset:nil forClassName:className];
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSSet *)dependencies {
   return [_rawRulesets objectForKey:kDependenciesSelectorKey];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++(Class)rulesetClass
+{
+  return _rulesetClass ?: [NICSSRuleset class];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
++(void)setRulesetClass:(Class)rulesetClass
+{
+  _rulesetClass = rulesetClass;
 }
 
 @end

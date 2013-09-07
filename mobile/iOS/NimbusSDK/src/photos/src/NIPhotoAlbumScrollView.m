@@ -20,6 +20,9 @@
 #import "NIPhotoAlbumScrollViewDataSource.h"
 #import "NimbusCore.h"
 
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,20 +93,25 @@
                                  originalPhotoDimensions: &originalPhotoDimensions];
 
   page.photoDimensions = originalPhotoDimensions;
+  page.loading = isLoading;
 
   if (nil == image) {
     page.zoomingIsEnabled = NO;
     [page setImage:self.loadingImage photoSize:NIPhotoScrollViewPhotoSizeUnknown];
 
   } else {
+    BOOL updateImage = photoSize > page.photoSize;
+    if (updateImage) {
+      [page setImage:image photoSize:photoSize];
+    }
+
+    // Configure this after the image is set otherwise if the page's image isn't there
+	// e.g. (after prepareForReuse), zooming will always be disabled
     page.zoomingIsEnabled = ([self isZoomingEnabled]
                              && (NIPhotoScrollViewPhotoSizeOriginal == photoSize));
-    if (photoSize > page.photoSize) {
-      [page setImage:image photoSize:photoSize];
 
-      if (NIPhotoScrollViewPhotoSizeOriginal == photoSize) {
-        [self notifyDelegatePhotoDidLoadAtIndex:page.pageIndex];
-      }
+    if (updateImage && NIPhotoScrollViewPhotoSizeOriginal == photoSize) {
+      [self notifyDelegatePhotoDidLoadAtIndex:page.pageIndex];
     }
   }
 }
@@ -171,6 +179,7 @@
 
       // Only replace the photo if it's of a higher quality than one we're already showing.
       if (photoSize > page.photoSize) {
+        page.loading = NO;
         [page setImage:image photoSize:photoSize];
 
         page.zoomingIsEnabled = ([self isZoomingEnabled]

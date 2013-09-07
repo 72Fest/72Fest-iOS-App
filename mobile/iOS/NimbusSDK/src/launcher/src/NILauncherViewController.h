@@ -35,11 +35,11 @@
  */
 @interface NILauncherViewController : UIViewController <NILauncherDelegate, NILauncherDataSource>
 
-@property (nonatomic, readwrite, retain) NILauncherView* launcherView;
+@property (nonatomic, readwrite, NI_STRONG) NILauncherView* launcherView;
 
 @end
 
-/** @name Getting the Launcher View */
+/** @name Accessing the Launcher View */
 
 /**
  * Returns the launcher view managed by the controller object.
