@@ -14,7 +14,7 @@
 #define CAPTION_FONT_SIZE 12.0
 #define COUNT_DOWN_BG_IMG @"digitsBackground.png"
 
-#define COUNTDOWN_METADATA_URL @"http://lonnygomes.com/72fest/countDown.php"
+#define COUNTDOWN_METADATA_URL @"http://putpocket.com/photoapp/countDown.php"
 
 #define kCountdownCaption   @"caption"
 #define kCountdownTime      @"time"
