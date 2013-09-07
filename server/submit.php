@@ -8,32 +8,33 @@ $link = mysql_connect("localhost", "phoshow", "phoshow")
 
   if ($_FILES["file"]["error"] > 0)
   {
-    echo "Return Code: " . $_FILES["file"]["error"] . "<br />";
+    error_log ("Return Code: " . $_FILES["file"]["error"] . "<br />");
   }
   else
   {
-    echo "Upload: " . $_FILES["file"]["name"] . "<br />";
-    echo "Type: " . $_FILES["file"]["type"] . "<br />";
-    echo "Size: " . ($_FILES["file"]["size"] / 1024) . " Kb<br />";
-    //echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br />";
+    error_log( "Upload: " . $_FILES["file"]["name"] . "<br />");
+    error_log ("Type: " . $_FILES["file"]["type"] . "<br />");
+    error_log ("Size: " . ($_FILES["file"]["size"] / 1024) . " Kb<br />");
+    //error_log "Temp file: " . $_FILES["file"]["tmp_name"] . "<br />";
 
     $newPhotoId = time(); 
     $newFileName = $newPhotoId . ".jpg";
     $basePath = "upload/";
     $fullPath = $basePath.$newFileName;
-    mysql_query("INSERT INTO photos (id, event_id, approved) VALUES($newPhotoId, 1, 0)") or die(mysql_error());
- 
+    error_log("INSERT INTO photos (id, event_id, ss_order, approved) VALUES($newPhotoId, 1, 0, 0)");
+    mysql_query("INSERT INTO photos (id, event_id, ss_order, approved) VALUES($newPhotoId, 1, 0, 0)") or die(mysql_error());
+    error_log("after mysql");
     //if (file_exists("upload/" . $_FILES["file"]["name"]))
     
     if (file_exists("upload/" . $newFileName))
     {
-      echo $_FILES["file"]["name"] . " already exists. ";
+      error_log ($_FILES["file"]["name"] . " already exists. ");
     }
     else
     {
       move_uploaded_file($_FILES["file"]["tmp_name"],
       "upload/" . $newFileName);
-      echo "Stored in: " . "upload/" . $_FILES["file"]["name"];
+      error_log ("Stored in: " . "upload/" . $_FILES["file"]["name"]);
        $image = new SimpleImage();
    $image->load($fullPath);
    if ($image->getWidth > $image->getHeight) {
