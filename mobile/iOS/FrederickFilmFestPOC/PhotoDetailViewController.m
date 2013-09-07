@@ -140,7 +140,7 @@
         }
         
         [imgData release];
-        [loadedImg retain];
+            [loadedImg retain];
         
         dispatch_async(dispatch_get_main_queue(), ^ {
             
