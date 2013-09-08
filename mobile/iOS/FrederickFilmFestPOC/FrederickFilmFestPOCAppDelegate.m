@@ -60,7 +60,6 @@
     
     
     [self.photoUploadController setParentTabBar:self.tabBarController.tabBar];
-    self.photoUploadController;
     
     self.window.rootViewController = self.tabBarController;
     //[[self window] addSubview:[self.navController view]];
