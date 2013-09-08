@@ -252,8 +252,6 @@
             dispatch_queue_t imageThumbCellQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             
             dispatch_async(imageThumbCellQueue, ^{
-                 //not sure if all of this is needed
-                
                 UIImage  *img;
                 NSString *curFilename = [curThumbStr lastPathComponent];
                 if ([[DiskCacheManager defaultManager] existsInCache:curFilename]) {

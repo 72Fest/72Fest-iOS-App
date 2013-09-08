@@ -103,11 +103,11 @@
     dispatch_queue_t largePhotoQueue = dispatch_queue_create("Large Photo Queue", NULL);
     
     NIPhotoAlbumScrollView *albumViewRef = self.photoAlbumView;
-    __block NSData *imgData = nil;
+   
     dispatch_async(largePhotoQueue, ^{
         //NSString *fullUrlStr = [imgDict valueForKey:XML_TAG_FULL_URL];
         //NSString *fileName = [fullUrlStr lastPathComponent];
-        
+        NSData *imgData = nil;
         
         //check disk cache first
         if ([[DiskCacheManager defaultManager] existsInCache:[[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent]]) {

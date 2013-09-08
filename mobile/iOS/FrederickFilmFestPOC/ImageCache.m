@@ -38,12 +38,12 @@ static ImageCache *_sharedImageCache;
 - (void)setThumb:(UIImage *)thumbImg forKey:(NSString *)key {
     
     if (![self.hashTable valueForKey:key]){
-        [self.hashTable setValue:thumbImg forKey:key];
+        [self.hashTable setValue:[thumbImg copy] forKey:key];
     }
 }
 
 - (UIImage *)thumbForKey:(NSString *)key {
-    return (UIImage *)[self.hashTable valueForKey:key];
+    return [(UIImage *)[self.hashTable valueForKey:key] copy];
 }
 
 - (void)purgeCache {
