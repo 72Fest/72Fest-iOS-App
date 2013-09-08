@@ -12,7 +12,7 @@
 
 - (void)sortByOrder;
 
-@property (nonatomic, retain) NSURL *url;
+@property (nonatomic, strong) NSURL *url;
 
 @end
 
@@ -23,14 +23,9 @@
 @synthesize delegate = _delegate;
 
 
-- (void) dealloc {
-    [_url release];
-    [_photoList release];
-    [super dealloc];
-}
 
 - (void)loadURL:(NSURL *)url {
-    self.photoList = [[[NSMutableArray alloc] init] autorelease];
+    self.photoList = [[NSMutableArray alloc] init];
     
     //Use Grand Central Dispatcher to load off to a queue
     dispatch_queue_t photoLoaderQueue = dispatch_queue_create("Photo Loader Queue", NULL);

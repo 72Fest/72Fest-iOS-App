@@ -22,6 +22,10 @@
 @class NIStylesheet;
 @class NIStylesheetCache;
 
+extern NSString* const NIJSONDidChangeNotification;
+extern NSString* const NIJSONDidChangeFilePathKey;
+extern NSString* const NIJSONDidChangeNameKey;
+
 /**
  * An observer for the Chameleon server.
  *
@@ -52,6 +56,8 @@
 
 - (void)watchSkinChanges;
 
+- (void)enableBonjourDiscovery: (NSString*) serviceName;
+
 @end
 
 /**
@@ -73,4 +79,11 @@
  * and then fires the appropriate notifications.
  *
  *      @fn NIChameleonObserver::watchSkinChanges
+ */
+
+/**
+ * Browses Bonjour for services with the given name (e.g. your username) and sets the host
+ * automatically.
+ *
+ *      @fn NIChameleonObserver::enableBonjourDiscovery:
  */

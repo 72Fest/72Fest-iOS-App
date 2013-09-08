@@ -20,6 +20,9 @@
 
 #import "NimbusCore.h"
 
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -171,6 +174,8 @@
 - (void)loadView {
   [super loadView];
 
+  self.view.backgroundColor = [UIColor blackColor];
+
   CGRect bounds = self.view.bounds;
 
   // Toolbar Setup
@@ -209,18 +214,8 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)viewDidUnload {
-  [self shutdown_NIToolbarPhotoViewController];
-
-  [super viewDidUnload];
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
-
-  [NINavigationAppearance pushAppearanceForNavigationController:self.navigationController];
 
   [[UIApplication sharedApplication] setStatusBarStyle: (NIIsPad()
                                                          ? UIStatusBarStyleBlackOpaque
@@ -228,8 +223,8 @@
                                               animated: animated];
 
   UINavigationBar* navBar = self.navigationController.navigationBar;
-  //navBar.barStyle = UIBarStyleBlack;
-  //navBar.translucent = YES;
+  navBar.barStyle = UIBarStyleBlack;
+  navBar.translucent = YES;
 
   _previousButton.enabled = [self.photoAlbumView hasPrevious];
   _nextButton.enabled = [self.photoAlbumView hasNext];
@@ -237,17 +232,11 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)viewWillDisappear:(BOOL)animated {
-  [super viewWillDisappear:animated];
-
-  [NINavigationAppearance popAppearanceForNavigationController:self.navigationController animated:YES];
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < NIIOS_6_0
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
   return NIIsSupportedOrientation(toInterfaceOrientation);
 }
+#endif
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -448,6 +437,12 @@
   self.previousButton.enabled = [self.photoAlbumView hasPrevious];
   self.nextButton.enabled = [self.photoAlbumView hasNext];
 
+  [self setChromeTitle];
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)setChromeTitle {
   self.title = [NSString stringWithFormat:@"%d of %d",
                 (self.photoAlbumView.centerPageIndex + 1),
                 self.photoAlbumView.numberOfPages];
@@ -514,12 +509,16 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)didTapNextButton {
   [self.photoAlbumView moveToNextAnimated:self.animateMovingToNextAndPreviousPhotos];
+  
+  [self refreshChromeState];
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)didTapPreviousButton {
   [self.photoAlbumView moveToPreviousAnimated:self.animateMovingToNextAndPreviousPhotos];
+
+  [self refreshChromeState];
 }
 
 

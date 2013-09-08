@@ -21,14 +21,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [designUrlLabel release];
-    [dismissBtn release];
-    [urlLabel release];
-    [_siteBannerBtn release];
-    [super dealloc];
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -54,15 +46,11 @@
     UIImage *i = [UIImage imageNamed:@"bkg.png"];
     UIColor *c = [[UIColor alloc] initWithPatternImage:i];
     v.backgroundColor = c;
-    [c release];
     [[self view] insertSubview:v atIndex:0];
-    [v release];
     
     UIBarButtonItem *closeBtn = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(btnPressed:)];
     self.navigationItem.rightBarButtonItem = closeBtn;
-    [closeBtn release];
     
-    [iv release];
 }
 
 - (void)viewDidUnload
@@ -71,13 +59,10 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
-    [dismissBtn release];
     dismissBtn = nil;
     
-    [urlLabel release];
     urlLabel = nil;
     
-    [designUrlLabel release];
     designUrlLabel = nil;
 }
 

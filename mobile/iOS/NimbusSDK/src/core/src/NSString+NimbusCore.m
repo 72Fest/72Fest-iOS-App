@@ -18,11 +18,14 @@
 
 #import "NSString+NimbusCore.h"
 
-#import "NSData+NimbusCore.h"
+#import "NIFoundationMethods.h"
 #import "NIPreprocessorMacros.h"
 
 #import <UIKit/UIKit.h>
 
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,22 +39,6 @@ NI_FIX_CATEGORY_BUG(NSStringNimbusCore)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * Determines if the string contains only whitespace and newlines.
- */
-- (BOOL)isWhitespaceAndNewlines {
-  NSCharacterSet* whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-  for (NSInteger i = 0; i < self.length; ++i) {
-    unichar c = [self characterAtIndex:i];
-    if (![whitespace characterIsMember:c]) {
-      return NO;
-    }
-  }
-  return YES;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-/**
  * Calculates the height of this text given the font, max width, and line break mode.
  *
  * A convenience wrapper for sizeWithFont:constrainedToSize:lineBreakMode:
@@ -59,7 +46,7 @@ NI_FIX_CATEGORY_BUG(NSStringNimbusCore)
 // COV_NF_START
 - (CGFloat)heightWithFont:(UIFont*)font
        constrainedToWidth:(CGFloat)width
-            lineBreakMode:(UILineBreakMode)lineBreakMode {
+            lineBreakMode:(NSLineBreakMode)lineBreakMode {
   return [self sizeWithFont:font
           constrainedToSize:CGSizeMake(width, CGFLOAT_MAX)
               lineBreakMode:lineBreakMode].height;
@@ -119,7 +106,7 @@ NI_FIX_CATEGORY_BUG(NSStringNimbusCore)
   CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
                                           (__bridge CFStringRef)self,
                                           NULL,
-                                          (__bridge CFStringRef)@";/?:@&=+$,",
+                                          (__bridge CFStringRef)@"!*'();:@&=+$,/?%#[]",
                                           kCFStringEncodingUTF8);
   
   NSString *result = [NSString stringWithString:(__bridge NSString *)buffer];
@@ -231,7 +218,7 @@ NI_FIX_CATEGORY_BUG(NSStringNimbusCore)
  * @returns md5 hash of this string.
  */
 - (NSString*)md5Hash {
-  return [[self dataUsingEncoding:NSUTF8StringEncoding] md5Hash];
+  return NIMD5HashFromData([self dataUsingEncoding:NSUTF8StringEncoding]);
 }
 
 
@@ -242,7 +229,7 @@ NI_FIX_CATEGORY_BUG(NSStringNimbusCore)
  * @returns SHA1 hash of this string.
  */
 - (NSString*)sha1Hash {
-  return [[self dataUsingEncoding:NSUTF8StringEncoding] sha1Hash];
+  return NISHA1HashFromData([self dataUsingEncoding:NSUTF8StringEncoding]);
 }
 
 @end

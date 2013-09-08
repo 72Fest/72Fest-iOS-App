@@ -20,7 +20,7 @@
 
 -(void)initTabBar;
 
-@property (nonatomic, retain) UIImageView *tabBarImg;
+@property (nonatomic, strong) UIImageView *tabBarImg;
 @end
 @implementation FrederickFilmFestPOCAppDelegate
 
@@ -33,10 +33,10 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     //add upload view
-    PhotoUploadViewController *photoUploadController = [[PhotoUploadViewController alloc] init];
+    self.photoUploadController = [[PhotoUploadViewController alloc] init];
     
     //nav controller
-    self.navController = [[UINavigationController alloc] initWithRootViewController:photoUploadController];
+    self.navController = [[UINavigationController alloc] initWithRootViewController:self.photoUploadController];
         
     //set up tab bar item
 //    UITabBarItem *tbi = [[UITabBarItem alloc] initWithTitle:@"Upload" image:[UIImage imageNamed:@"upload-photo.png"] tag:1];
@@ -55,14 +55,12 @@
     [[galleryNavController navigationBar] setTintColor:THEME_CLR];
     
     //creating tab view
-    self.tabBarController = [[[UITabBarController alloc] init] autorelease];
+    self.tabBarController = [[UITabBarController alloc] init];
     self.tabBarController.viewControllers = [NSArray arrayWithObjects:self.navController, galleryNavController, nil];
     
-    [galleryVC release];
-    [galleryNavController release];
     
-    [photoUploadController setParentTabBar:self.tabBarController.tabBar];
-    [photoUploadController release];
+    [self.photoUploadController setParentTabBar:self.tabBarController.tabBar];
+    self.photoUploadController;
     
     self.window.rootViewController = self.tabBarController;
     //[[self window] addSubview:[self.navController view]];
@@ -144,15 +142,6 @@
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
-}
-
-- (void)dealloc
-{
-    [_tabBarImg release];
-    [_navController release];
-    [_tabBarController release];
-    [_window release];
-    [super dealloc];
 }
 
 @end

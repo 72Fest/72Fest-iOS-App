@@ -30,8 +30,8 @@
 // table methods
 - (GalleryTableViewCell *)retrieveGalleryCellForTableView:(UITableView *)tableView withIndexPath:(NSIndexPath *)indexPath andDequeueName:(NSString *)dequeueName;
 
-@property (nonatomic, retain) PhotoListParser *photoListParser;
-@property (nonatomic, retain) NSArray *imageNames;
-@property (retain, nonatomic) IBOutlet UITableView *galleryTableView;
+@property (nonatomic, strong) PhotoListParser *photoListParser;
+@property (nonatomic, strong) NSArray *imageNames;
+@property (strong, nonatomic) IBOutlet UITableView *galleryTableView;
 @property (nonatomic, assign) BOOL isRefreshing;
 @end

@@ -16,9 +16,9 @@
 
 @interface GalleryViewController ()
 
-@property (nonatomic, retain) UIBarButtonItem *refreshBtn;
-@property (nonatomic, retain) UINib *nibLoader;
-@property (nonatomic, retain) LoaderBoxViewController *loaderBoxVC;
+@property (nonatomic, strong) UIBarButtonItem *refreshBtn;
+@property (nonatomic, strong) UINib *nibLoader;
+@property (nonatomic, strong) LoaderBoxViewController *loaderBoxVC;
 
 @end
 
@@ -44,15 +44,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [_imageNames release];
-    [_photoListParser release];
-    [_refreshBtn release];
-    [_galleryTableView release];
-    [_nibLoader release];
-    [_loaderBoxVC release];
-    [super dealloc];
-}
 
 - (void)viewDidLoad
 {
@@ -61,7 +52,7 @@
     
     //set up refresh button
     //self.refreshBtn = [[UIBarButtonItem alloc] initWithTitle:@"Refresh" style:UIBarButtonSystemItemAction target:self action:@selector(refreshPressed:)];
-    self.refreshBtn = [[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"01-refresh.png"] style:UIBarButtonSystemItemAction target:self action:@selector(refreshPressed:)] autorelease];
+    self.refreshBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"01-refresh.png"] style:UIBarButtonSystemItemAction target:self action:@selector(refreshPressed:)];
     self.navigationItem.rightBarButtonItem = self.refreshBtn;
     
     
@@ -69,10 +60,9 @@
     UIImageView *iv = 
     [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"filmFestLogo.png"]];
     [[self navigationItem] setTitleView:iv];
-    [iv release];
     
     //set up loader box
-    self.loaderBoxVC = [[[LoaderBoxViewController alloc] init] autorelease];
+    self.loaderBoxVC = [[LoaderBoxViewController alloc] init];
     [self.view addSubview:self.loaderBoxVC.view];
     //[self.loaderBoxVC setLoading:YES];
     
@@ -95,8 +85,8 @@
     [self.photoListParser setDelegate:self];
     [self.photoListParser loadURL:[NSURL URLWithString:PHOTO_LIST_URL_STR]];
     
-    self.nibLoader = [[UINib nibWithNibName:GALLERY_CELL_CLASS_NAME 
-                                bundle:[NSBundle mainBundle]] retain];
+    self.nibLoader = [UINib nibWithNibName:GALLERY_CELL_CLASS_NAME 
+                                bundle:[NSBundle mainBundle]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -134,8 +124,7 @@
     if (_isRefreshing) {
         UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         [spinner startAnimating];
-        self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:spinner] autorelease];
-        [spinner release];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
     } else {
         self.navigationItem.rightBarButtonItem = self.refreshBtn;
     }
@@ -162,12 +151,10 @@
     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:detailVC];
     
     
-    detailVC.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(photoDetailCloseBtnPressed:)] autorelease];
+    detailVC.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(photoDetailCloseBtnPressed:)];
     
     [tbc presentModalViewController:nc animated:YES];
     
-    [detailVC release];
-    [nc release];
 }
 
 - (void)photoDetailCloseBtnPressed:(id)sender {
@@ -191,8 +178,6 @@
 - (void)setImageNames:(NSArray *)imageNames {
     if (imageNames != _imageNames) {
         //handle the retains/releases
-        [imageNames retain];
-        [_imageNames release];
         _imageNames = imageNames;
         
         //update the table view now that the
@@ -267,9 +252,7 @@
             dispatch_queue_t imageThumbCellQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             
             dispatch_async(imageThumbCellQueue, ^{
-                [curGalleryDataItem retain]; //not sure if all of this is needed
-                [imgURL retain];
-                [curThumbStr retain];
+                 //not sure if all of this is needed
                 
                 UIImage  *img;
                 NSString *curFilename = [curThumbStr lastPathComponent];
@@ -289,9 +272,6 @@
                 });
                 
                 
-                [curGalleryDataItem release];
-                [imgURL release];
-                [curThumbStr release];
             });
             dispatch_release(imageThumbCellQueue);
         }

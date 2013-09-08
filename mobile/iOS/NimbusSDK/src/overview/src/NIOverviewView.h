@@ -16,7 +16,7 @@
 
 #import <UIKit/UIKit.h>
 
-#ifdef DEBUG
+#if defined(DEBUG) || defined(NI_DEBUG)
 
 @class NIOverviewPageView;
 
@@ -41,6 +41,11 @@
  * Whether the view has a translucent background or not.
  */
 @property (nonatomic, readwrite, assign) BOOL translucent;
+
+/**
+ * Prepends a new page to the Overview.
+ */
+- (void)prependPageView:(NIOverviewPageView *)page;
 
 /**
  * Adds a new page to the Overview.

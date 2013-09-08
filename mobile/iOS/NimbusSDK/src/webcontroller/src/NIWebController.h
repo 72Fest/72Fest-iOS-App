@@ -20,6 +20,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#import "NIPreprocessorMacros.h" /* for NI_WEAK */
+
 /**
  * A simple web view controller implementation with a toolbar.
  *
@@ -83,13 +85,16 @@
 
 - (void)openURL:(NSURL*)URL;
 - (void)openRequest:(NSURLRequest*)request;
+- (void)openHTMLString:(NSString*)htmlString baseURL:(NSURL*)baseUrl;
 
 @property (nonatomic, readwrite, assign, getter = isToolbarHidden) BOOL toolbarHidden;
-@property (nonatomic, readwrite, assign) UIColor* toolbarTintColor;
+@property (nonatomic, readwrite, NI_WEAK) UIColor* toolbarTintColor;
+
+@property (nonatomic, readonly, NI_STRONG) UIWebView* webView;
 
 // Subclassing
 - (BOOL)shouldPresentActionSheet:(UIActionSheet *)actionSheet;
-@property (nonatomic, readwrite, retain) NSURL* actionSheetURL;
+@property (nonatomic, readwrite, NI_STRONG) NSURL* actionSheetURL;
 
 @end
 
@@ -140,6 +145,15 @@
  *      @fn NIWebController::openRequest:
  */
 
+/**
+ * Load the given request using UIWebView's loadHTMLString:baseURL:.
+ *
+ *      @param htmlString  The content for the main page.
+ *      @param baseUrl  The base URL for the content.
+ *
+ *      @fn NIWebController::openHTMLString:baseURL:
+ */
+
 /** @name Accessing the Toolbar */
 
 /**
@@ -154,6 +168,14 @@
  * The tint color of the toolbar.
  *
  *      @fn NIWebController::toolbarTintColor
+ */
+
+/** @name Accessing the Web View */
+
+/**
+ * The internal web view.
+ *
+ *      @fn NIWebController::webView
  */
 
 /** @name Subclassing the Web Controller */
