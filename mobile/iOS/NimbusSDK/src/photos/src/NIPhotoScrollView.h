@@ -36,6 +36,7 @@
   UIImageView* _imageView;
   // The scroll view.
   NICenteringScrollView* _scrollView;
+  UIActivityIndicatorView* _loadingView;
 
   // Photo Information
   NIPhotoScrollViewPhotoSize _photoSize;
@@ -48,7 +49,6 @@
 
   UITapGestureRecognizer* _doubleTapGestureRecognizer;
 
-  __unsafe_unretained id<NIPhotoScrollViewDelegate> _photoScrollViewDelegate;
 }
 
 #pragma mark Configuring Functionality
@@ -56,16 +56,19 @@
 @property (nonatomic, readwrite, assign, getter=isZoomingEnabled) BOOL zoomingIsEnabled; // default: yes
 @property (nonatomic, readwrite, assign, getter=isZoomingAboveOriginalSizeEnabled) BOOL zoomingAboveOriginalSizeIsEnabled; // default: yes
 @property (nonatomic, readwrite, assign, getter=isDoubleTapToZoomEnabled) BOOL doubleTapToZoomIsEnabled; // default: yes
-@property (nonatomic, readwrite, assign) id<NIPhotoScrollViewDelegate> photoScrollViewDelegate;
+@property (nonatomic, readwrite, assign) CGFloat maximumScale; // default: 0 (autocalculate)
+@property (nonatomic, readwrite, NI_WEAK) id<NIPhotoScrollViewDelegate> photoScrollViewDelegate;
 
 #pragma mark State
 
 - (UIImage *)image;
 - (NIPhotoScrollViewPhotoSize)photoSize;
 - (void)setImage:(UIImage *)image photoSize:(NIPhotoScrollViewPhotoSize)photoSize;
+@property (nonatomic, assign, getter = isLoading) BOOL loading;
 
 @property (nonatomic, readwrite, assign) NSInteger pageIndex;
 @property (nonatomic, readwrite, assign) CGSize photoDimensions;
+@property (nonatomic, readonly, NI_STRONG) UITapGestureRecognizer* doubleTapGestureRecognizer;
 
 @end
 
@@ -107,6 +110,15 @@
  * By default this is YES.
  *
  *      @fn NIPhotoScrollView::doubleTapToZoomIsEnabled
+ */
+
+/**
+ * The maximum scale of the image.
+ *
+ * By default this is 0, meaning the view will automatically determine the maximum scale.
+ * Setting this to a non-zero value will override the automatically-calculated maximum scale.
+ *
+ *      @fn NIPhotoScrollView::maximumScale
  */
 
 /**
@@ -160,4 +172,12 @@
  * CGSizeZero is used to signify an unknown final photo dimension.
  *
  *      @fn NIPhotoScrollView::photoDimensions
+ */
+
+/**
+ * The gesture recognizer for double-tapping zooms in and out of the image.
+ *
+ * This is used mainly for setting up dependencies between gesture recognizers.
+ *
+ *      @fn NIPhotoScrollView::doubleTapGestureRecognizer
  */

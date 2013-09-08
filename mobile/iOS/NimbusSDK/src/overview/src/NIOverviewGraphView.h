@@ -16,6 +16,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "NIPreprocessorMacros.h" /* for NI_WEAK */
+
 @protocol NIOverviewGraphViewDataSource;
 
 /**
@@ -25,13 +27,13 @@
  */
 @interface NIOverviewGraphView : UIView {
 @private
-  __unsafe_unretained id<NIOverviewGraphViewDataSource> _dataSource;
+  __weak id<NIOverviewGraphViewDataSource> _dataSource;
 }
 
 /**
  * The data source for this graph view.
  */
-@property (nonatomic, readwrite, assign) id<NIOverviewGraphViewDataSource> dataSource;
+@property (nonatomic, readwrite, NI_WEAK) id<NIOverviewGraphViewDataSource> dataSource;
 
 @end
 

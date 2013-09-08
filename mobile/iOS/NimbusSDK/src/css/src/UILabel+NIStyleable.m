@@ -19,9 +19,13 @@
 #import "UIView+NIStyleable.h"
 #import "NICSSRuleset.h"
 #import "NimbusCore.h"
+#import "NIUserInterfaceString.h"
+
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "Nimbus requires ARC support."
+#endif
 
 NI_FIX_CATEGORY_BUG(UILabel_NIStyleable)
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +35,13 @@ NI_FIX_CATEGORY_BUG(UILabel_NIStyleable)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)applyLabelStyleWithRuleSet:(NICSSRuleset *)ruleSet {
+  [self applyLabelStyleWithRuleSet:ruleSet inDOM:nil];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)applyLabelStyleWithRuleSet:(NICSSRuleset *)ruleSet inDOM:(NIDOM *)dom {
   if ([ruleSet hasTextColor]) { self.textColor = ruleSet.textColor; }
+  if ([ruleSet hasHighlightedTextColor]) { self.highlightedTextColor = ruleSet.highlightedTextColor; }
   if ([ruleSet hasTextAlignment]) { self.textAlignment = ruleSet.textAlignment; }
   if ([ruleSet hasFont]) { self.font = ruleSet.font; }
   if ([ruleSet hasTextShadowColor]) { self.shadowColor = ruleSet.textShadowColor; }
@@ -43,11 +53,25 @@ NI_FIX_CATEGORY_BUG(UILabel_NIStyleable)
   if ([ruleSet hasBaselineAdjustment]) { self.baselineAdjustment = ruleSet.baselineAdjustment; }
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)applyLabelStyleBeforeViewWithRuleSet:(NICSSRuleset *)ruleSet inDOM:(NIDOM *)dom
+{
+  if (ruleSet.hasTextKey) {
+    NIUserInterfaceString *nis = [[NIUserInterfaceString alloc] initWithKey:ruleSet.textKey];
+    [nis attach:self withSelector:@selector(setText:)];
+  }
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)applyStyleWithRuleSet:(NICSSRuleset *)ruleSet {
-  [self applyViewStyleWithRuleSet:ruleSet];
-  [self applyLabelStyleWithRuleSet:ruleSet];
+  [self applyStyleWithRuleSet:ruleSet inDOM:nil];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)applyStyleWithRuleSet:(NICSSRuleset *)ruleSet inDOM:(NIDOM *)dom {
+  [self applyLabelStyleBeforeViewWithRuleSet:ruleSet inDOM:dom];
+  [self applyViewStyleWithRuleSet:ruleSet inDOM:dom];
+  [self applyLabelStyleWithRuleSet:ruleSet inDOM:dom];
 }
 
 @end

@@ -12,11 +12,6 @@
 @synthesize itemIndexPath=_itemIndexPath;
 @synthesize fullImageURL=_fullImageURL;
 
-- (void)dealloc {
-    [_itemIndexPath release];
-    [_fullImageURL release];
-    [super dealloc];
-}
 
 - (void)setThumb:(UIImage *)img; {
     if (!img) {

@@ -12,7 +12,6 @@
 #import "Reachability.h"
 #import "ConnectionInfo.h"
 #import "CountDownView.h"
-#import "JSONKit.h"
 #import "FrederickFilmFestPOCAppDelegate.h"
 
 @implementation PhotoUploadViewController
@@ -38,22 +37,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_progressView release];
-    [_selectedImage release];
-    [_selectPhotoFromSource release];
-    [_uploadTxt release];
-    [_activityIndicator release];
-    [_curConnection release];
-    [_curImage release];
-    [_parentTabBar release];
-    [_fullSizeImage release];
-    
-    [_countDownTimer release];
-    [_uploadTextView release];
-    [super dealloc];
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -86,22 +69,18 @@
     UIImage *i = [UIImage imageNamed:@"bkg.png"];
     UIColor *c = [[UIColor alloc] initWithPatternImage:i];
     v.backgroundColor = c;
-    [c release];
     [[self view] insertSubview:v atIndex:0];
-    [v release];
     
     //set up image
     UIImageView *iv = 
         [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"filmFestLogo.png"]];
     [[self navigationItem] setTitleView:iv];
-    [iv release];
     
     //set up tab item
     UIBarButtonItem *infoBtnItem = 
         [[UIBarButtonItem alloc] initWithTitle:@"Info" style:UIBarButtonItemStylePlain target:self action:@selector(infoItemPressed:)];
     
     [[self navigationItem] setRightBarButtonItem:infoBtnItem];
-    [infoBtnItem release];
     
     
     // attempt to retrieve the count down metata data
@@ -211,12 +190,14 @@
     dispatch_async(countDownRetreivalQueue, ^{
         NSURLResponse *response;
         NSError *err;
+        NSError *jsonErr;
         
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:countDownURLStr]];
         
         NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&err];
         
-        NSDictionary *jsonDict = [data objectFromJSONData];
+        NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:nil error:&jsonErr];
+        
         
         NSString *countdownCaption = (NSString *)[jsonDict valueForKey:kCountdownCaption];
         
@@ -255,8 +236,6 @@
             });
         }
         
-        [comp release];
-        [cal release];
         
     });
     dispatch_release(countDownRetreivalQueue);
@@ -268,7 +247,6 @@
     [cdv setCaption:captionStr];
     
     [self.view addSubview:cdv];
-    [cdv release];
 }
 
 #pragma mark - NSURL delegate methods
@@ -297,7 +275,6 @@
     //[self setCurImage:nil];
     [self.uploadBtn setEnabled:NO];
     
-    [alert release];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
@@ -316,7 +293,6 @@
                          otherButtonTitles:nil];
     [failAlert show];
     
-    [failAlert release];
 }
 
 - (void)connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
@@ -396,7 +372,6 @@
     
     [self  presentModalViewController:imagePicker animated:YES];
     
-    [imagePicker release];
 }
 
 - (void)choosePhotoBtnPressed {
@@ -410,7 +385,6 @@
     [imagePicker setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
     [self  presentModalViewController:imagePicker animated:YES];
     
-    [imagePicker release];
 }
 
 #pragma mark - nav bar actions
@@ -421,7 +395,6 @@
     
     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:newVC];
     [nc.navigationBar setTintColor:THEME_CLR];
-    [newVC release];
     
     //set up nav bar header
     
@@ -429,7 +402,6 @@
     
     [self presentModalViewController:nc animated:YES];
     
-    [nc release];
 }
 
 - (void)infoViewClosed:(id)sender {
@@ -455,7 +427,6 @@
     }
     
     [sheet showFromTabBar:self.parentTabBar];
-    [sheet release];
 }
 
 - (IBAction)uploadBtnPressed:(id)sender {
@@ -469,7 +440,6 @@
                              otherButtonTitles:nil];
         [failAlert show];
         
-        [failAlert release];
 
         return;
     }
@@ -497,7 +467,6 @@
                          otherButtonTitles:nil];
         [alert show];
         
-        [alert release];
         
         return;
     } else {
