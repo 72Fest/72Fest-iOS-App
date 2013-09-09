@@ -109,19 +109,19 @@
         //NSString *fileName = [fullUrlStr lastPathComponent];
         NSData *imgData = nil;
         
-        //check disk cache first
-        if ([[DiskCacheManager defaultManager] existsInCache:[[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent]]) {
-            //we found it in the disk cache, lets save the pull from the
-            //network and grab it from the disk cache
-            imgData = [[DiskCacheManager defaultManager] retrieveFromCache:[[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent]];
-        } else {
-            //pull it from the network, but then save to the cache
+//        //check disk cache first
+//        if ([[DiskCacheManager defaultManager] existsInCache:[[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent]]) {
+//            //we found it in the disk cache, lets save the pull from the
+//            //network and grab it from the disk cache
+//            imgData = [[DiskCacheManager defaultManager] retrieveFromCache:[[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent]];
+//        } else {
+//            //pull it from the network, but then save to the cache
             imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[imgDict valueForKey:XML_TAG_FULL_URL]]];
-            
-            if (imgData) {
-                [[DiskCacheManager defaultManager] saveToCache:imgData withFilename:[[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent]];
-            }
-        }
+//            
+//            if (imgData) {
+//                [[DiskCacheManager defaultManager] saveToCache:imgData withFilename:[[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent]];
+//            }
+//        }
 
         UIImage *loadedImg = [UIImage imageWithData:imgData];
         
@@ -133,7 +133,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^ {
             
-            [albumViewRef didLoadPhoto: loadedImg
+            [self.photoAlbumView didLoadPhoto: loadedImg
                                       atIndex: photoIndex
                                     photoSize: NIPhotoScrollViewPhotoSizeOriginal];
         });
