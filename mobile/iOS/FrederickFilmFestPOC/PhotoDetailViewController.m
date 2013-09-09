@@ -10,6 +10,7 @@
 #import "PhotoListParser.h"
 #import "ImageCache.h"
 #import "DiskCacheManager.h"
+#define USE_DISK_CACHE
 
 @interface PhotoDetailViewController ()
 
@@ -101,27 +102,30 @@
     
     //TODO: cache large photo as well
     dispatch_queue_t largePhotoQueue = dispatch_queue_create("Large Photo Queue", NULL);
-    
-    NIPhotoAlbumScrollView *albumViewRef = self.photoAlbumView;
    
     dispatch_async(largePhotoQueue, ^{
         //NSString *fullUrlStr = [imgDict valueForKey:XML_TAG_FULL_URL];
         //NSString *fileName = [fullUrlStr lastPathComponent];
         NSData *imgData = nil;
         
-//        //check disk cache first
-//        if ([[DiskCacheManager defaultManager] existsInCache:[[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent]]) {
-//            //we found it in the disk cache, lets save the pull from the
-//            //network and grab it from the disk cache
-//            imgData = [[DiskCacheManager defaultManager] retrieveFromCache:[[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent]];
-//        } else {
-//            //pull it from the network, but then save to the cache
+        NSString *imageKey = [[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent];
+#ifdef USE_DISK_CACHE        
+        //check disk cache first
+        if ([[DiskCacheManager defaultManager] existsInCache:imageKey]) {
+            //we found it in the disk cache, lets save the pull from the
+            //network and grab it from the disk cache
+
+            imgData = [[DiskCacheManager defaultManager] retrieveFromCache:imageKey];
+        } else {
+#endif
+            //pull it from the network, but then save to the cache
             imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[imgDict valueForKey:XML_TAG_FULL_URL]]];
-//            
-//            if (imgData) {
-//                [[DiskCacheManager defaultManager] saveToCache:imgData withFilename:[[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent]];
-//            }
-//        }
+#ifdef USE_DISK_CACHE
+            if (imgData) {
+                [[DiskCacheManager defaultManager] saveToCache:imgData withFilename:imageKey];
+            }
+#endif
+        }
 
         UIImage *loadedImg = [UIImage imageWithData:imgData];
         

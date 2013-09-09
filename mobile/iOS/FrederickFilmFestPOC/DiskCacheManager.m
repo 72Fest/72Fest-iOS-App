@@ -43,13 +43,18 @@ static DiskCacheManager *_diskCacheManager;
 }
 
 - (void)saveToCache:(NSData *)data withFilename:(NSString *)fileName {
-    [data writeToFile:[self.cachePath stringByAppendingPathComponent:fileName] atomically:YES];
+    if (![self existsInCache:fileName])
+        [data writeToFile:[self.cachePath stringByAppendingPathComponent:fileName] atomically:NO];
 }
 
 - (NSData *)retrieveFromCache:(NSString *)fileName {
-    NSData *data = [NSData dataWithContentsOfFile:[self.cachePath stringByAppendingPathComponent:fileName]];
+    NSError *error;
+
+    NSData *data =
+        [NSData dataWithContentsOfFile:[self.cachePath stringByAppendingPathComponent:fileName]
+                               options:NSDataReadingUncached error:&error];
     
-    return [data copy];
+    return [NSData dataWithData:data];
 }
 
 @end
