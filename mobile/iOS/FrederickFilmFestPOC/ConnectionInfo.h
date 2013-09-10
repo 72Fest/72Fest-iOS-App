@@ -11,6 +11,7 @@
 
 #define PHOTO_LIST_URL_STR @"http://putpocket.com/photoapp/getImagesJs.php"
 #define UPLOAD_URL_STR  @"http://putpocket.com/photoapp/submit.php"
+#define VOTE_URL_STR  @"http://putpocket.com/photoapp/vote.php"
 #define EMAIL_URL_STR @"http://www.72fest.com/about/contact/"
 #define DESIGN_URL_STR @"http://www.jbokim.com"
 #define MAIN_URL_STR @"http://www.72fest.com"

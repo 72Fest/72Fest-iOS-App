@@ -10,10 +10,15 @@
 #import "PhotoListParser.h"
 #import "ImageCache.h"
 #import "DiskCacheManager.h"
-#define USE_DISK_CACHE
+#import "VoteManager.h"
+//#define USE_DISK_CACHE
 
 @interface PhotoDetailViewController ()
+- (void)setupVoteIconWithVoteVal:(BOOL)hasVote;
+- (NSString *)imageKeyForIndex:(NSInteger)imageIdx;
 
+@property (nonatomic, strong) UIBarButtonItem *likeBtn;
+@property (nonatomic, strong) UIBarButtonItem *unlikeBtn;
 @end
 
 @implementation PhotoDetailViewController
@@ -40,15 +45,11 @@
     self.photoAlbumView.delegate = self;
     
     //set up custom toolbar
-    UIBarItem* flexibleSpace =
-    [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemFlexibleSpace target: nil 
-action: nil];
+    self.likeBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(likeBtnPressed:)];
     
-    UIBarButtonItem *likeBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(likeBtnPressed:)];
+    self.unlikeBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(likeBtnPressed:)];
     
-    self.toolbar.items = @[flexibleSpace, self.previousButton,
-                           flexibleSpace, likeBtn, flexibleSpace,
-                           self.nextButton, flexibleSpace];
+    [self setupVoteIconWithVoteVal:NO];
     
     //load up all the data
     [self.photoAlbumView reloadData];
@@ -68,11 +69,49 @@ action: nil];
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+- (void)setupVoteIconWithVoteVal:(BOOL)hasVote {
+    UIBarItem* flexibleSpace =
+    [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemFlexibleSpace target: nil action: nil];
+    
+    if (hasVote) {
+        self.toolbar.items = @[self.previousButton,
+                               flexibleSpace, self.unlikeBtn, flexibleSpace,
+                               self.nextButton];
+    } else {
+        self.toolbar.items = @[ self.previousButton,
+                               flexibleSpace, self.likeBtn, flexibleSpace,
+                               self.nextButton];
+    }
+}
+
+- (NSString *)imageKeyForIndex:(NSInteger)imageIdx {
+    NSDictionary *imgDict = (NSDictionary *)[self.photosList objectAtIndex:imageIdx];
+    
+    NSString *imgFile = [[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent];
+    NSRange range = [imgFile rangeOfString:@"."];
+    NSString *imgKey = [imgFile substringToIndex:range.location];
+    
+    return imgKey;
+}
 
 #pragma mark - action selectors
 - (void)likeBtnPressed:(id)sender {
-    NSLog(@"Like button pressed!");
+    NSLog(@"Like button pressed! %d",  self.photoAlbumView.centerPageIndex);
+    NSString *imgKey = [self imageKeyForIndex:self.photoAlbumView.centerPageIndex];
+    
+    BOOL hasVote = [[VoteManager defaultManager] toggleVoteForImgKey:imgKey];
+    
+    //toggle like icon (for some reason I'm colling it vote)
+    [self setupVoteIconWithVoteVal:hasVote];
+    
 }
+
+#pragma mark - NIPagingScrollViewDelegate
+- (void)pagingScrollViewDidChangePages:(NIPagingScrollView *)pagingScrollView {
+    NSString *imgKey = [self imageKeyForIndex:self.photoAlbumView.centerPageIndex];
+    [self setupVoteIconWithVoteVal:[[VoteManager defaultManager] hasVoteForImgKey:imgKey]];
+}
+
 
 #pragma mark - NIPhotoAlbumScrollViewDataSource
 
@@ -87,7 +126,13 @@ action: nil];
                         photoSize: (NIPhotoScrollViewPhotoSize *)photoSize
                         isLoading: (BOOL *)isLoading
           originalPhotoDimensions: (CGSize *)originalPhotoDimensions {
-        
+    
+    //set up like icon for image
+    if (self.photoAlbumView.centerPageIndex == photoIndex) {
+        NSString *imgKey = [self imageKeyForIndex:photoIndex];
+        [self setupVoteIconWithVoteVal:[[VoteManager defaultManager] hasVoteForImgKey:imgKey]];
+    }
+    
     NSDictionary *imgDict = (NSDictionary *)[self.photosList objectAtIndex:photoIndex];
     
     NSString *imgThumbStr = [imgDict valueForKey:XML_TAG_THUMB_URL];
@@ -124,8 +169,8 @@ action: nil];
         //NSString *fileName = [fullUrlStr lastPathComponent];
         NSData *imgData = nil;
         
+#ifdef USE_DISK_CACHE
         NSString *imageKey = [[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent];
-#ifdef USE_DISK_CACHE        
         //check disk cache first
         if ([[DiskCacheManager defaultManager] existsInCache:imageKey]) {
             //we found it in the disk cache, lets save the pull from the
@@ -140,9 +185,9 @@ action: nil];
             if (imgData) {
                 [[DiskCacheManager defaultManager] saveToCache:imgData withFilename:imageKey];
             }
-#endif
-        }
 
+        }
+#endif
         UIImage *loadedImg = [UIImage imageWithData:imgData];
         
         if (loadedImg == nil) {
