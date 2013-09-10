@@ -39,6 +39,17 @@
     self.photoAlbumView.dataSource = self;
     self.photoAlbumView.delegate = self;
     
+    //set up custom toolbar
+    UIBarItem* flexibleSpace =
+    [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemFlexibleSpace target: nil 
+action: nil];
+    
+    UIBarButtonItem *likeBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(likeBtnPressed:)];
+    
+    self.toolbar.items = @[flexibleSpace, self.previousButton,
+                           flexibleSpace, likeBtn, flexibleSpace,
+                           self.nextButton, flexibleSpace];
+    
     //load up all the data
     [self.photoAlbumView reloadData];
     
@@ -57,8 +68,13 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-#pragma mark -
-#pragma mark NIPhotoAlbumScrollViewDataSource
+
+#pragma mark - action selectors
+- (void)likeBtnPressed:(id)sender {
+    NSLog(@"Like button pressed!");
+}
+
+#pragma mark - NIPhotoAlbumScrollViewDataSource
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
