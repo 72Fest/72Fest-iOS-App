@@ -12,13 +12,23 @@
 #import "DiskCacheManager.h"
 #import "VoteManager.h"
 #import "ConnectionInfo.h"
+#import <Social/Social.h>
 //#define USE_DISK_CACHE
+
+typedef enum {
+    SHARE_ITEM_TWITTER,
+    SHARE_ITEM_FACEBOOK,
+    SHARE_ITEM_NONE
+} ShareItem;
 
 @interface PhotoDetailViewController ()
 - (void)setupVoteIconWithVoteVal:(BOOL)hasVote;
 - (NSString *)imageKeyForIndex:(NSInteger)imageIdx;
 - (void)submitVoteWithVoteValue:(BOOL)hasVote andImageKey:(NSString *)imageKey;
 - (NSString *)curImageKey;
+- (void)processShareItem:(ShareItem)item;
+- (void)shareOnTwitterForImage:(UIImage *)img;
+- (void)shareOnFacebookForImage:(UIImage *)img;
 
 @property (nonatomic, strong) UIBarButtonItem *likeBtn;
 @property (nonatomic, strong) UIBarButtonItem *unlikeBtn;
@@ -51,6 +61,10 @@
     //set up custom toolbar
     self.likeBtn = [[UIBarButtonItem alloc] initWithImage:VOTE_UP_ICON_IMG style:UIBarButtonItemStylePlain target:self action:@selector(likeBtnPressed:)];
     self.unlikeBtn = [[UIBarButtonItem alloc] initWithImage:VOTE_DOWN_ICON_IMG style:UIBarButtonItemStylePlain  target:self action:@selector(likeBtnPressed:)];
+    
+    //adding share button
+    self.navigationItem.rightBarButtonItem =
+        [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareBtnPressed:)];
     
     [self setupVoteIconWithVoteVal:NO];
     
@@ -101,6 +115,49 @@
     return imgKey;
 }
 
+- (void)processShareItem:(ShareItem)item {
+    switch (item) {
+        case SHARE_ITEM_TWITTER:
+            [self shareOnTwitterForImage:self.photoAlbumView];
+            break;
+        case SHARE_ITEM_FACEBOOK:
+            [self shareOnFacebookForImage:nil];
+            break;
+        default:
+            break;
+    }
+}
+             
+- (void)shareOnTwitterForImage:(UIImage *)img {
+    SLComposeViewController *tweetSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+    
+    tweetSheet.completionHandler = ^(SLComposeViewControllerResult result) {
+        switch(result) {
+            case SLComposeViewControllerResultCancelled:
+                //cancel was pressed
+                break;
+            case SLComposeViewControllerResultDone:
+                //send was pressed
+                break;
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self dismissViewControllerAnimated:NO completion:^{
+                NSLog(@"Dismissed!");
+            }];
+        });
+        
+    };
+    
+    [tweetSheet setInitialText:@"#72Fest"];
+    
+    [self presentViewController:tweetSheet animated:YES completion:nil];
+}
+
+- (void)shareOnFacebookForImage:(UIImage *)img {
+    
+}
+
 #pragma mark - action selectors
 - (void)likeBtnPressed:(id)sender {
     NSLog(@"Like button pressed! %d",  self.photoAlbumView.centerPageIndex);
@@ -114,6 +171,17 @@
     //toggle like icon (for some reason I'm colling it vote)
     [self setupVoteIconWithVoteVal:hasVote];
     
+}
+
+ - (void)shareBtnPressed:(id)sender {
+     UIActionSheet *shareSheet = [[UIActionSheet alloc] initWithTitle:@"Share your photo!" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Twitter", @"Facebook", nil];
+     [shareSheet showInView:self.view];
+ }
+
+#pragma mark - action sheet delegate methods
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    NSLog(@"Pressed share item: %d!", buttonIndex);
+    [self processShareItem:buttonIndex];
 }
 
 #pragma mark - NIPagingScrollViewDelegate

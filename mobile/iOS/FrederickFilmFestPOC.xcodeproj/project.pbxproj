@@ -352,6 +352,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0750DB4D17E041A50040A68E /* Social.framework in Frameworks */,
 				8AEA3A85159ABED20006891F /* QuartzCore.framework in Frameworks */,
 				8A430B25142C2D38007B72F5 /* SystemConfiguration.framework in Frameworks */,
 				8AC0A2FC141D773800F0E4B0 /* UIKit.framework in Frameworks */,
@@ -476,6 +477,7 @@
 		8AC0A2EC141D773800F0E4B0 = {
 			isa = PBXGroup;
 			children = (
+				0750DB4C17E041A50040A68E /* Social.framework */,
 				0703D11616131508004870A5 /* Default.png */,
 				0703D11416131500004870A5 /* Default@2x.png */,
 				076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */,
@@ -502,6 +504,7 @@
 		8AC0A2FA141D773800F0E4B0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0750DB4A17E03F4D0040A68E /* Twitter.framework */,
 				8AEA3A84159ABED20006891F /* QuartzCore.framework */,
 				8A430B24142C2D38007B72F5 /* SystemConfiguration.framework */,
 				8AC0A2FB141D773800F0E4B0 /* UIKit.framework */,
