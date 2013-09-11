@@ -8,7 +8,7 @@
 
 #import "NIToolbarPhotoViewController.h"
 
-@interface PhotoDetailViewController : NIToolbarPhotoViewController <NIPhotoAlbumScrollViewDataSource, NIPagingScrollViewDelegate, NSURLConnectionDelegate>
+@interface PhotoDetailViewController : NIToolbarPhotoViewController <NIPhotoAlbumScrollViewDataSource, NIPagingScrollViewDelegate, NSURLConnectionDelegate, UIActionSheetDelegate>
 
 @property (nonatomic, strong) NSArray *photosList;
 @property (nonatomic, assign) NSInteger selectedPhotIndex;
