@@ -13,7 +13,7 @@
 #define VOTE_RESULT_STATUS_KEY @"status"
 #define VOTE_REULST_TOTALS_KEY @"votes"
 
-@interface PhotoDetailViewController : NIToolbarPhotoViewController <NIPhotoAlbumScrollViewDataSource, NIPagingScrollViewDelegate, NSURLConnectionDelegate>
+@interface PhotoDetailViewController : NIToolbarPhotoViewController <NIPhotoAlbumScrollViewDataSource, NIPagingScrollViewDelegate, NSURLConnectionDelegate, UIActionSheetDelegate>
 
 @property (nonatomic, strong) NSArray *photosList;
 @property (nonatomic, assign) NSInteger selectedPhotIndex;
