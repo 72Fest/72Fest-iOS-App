@@ -153,13 +153,13 @@
     
     detailVC.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(photoDetailCloseBtnPressed:)];
     
-    [self presentModalViewController:nc animated:YES];
+    [self presentViewController:nc animated:YES completion:nil];
     
 }
 
 - (void)photoDetailCloseBtnPressed:(id)sender {
      //UITabBarController *tbc = [(FrederickFilmFestPOCAppDelegate *)[[UIApplication sharedApplication] delegate] tabBarController];
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Photo Galleries Protocol
@@ -271,7 +271,6 @@
                 
                 
             });
-            dispatch_release(imageThumbCellQueue);
         }
     }
 
