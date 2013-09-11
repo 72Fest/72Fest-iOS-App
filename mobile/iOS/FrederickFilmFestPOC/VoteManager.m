@@ -30,28 +30,33 @@ static VoteManager *_voteManager;
     self = [super init];
     if (self) {
         self.defaults = [NSUserDefaults standardUserDefaults];
-        self.votesDict = [self.defaults valueForKey:VOTE_MANGER_IMG_KEY];
+        self.votesDict = [[self.defaults dictionaryForKey:VOTE_MANGER_IMG_KEY] mutableCopy];
         
         if (!self.votesDict)
             self.votesDict = [[NSMutableDictionary alloc] init];
+
     }
     
     return self;
 }
 
 - (BOOL)toggleVoteForImgKey:(NSString *)imgKey {
+    BOOL hasVote;
+
     if ([self hasVoteForImgKey:imgKey]) {
         [self.votesDict removeObjectForKey:imgKey];
-        return NO;
+        hasVote = NO;
     } else {
         [self.votesDict setValue:@"YES" forKey:imgKey];
-        return YES;
+        hasVote = YES;
     }
     
     //sync the changes to the settings cache
     //TODO: should this be added into a queue?
-    [self.defaults setValue:self.votesDict forKey:VOTE_MANGER_IMG_KEY];
+    [self.defaults setObject:self.votesDict forKey:VOTE_MANGER_IMG_KEY];
     [self.defaults synchronize];
+    
+    return hasVote;
 }
 
 - (BOOL)hasVoteForImgKey:(NSString *)imgKey {
