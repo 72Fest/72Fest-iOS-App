@@ -11,14 +11,18 @@
 #import "ImageCache.h"
 #import "DiskCacheManager.h"
 #import "VoteManager.h"
+#import "ConnectionInfo.h"
 //#define USE_DISK_CACHE
 
 @interface PhotoDetailViewController ()
 - (void)setupVoteIconWithVoteVal:(BOOL)hasVote;
 - (NSString *)imageKeyForIndex:(NSInteger)imageIdx;
+- (void)submitVoteWithVoteValue:(BOOL)hasVote andImageKey:(NSString *)imageKey;
+- (NSString *)curImageKey;
 
 @property (nonatomic, strong) UIBarButtonItem *likeBtn;
 @property (nonatomic, strong) UIBarButtonItem *unlikeBtn;
+@property (nonatomic, strong) NSURLConnection *curConnection;
 @end
 
 @implementation PhotoDetailViewController
@@ -69,6 +73,10 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+- (NSString *)curImageKey {
+    return [self imageKeyForIndex:self.photoAlbumView.centerPageIndex];
+}
+
 - (void)setupVoteIconWithVoteVal:(BOOL)hasVote {
     UIBarItem* flexibleSpace =
     [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemFlexibleSpace target: nil action: nil];
@@ -97,10 +105,13 @@
 #pragma mark - action selectors
 - (void)likeBtnPressed:(id)sender {
     NSLog(@"Like button pressed! %d",  self.photoAlbumView.centerPageIndex);
-    NSString *imgKey = [self imageKeyForIndex:self.photoAlbumView.centerPageIndex];
     
-    BOOL hasVote = [[VoteManager defaultManager] toggleVoteForImgKey:imgKey];
-    
+    BOOL hasVote = [[VoteManager defaultManager] toggleVoteForImgKey:self.curImageKey];
+
+    NSString *keyVal = self.curImageKey;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self submitVoteWithVoteValue:hasVote andImageKey:keyVal];
+    });
     //toggle like icon (for some reason I'm colling it vote)
     [self setupVoteIconWithVoteVal:hasVote];
     
@@ -108,10 +119,46 @@
 
 #pragma mark - NIPagingScrollViewDelegate
 - (void)pagingScrollViewDidChangePages:(NIPagingScrollView *)pagingScrollView {
-    NSString *imgKey = [self imageKeyForIndex:self.photoAlbumView.centerPageIndex];
+    NSString *imgKey = self.curImageKey;
     [self setupVoteIconWithVoteVal:[[VoteManager defaultManager] hasVoteForImgKey:imgKey]];
 }
 
+- (void)submitVoteWithVoteValue:(BOOL)hasVote andImageKey:(NSString *)imageKey {
+    NSMutableURLRequest *request =
+    [NSMutableURLRequest requestWithURL:[NSURL URLWithString:VOTE_URL_STR]];
+    NSString *boundary =
+    [NSString stringWithFormat:@"_14737809831466499882%d_",arc4random() % 74];
+    
+    
+    [request addValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField:@"Content-Type"];
+    [request addValue:@"application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5" forHTTPHeaderField:@"Accept"];
+    
+    
+    [request setValue:@"PhotoApp iOS" forHTTPHeaderField:@"User-agent"];
+    
+    [request setHTTPMethod:@"POST"];
+    
+    NSMutableData *body = [NSMutableData data];
+    
+    //build body
+    
+    //separate each form data item with boundary
+    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[@"Content-Disposition: form-data; name=\"id\"\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"%@", imageKey] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"\r\n--%@%@\r\n",boundary, (hasVote) ? @"--" : @""] dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    if (!hasVote) {
+        [body appendData:[@"Content-Disposition: form-data; name=\"unlike\"\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[@"1" dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+    
+    [request setHTTPBody:body];
+    
+    self.curConnection = [NSURLConnection connectionWithRequest:request delegate:self];
+    
+}
 
 #pragma mark - NIPhotoAlbumScrollViewDataSource
 
@@ -216,5 +263,41 @@
 - (id<NIPagingScrollViewPage>)pagingScrollView:(NIPagingScrollView *)pagingScrollView pageViewForIndex:(NSInteger)pageIndex {
     return [self.photoAlbumView pagingScrollView:pagingScrollView pageViewForIndex:pageIndex];
 }
+
+#pragma mark - NSURL delegate methods
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    
+    NSString *content = [NSString stringWithUTF8String:[data bytes]];
+    NSLog(@"got vote result:%@", content );
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    NSLog(@"finished loading");
+    
+    /*
+    UIAlertView *alert =
+    [[UIAlertView alloc] initWithTitle:@"Success"
+                               message:@"The image has been submitted for approval!"
+                              delegate:nil
+                     cancelButtonTitle:@"Dismiss"
+                     otherButtonTitles:nil];
+    [alert show];
+    */
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    NSLog(@"failed to vote!");
+        
+    
+    UIAlertView *failAlert =
+    [[UIAlertView alloc] initWithTitle:@"Vote Failed!"
+                               message:[NSString stringWithFormat:@"Your vote could not be recorded! %@", [error localizedDescription]]
+                              delegate:nil
+                     cancelButtonTitle:@"Close"
+                     otherButtonTitles:nil];
+    [failAlert show];
+    
+}
+
 
 @end
