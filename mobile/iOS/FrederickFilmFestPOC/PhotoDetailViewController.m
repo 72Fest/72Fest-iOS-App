@@ -49,9 +49,8 @@
     self.photoAlbumView.delegate = self;
     
     //set up custom toolbar
-    self.likeBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(likeBtnPressed:)];
-    
-    self.unlikeBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(likeBtnPressed:)];
+    self.likeBtn = [[UIBarButtonItem alloc] initWithImage:VOTE_UP_ICON_IMG style:UIBarButtonItemStylePlain target:self action:@selector(likeBtnPressed:)];
+    self.unlikeBtn = [[UIBarButtonItem alloc] initWithImage:VOTE_DOWN_ICON_IMG style:UIBarButtonItemStylePlain  target:self action:@selector(likeBtnPressed:)];
     
     [self setupVoteIconWithVoteVal:NO];
     
