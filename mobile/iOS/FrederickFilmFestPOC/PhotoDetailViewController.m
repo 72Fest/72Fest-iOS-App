@@ -250,9 +250,6 @@
         
         *isLoading = NO;
     });
-    
-    
-    dispatch_release(largePhotoQueue);
         
     
     return image;

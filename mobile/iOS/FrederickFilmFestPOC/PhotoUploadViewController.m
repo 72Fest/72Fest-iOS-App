@@ -240,7 +240,6 @@
         
         
     });
-    dispatch_release(countDownRetreivalQueue);
 }
 
 - (void)displayCountdownWithCaption:(NSString *)captionStr andDate:(NSDate *)countDownDate {
@@ -329,11 +328,11 @@
     [self.uploadBtn setEnabled:YES];
     [self.uploadBtn setHidden:NO];
     
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Action Sheet delegate methods
@@ -371,8 +370,8 @@
     
     [imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
     [imagePicker setDelegate:self];
-    
-    [self  presentModalViewController:imagePicker animated:YES];
+
+    [self presentViewController:imagePicker animated:YES completion:nil];
     
 }
 
@@ -385,7 +384,7 @@
     [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
     [imagePicker setDelegate:self];
     [imagePicker setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-    [self  presentModalViewController:imagePicker animated:YES];
+    [self presentViewController:imagePicker animated:YES completion:nil];
     
 }
 
@@ -401,13 +400,11 @@
     //set up nav bar header
     
     
-    
-    [self presentModalViewController:nc animated:YES];
-    
+    [self presentViewController:nc animated:YES completion:nil];
 }
 
 - (void)infoViewClosed:(id)sender {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - IBActions
