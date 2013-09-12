@@ -16,6 +16,7 @@ $timeHash = array("year" =>  $year,
 
 $countdownData = array("caption" => $caption, "time" => $timeHash);
 
-echo json_encode($countdownData, $JSON_UNESCAPED_UNICODE);
+header('Content-Type: application/json');
+echo json_encode($countdownData);
 
 ?>
