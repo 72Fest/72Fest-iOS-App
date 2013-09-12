@@ -102,6 +102,8 @@
     
     self.activityIndicator = nil;
     
+    self.parentTabBar = nil;
+    
     [self setCountDownTimer:nil];
     [self setUploadTextView:nil];
     [self setUploadTextView:nil];
@@ -114,7 +116,7 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
-    return NO;
+    return UIInterfaceOrientationIsPortrait(interfaceOrientation);
 }
 
 #pragma mark - Upload code
