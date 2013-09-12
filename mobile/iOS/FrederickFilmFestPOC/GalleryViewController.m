@@ -141,7 +141,7 @@
 }
 
 - (void)galleryThumbPressed:(GalleryCellDataItem *)sender {
-    UITabBarController *tbc = [(FrederickFilmFestPOCAppDelegate *)[[UIApplication sharedApplication] delegate] tabBarController];
+    //UITabBarController *tbc = [(FrederickFilmFestPOCAppDelegate *)[[UIApplication sharedApplication] delegate] tabBarController];
     
     PhotoDetailViewController *detailVC = [[PhotoDetailViewController alloc] initWithNibName:nil bundle:nil];
     [detailVC setPhotosList:self.imageNames];
@@ -153,13 +153,13 @@
     
     detailVC.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(photoDetailCloseBtnPressed:)];
     
-    [tbc presentModalViewController:nc animated:YES];
+    [self presentModalViewController:nc animated:YES];
     
 }
 
 - (void)photoDetailCloseBtnPressed:(id)sender {
-     UITabBarController *tbc = [(FrederickFilmFestPOCAppDelegate *)[[UIApplication sharedApplication] delegate] tabBarController];
-    [tbc dismissModalViewControllerAnimated:YES];
+     //UITabBarController *tbc = [(FrederickFilmFestPOCAppDelegate *)[[UIApplication sharedApplication] delegate] tabBarController];
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark - Photo Galleries Protocol
@@ -252,8 +252,6 @@
             dispatch_queue_t imageThumbCellQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             
             dispatch_async(imageThumbCellQueue, ^{
-                 //not sure if all of this is needed
-                
                 UIImage  *img;
                 NSString *curFilename = [curThumbStr lastPathComponent];
                 if ([[DiskCacheManager defaultManager] existsInCache:curFilename]) {

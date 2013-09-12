@@ -10,9 +10,19 @@
 #import "PhotoListParser.h"
 #import "ImageCache.h"
 #import "DiskCacheManager.h"
+#import "VoteManager.h"
+#import "ConnectionInfo.h"
+//#define USE_DISK_CACHE
 
 @interface PhotoDetailViewController ()
+- (void)setupVoteIconWithVoteVal:(BOOL)hasVote;
+- (NSString *)imageKeyForIndex:(NSInteger)imageIdx;
+- (void)submitVoteWithVoteValue:(BOOL)hasVote andImageKey:(NSString *)imageKey;
+- (NSString *)curImageKey;
 
+@property (nonatomic, strong) UIBarButtonItem *likeBtn;
+@property (nonatomic, strong) UIBarButtonItem *unlikeBtn;
+@property (nonatomic, strong) NSURLConnection *curConnection;
 @end
 
 @implementation PhotoDetailViewController
@@ -38,6 +48,12 @@
     self.photoAlbumView.dataSource = self;
     self.photoAlbumView.delegate = self;
     
+    //set up custom toolbar
+    self.likeBtn = [[UIBarButtonItem alloc] initWithImage:VOTE_UP_ICON_IMG style:UIBarButtonItemStylePlain target:self action:@selector(likeBtnPressed:)];
+    self.unlikeBtn = [[UIBarButtonItem alloc] initWithImage:VOTE_DOWN_ICON_IMG style:UIBarButtonItemStylePlain  target:self action:@selector(likeBtnPressed:)];
+    
+    [self setupVoteIconWithVoteVal:NO];
+    
     //load up all the data
     [self.photoAlbumView reloadData];
     
@@ -56,8 +72,94 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-#pragma mark -
-#pragma mark NIPhotoAlbumScrollViewDataSource
+- (NSString *)curImageKey {
+    return [self imageKeyForIndex:self.photoAlbumView.centerPageIndex];
+}
+
+- (void)setupVoteIconWithVoteVal:(BOOL)hasVote {
+    UIBarItem* flexibleSpace =
+    [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemFlexibleSpace target: nil action: nil];
+    
+    if (hasVote) {
+        self.toolbar.items = @[self.previousButton,
+                               flexibleSpace, self.unlikeBtn, flexibleSpace,
+                               self.nextButton];
+    } else {
+        self.toolbar.items = @[ self.previousButton,
+                               flexibleSpace, self.likeBtn, flexibleSpace,
+                               self.nextButton];
+    }
+}
+
+- (NSString *)imageKeyForIndex:(NSInteger)imageIdx {
+    NSDictionary *imgDict = (NSDictionary *)[self.photosList objectAtIndex:imageIdx];
+    
+    NSString *imgFile = [[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent];
+    NSRange range = [imgFile rangeOfString:@"."];
+    NSString *imgKey = [imgFile substringToIndex:range.location];
+    
+    return imgKey;
+}
+
+#pragma mark - action selectors
+- (void)likeBtnPressed:(id)sender {
+    NSLog(@"Like button pressed! %d",  self.photoAlbumView.centerPageIndex);
+    
+    BOOL hasVote = [[VoteManager defaultManager] toggleVoteForImgKey:self.curImageKey];
+
+    NSString *keyVal = self.curImageKey;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self submitVoteWithVoteValue:hasVote andImageKey:keyVal];
+    });
+    //toggle like icon (for some reason I'm colling it vote)
+    [self setupVoteIconWithVoteVal:hasVote];
+    
+}
+
+#pragma mark - NIPagingScrollViewDelegate
+- (void)pagingScrollViewDidChangePages:(NIPagingScrollView *)pagingScrollView {
+    NSString *imgKey = self.curImageKey;
+    [self setupVoteIconWithVoteVal:[[VoteManager defaultManager] hasVoteForImgKey:imgKey]];
+}
+
+- (void)submitVoteWithVoteValue:(BOOL)hasVote andImageKey:(NSString *)imageKey {
+    NSMutableURLRequest *request =
+    [NSMutableURLRequest requestWithURL:[NSURL URLWithString:VOTE_URL_STR]];
+    NSString *boundary =
+    [NSString stringWithFormat:@"_14737809831466499882%d_",arc4random() % 74];
+    
+    
+    [request addValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField:@"Content-Type"];
+    [request addValue:@"application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5" forHTTPHeaderField:@"Accept"];
+    
+    
+    [request setValue:@"PhotoApp iOS" forHTTPHeaderField:@"User-agent"];
+    
+    [request setHTTPMethod:@"POST"];
+    
+    NSMutableData *body = [NSMutableData data];
+    
+    //build body
+    
+    //separate each form data item with boundary
+    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[@"Content-Disposition: form-data; name=\"id\"\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"%@", imageKey] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"\r\n--%@%@\r\n",boundary, (hasVote) ? @"--" : @""] dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    if (!hasVote) {
+        [body appendData:[@"Content-Disposition: form-data; name=\"unlike\"\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[@"1" dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+    
+    [request setHTTPBody:body];
+    
+    self.curConnection = [NSURLConnection connectionWithRequest:request delegate:self];
+    
+}
+
+#pragma mark - NIPhotoAlbumScrollViewDataSource
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,7 +172,13 @@
                         photoSize: (NIPhotoScrollViewPhotoSize *)photoSize
                         isLoading: (BOOL *)isLoading
           originalPhotoDimensions: (CGSize *)originalPhotoDimensions {
-        
+    
+    //set up like icon for image
+    if (self.photoAlbumView.centerPageIndex == photoIndex) {
+        NSString *imgKey = [self imageKeyForIndex:photoIndex];
+        [self setupVoteIconWithVoteVal:[[VoteManager defaultManager] hasVoteForImgKey:imgKey]];
+    }
+    
     NSDictionary *imgDict = (NSDictionary *)[self.photosList objectAtIndex:photoIndex];
     
     NSString *imgThumbStr = [imgDict valueForKey:XML_TAG_THUMB_URL];
@@ -101,28 +209,31 @@
     
     //TODO: cache large photo as well
     dispatch_queue_t largePhotoQueue = dispatch_queue_create("Large Photo Queue", NULL);
-    
-    NIPhotoAlbumScrollView *albumViewRef = self.photoAlbumView;
-    __block NSData *imgData = nil;
+   
     dispatch_async(largePhotoQueue, ^{
         //NSString *fullUrlStr = [imgDict valueForKey:XML_TAG_FULL_URL];
         //NSString *fileName = [fullUrlStr lastPathComponent];
+        NSData *imgData = nil;
         
-        
+#ifdef USE_DISK_CACHE
+        NSString *imageKey = [[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent];
         //check disk cache first
-        if ([[DiskCacheManager defaultManager] existsInCache:[[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent]]) {
+        if ([[DiskCacheManager defaultManager] existsInCache:imageKey]) {
             //we found it in the disk cache, lets save the pull from the
             //network and grab it from the disk cache
-            imgData = [[DiskCacheManager defaultManager] retrieveFromCache:[[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent]];
+
+            imgData = [[DiskCacheManager defaultManager] retrieveFromCache:imageKey];
         } else {
+#endif
             //pull it from the network, but then save to the cache
             imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[imgDict valueForKey:XML_TAG_FULL_URL]]];
-            
+#ifdef USE_DISK_CACHE
             if (imgData) {
-                [[DiskCacheManager defaultManager] saveToCache:imgData withFilename:[[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent]];
+                [[DiskCacheManager defaultManager] saveToCache:imgData withFilename:imageKey];
             }
-        }
 
+        }
+#endif
         UIImage *loadedImg = [UIImage imageWithData:imgData];
         
         if (loadedImg == nil) {
@@ -133,7 +244,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^ {
             
-            [albumViewRef didLoadPhoto: loadedImg
+            [self.photoAlbumView didLoadPhoto: loadedImg
                                       atIndex: photoIndex
                                     photoSize: NIPhotoScrollViewPhotoSizeOriginal];
         });
@@ -151,5 +262,41 @@
 - (id<NIPagingScrollViewPage>)pagingScrollView:(NIPagingScrollView *)pagingScrollView pageViewForIndex:(NSInteger)pageIndex {
     return [self.photoAlbumView pagingScrollView:pagingScrollView pageViewForIndex:pageIndex];
 }
+
+#pragma mark - NSURL delegate methods
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    
+    NSString *content = [NSString stringWithUTF8String:[data bytes]];
+    NSLog(@"got vote result:%@", content );
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    NSLog(@"finished loading");
+    
+    /*
+    UIAlertView *alert =
+    [[UIAlertView alloc] initWithTitle:@"Success"
+                               message:@"The image has been submitted for approval!"
+                              delegate:nil
+                     cancelButtonTitle:@"Dismiss"
+                     otherButtonTitles:nil];
+    [alert show];
+    */
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    NSLog(@"failed to vote!");
+        
+    
+    UIAlertView *failAlert =
+    [[UIAlertView alloc] initWithTitle:@"Vote Failed!"
+                               message:[NSString stringWithFormat:@"Your vote could not be recorded! %@", [error localizedDescription]]
+                              delegate:nil
+                     cancelButtonTitle:@"Close"
+                     otherButtonTitles:nil];
+    [failAlert show];
+    
+}
+
 
 @end

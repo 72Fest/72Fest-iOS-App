@@ -9,27 +9,28 @@
 #import "DiskCacheManager.h"
 
 static DiskCacheManager *_diskCacheManager;
-@interface DiskCacheManager() {
-    NSString *cachePath;
-    NSString *curPath;
-}
+@interface DiskCacheManager()
+
+- (id)initCache;
+@property (nonatomic, strong) NSString *cachePath;
 
 @end
+
 @implementation DiskCacheManager
 +  (DiskCacheManager *)defaultManager {
     if (_diskCacheManager == nil) {
-        _diskCacheManager = [[DiskCacheManager alloc] init];
+        _diskCacheManager = [[DiskCacheManager alloc] initCache];
     }
     
     return _diskCacheManager;
 }
 
-- (id)init {
+- (id)initCache {
     self = [super init];
     
     if (self) {
         NSArray* cachePathArray = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        cachePath = [cachePathArray objectAtIndex:0];
+        self.cachePath = [cachePathArray objectAtIndex:0];
     }
     
     return self;
@@ -38,19 +39,22 @@ static DiskCacheManager *_diskCacheManager;
 
 
 - (BOOL)existsInCache:(NSString *)fileName {
-    return [[NSFileManager defaultManager] fileExistsAtPath:[cachePath stringByAppendingPathComponent:fileName]];
+    return [[NSFileManager defaultManager] fileExistsAtPath:[self.cachePath stringByAppendingPathComponent:fileName]];
 }
 
 - (void)saveToCache:(NSData *)data withFilename:(NSString *)fileName {
-    curPath = [cachePath stringByAppendingPathComponent:fileName];
-    
-    [data writeToFile:[cachePath stringByAppendingPathComponent:fileName] atomically:YES];
+    if (![self existsInCache:fileName])
+        [data writeToFile:[self.cachePath stringByAppendingPathComponent:fileName] atomically:NO];
 }
 
 - (NSData *)retrieveFromCache:(NSString *)fileName {
-    NSData *data = [NSData dataWithContentsOfFile:[cachePath stringByAppendingPathComponent:fileName]];
+    NSError *error;
+
+    NSData *data =
+        [NSData dataWithContentsOfFile:[self.cachePath stringByAppendingPathComponent:fileName]
+                               options:NSDataReadingUncached error:&error];
     
-    return data;
+    return [NSData dataWithData:data];
 }
 
 @end
