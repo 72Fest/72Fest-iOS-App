@@ -108,9 +108,9 @@
     BOOL hasVote = [[VoteManager defaultManager] toggleVoteForImgKey:self.curImageKey];
 
     NSString *keyVal = self.curImageKey;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self submitVoteWithVoteValue:hasVote andImageKey:keyVal];
-    });
+    
+    [self submitVoteWithVoteValue:hasVote andImageKey:keyVal];
+
     //toggle like icon (for some reason I'm colling it vote)
     [self setupVoteIconWithVoteVal:hasVote];
     
@@ -156,7 +156,6 @@
     [request setHTTPBody:body];
     
     self.curConnection = [NSURLConnection connectionWithRequest:request delegate:self];
-    
 }
 
 #pragma mark - NIPhotoAlbumScrollViewDataSource
@@ -265,13 +264,25 @@
 
 #pragma mark - NSURL delegate methods
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    NSError *error;
+    NSDictionary *voteResults;
     
-    NSString *content = [NSString stringWithUTF8String:[data bytes]];
-    NSLog(@"got vote result:%@", content );
+    //NSString *content = [NSString stringWithUTF8String:[data bytes]];
+    if (data) {
+        voteResults = [NSJSONSerialization JSONObjectWithData:data options:nil error:&error];
+    }
+    NSLog(@"got vote status:%@ and results:%@",
+          voteResults[VOTE_RESULT_STATUS_KEY], voteResults[VOTE_REULST_TOTALS_KEY]);
+
+    if ([voteResults[VOTE_RESULT_STATUS_KEY] integerValue]) {
+        NSLog(@"Vote failed!");
+        //TODO: We need to reset or send a message or something???
+    }
 }
 
+
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    NSLog(@"finished loading");
+    NSLog(@"finished voting");
     
     /*
     UIAlertView *alert =

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ConnectionInfo.h"
 
 #define LABEL_FONT_NAME @"Archive"
 #define LABEL_FONT_SIZE 10.0
@@ -14,7 +15,7 @@
 #define CAPTION_FONT_SIZE 12.0
 #define COUNT_DOWN_BG_IMG @"digitsBackground.png"
 
-#define COUNTDOWN_METADATA_URL @"http://putpocket.com/photoapp/countDown.php"
+
 
 #define kCountdownCaption   @"caption"
 #define kCountdownTime      @"time"
