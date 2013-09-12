@@ -94,7 +94,7 @@ static const NSInteger NIPhotoScrubberViewUnknownTag = -1;
     self.multipleTouchEnabled = NO;
     
     _containerView = [[UIView alloc] init];
-    _containerView.layer.borderColor = [UIColor colorWithWhite:1 alpha:0.1f].CGColor;
+    //_containerView.layer.borderColor = [UIColor colorWithWhite:1 alpha:0.1f].CGColor;
     _containerView.layer.borderWidth = 1;
     _containerView.backgroundColor = [UIColor colorWithWhite:1 alpha:0.3f];
     _containerView.userInteractionEnabled = NO;
@@ -116,7 +116,7 @@ static const NSInteger NIPhotoScrubberViewUnknownTag = -1;
 - (UIImageView *)photoView {
   UIImageView* imageView = [[UIImageView alloc] init];
   
-  imageView.layer.borderColor = [UIColor whiteColor].CGColor;
+  //imageView.layer.borderColor = [UIColor whiteColor].CGColor;
   imageView.layer.borderWidth = 1;
   imageView.backgroundColor = [UIColor blackColor];
   imageView.clipsToBounds = YES;
