@@ -17,6 +17,9 @@
 #define PHOTO_LIST_URL_STR GEN_URL(@"getImagesJs.php")
 #define UPLOAD_URL_STR  GEN_URL(@"submit.php")
 #define VOTE_URL_STR  GEN_URL(@"vote.php")
+#define VOTE_TOTALS_URL_STR GEN_URL(@"getVotes.php")
+//macro to generate a string to retrieve vote totals for a given id
+#define VOTE_TOTALS_URL_FOR_ID(PHOTO_ID) [NSString stringWithFormat:@"%@?id=%@", VOTE_TOTALS_URL_STR, PHOTO_ID]
 
 //Other links
 #define EMAIL_URL_STR @"http://www.72fest.com/about/contact/"

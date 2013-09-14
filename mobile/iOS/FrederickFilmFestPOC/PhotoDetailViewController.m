@@ -19,6 +19,8 @@
 - (NSString *)imageKeyForIndex:(NSInteger)imageIdx;
 - (void)submitVoteWithVoteValue:(BOOL)hasVote andImageKey:(NSString *)imageKey;
 - (NSString *)curImageKey;
+- (void)displayVoteTotal;
+- (void)setVoteTitleWithTotal:(NSInteger)voteTotal;
 
 @property (nonatomic, strong) UIBarButtonItem *likeBtn;
 @property (nonatomic, strong) UIBarButtonItem *unlikeBtn;
@@ -47,6 +49,9 @@
     self.view.backgroundColor = [UIColor blackColor];
     self.photoAlbumView.dataSource = self;
     self.photoAlbumView.delegate = self;
+    self.photoAlbumView.zoomingIsEnabled = NO;
+    self.hidesChromeWhenScrolling = NO;
+    self.chromeCanBeHidden = YES;
     
     //set up custom toolbar
     self.likeBtn = [[UIBarButtonItem alloc] initWithImage:VOTE_UP_ICON_IMG style:UIBarButtonItemStylePlain target:self action:@selector(likeBtnPressed:)];
@@ -59,6 +64,9 @@
     
     //jump to the selected photo
     [self.photoAlbumView moveToPageAtIndex:self.selectedPhotIndex animated:NO];
+    
+    //update the vote total
+    [self displayVoteTotal];
 }
 
 - (void)viewDidUnload
@@ -101,6 +109,24 @@
     return imgKey;
 }
 
+- (void)displayVoteTotal {
+    self.title = @"Loading ...";
+    dispatch_async(dispatch_queue_create("Vote Update Queue", NULL), ^{
+        NSInteger voteTotal = [[VoteManager defaultManager] getUpdatedTotalForId:self.curImageKey];
+        
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            [self setVoteTitleWithTotal:voteTotal];
+        });
+    });
+    
+}
+
+- (void)setVoteTitleWithTotal:(NSInteger)voteTotal {
+    self.title =
+        [NSString stringWithFormat:@"%d vote%@", voteTotal, ((voteTotal == 1) ? @"": @"s")];
+        //[NSString stringWithFormat:@"%d vote%@ for %@", voteTotal, ((voteTotal == 1) ? @"": @"s"), self.curImageKey ];
+}
+
 #pragma mark - action selectors
 - (void)likeBtnPressed:(id)sender {
     NSLog(@"Like button pressed! %d",  self.photoAlbumView.centerPageIndex);
@@ -116,8 +142,14 @@
     
 }
 
+#pragma mark - subclassed methods
+- (void)setChromeTitle {
+    [self displayVoteTotal];
+}
+
 #pragma mark - NIPagingScrollViewDelegate
 - (void)pagingScrollViewDidChangePages:(NIPagingScrollView *)pagingScrollView {
+    [super pagingScrollViewDidChangePages:pagingScrollView];
     NSString *imgKey = self.curImageKey;
     [self setupVoteIconWithVoteVal:[[VoteManager defaultManager] hasVoteForImgKey:imgKey]];
 }
@@ -274,9 +306,12 @@
     NSLog(@"got vote status:%@ and results:%@",
           voteResults[VOTE_RESULT_STATUS_KEY], voteResults[VOTE_REULST_TOTALS_KEY]);
 
+    NSInteger voteTotal = [voteResults[VOTE_REULST_TOTALS_KEY] integerValue];
     if ([voteResults[VOTE_RESULT_STATUS_KEY] integerValue]) {
         NSLog(@"Vote failed!");
         //TODO: We need to reset or send a message or something???
+    } else {
+        [self setVoteTitleWithTotal:voteTotal];
     }
 }
 

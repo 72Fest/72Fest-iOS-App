@@ -8,9 +8,9 @@
 
 #import "ImageCache.h"
 
-static ImageCache *_sharedImageCache;
 
-@interface ImageCache() 
+@interface ImageCache()
+@property (nonatomic, assign) dispatch_queue_t thumbCacheQueue;
 @property (nonatomic, strong) NSMutableDictionary *hashTable;
 @end
 
@@ -22,6 +22,7 @@ static ImageCache *_sharedImageCache;
     self = [super init];
     if (self) {
         self.hashTable = [[NSMutableDictionary alloc] init];
+        //self.thumbCacheQueue = dispatch_queue_create("Thumb Cache Queue", DISPATCH_QUEUE_SERIAL);
     }
     
     return self;
@@ -29,21 +30,26 @@ static ImageCache *_sharedImageCache;
 
 
 + (ImageCache *)sharedImageCache {
-    if (!_sharedImageCache) {
+    static ImageCache *_sharedImageCache = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         _sharedImageCache = [[ImageCache alloc] init];
-    }
+    });
+    
     return _sharedImageCache;
 }
 
 - (void)setThumb:(UIImage *)thumbImg forKey:(NSString *)key {
     
-    if (![self.hashTable valueForKey:key]){
-        [self.hashTable setValue:[thumbImg copy] forKey:key];
-    }
+    dispatch_async(dispatch_queue_create("Thumb Cache Queue", DISPATCH_QUEUE_SERIAL), ^{
+        if (![self.hashTable objectForKey:key]){
+            [self.hashTable setObject:[thumbImg copy] forKey:key];
+        }
+    });
 }
 
 - (UIImage *)thumbForKey:(NSString *)key {
-    return [(UIImage *)[self.hashTable valueForKey:key] copy];
+    return [(UIImage *)[self.hashTable objectForKey:key] copy];
 }
 
 - (void)purgeCache {
