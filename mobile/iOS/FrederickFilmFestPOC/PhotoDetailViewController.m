@@ -66,7 +66,7 @@
     [self.photoAlbumView moveToPageAtIndex:self.selectedPhotIndex animated:NO];
     
     //update the vote total
-    [self displayVoteTotal];
+    //[self displayVoteTotal];
 }
 
 - (void)viewDidUnload
@@ -144,7 +144,7 @@
 
 #pragma mark - subclassed methods
 - (void)setChromeTitle {
-    [self displayVoteTotal];
+    //[self displayVoteTotal];
 }
 
 #pragma mark - NIPagingScrollViewDelegate
