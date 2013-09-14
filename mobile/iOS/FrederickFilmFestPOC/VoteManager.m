@@ -7,20 +7,23 @@
 //
 
 #import "VoteManager.h"
-
-static VoteManager *_voteManager;
+#import "ConnectionInfo.h"
 
 @interface VoteManager()
 - (id)initVoteData;
 @property (nonatomic, strong) NSUserDefaults *defaults;
 @property (nonatomic, strong) NSMutableDictionary *votesDict;
+@property (nonatomic, strong) NSMutableDictionary *voteTotalsDict;
 @end
 @implementation VoteManager
 
 + (VoteManager *)defaultManager {
-    if (!_voteManager) {
+    static VoteManager *_voteManager = nil;
+    static dispatch_once_t onceToken;
+
+    dispatch_once(&onceToken, ^{
         _voteManager = [[VoteManager alloc] initVoteData];
-    }
+    });
     
     return _voteManager;
 }
@@ -35,11 +38,13 @@ static VoteManager *_voteManager;
         if (!self.votesDict)
             self.votesDict = [[NSMutableDictionary alloc] init];
 
+        self.voteTotalsDict = [[NSMutableDictionary alloc] init];
     }
     
     return self;
 }
 
+#pragma mark - internal vote methods
 - (BOOL)toggleVoteForImgKey:(NSString *)imgKey {
     BOOL hasVote;
 
@@ -61,6 +66,38 @@ static VoteManager *_voteManager;
 
 - (BOOL)hasVoteForImgKey:(NSString *)imgKey {
     return ([self.votesDict valueForKey:imgKey] != nil) ? YES : NO;
+}
+
+#pragma mark - vote
+- (NSArray *)getVoteTotals {
+    NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString:VOTE_TOTALS_URL_STR]];
+    
+    NSError *err = nil;
+    NSArray *totalsArray = [NSJSONSerialization JSONObjectWithData:data options: nil error: &err];
+    
+    //clear out the current dictionary
+    [self.voteTotalsDict removeAllObjects];
+    for (NSDictionary *curVoteData in totalsArray) {
+        [self.voteTotalsDict setObject:curVoteData[VOTE_TOTALS_VOTES_KEY] forKey:curVoteData[VOTE_TOTALS_ID_KEY]];
+    }
+
+    return totalsArray;
+}
+
+- (NSInteger)getUpdatedTotalForId:(NSString *)photoId {
+    NSString *url = VOTE_TOTALS_URL_FOR_ID(photoId);
+    NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+    
+    NSError *err = nil;
+    NSArray *totalsArray = [NSJSONSerialization JSONObjectWithData:data options: nil error: &err];
+    
+    NSInteger voteTotal = 0;
+    if (totalsArray.count) {
+        NSNumber *voteNum = [totalsArray[0] valueForKey:VOTE_TOTALS_VOTES_KEY];
+        voteTotal = [voteNum integerValue];
+    }
+    
+    return voteTotal;
 }
 
 @end

@@ -12,9 +12,12 @@
 #import "ImageCache.h"
 #import "LoaderBoxViewController.h"
 #import "DiskCacheManager.h"
+#import "VoteManager.h"
 #import "FrederickFilmFestPOCAppDelegate.h"
 
 @interface GalleryViewController ()
+
+- (void)getVoteTotals;
 
 @property (nonatomic, strong) UIBarButtonItem *refreshBtn;
 @property (nonatomic, strong) UINib *nibLoader;
@@ -80,6 +83,9 @@
     [self.galleryTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.galleryTableView setRowHeight:GALLERY_TABLE_CELL_HEIGHT];
     
+    //load request for vote totals
+    [self getVoteTotals];
+    
     //load request for images
     self.photoListParser = [[PhotoListParser alloc] init];
     [self.photoListParser setDelegate:self];
@@ -134,7 +140,13 @@
     [self setIsRefreshing:YES];
     [self.photoListParser loadURL:[NSURL URLWithString:PHOTO_LIST_URL_STR]];
 }
-                                   
+
+- (void)getVoteTotals {
+    dispatch_async(dispatch_queue_create("Vote Totals Queue", NULL), ^{
+        [[VoteManager defaultManager] getVoteTotals];
+    }); 
+}
+
 #pragma mark - button actions
 - (void)refreshPressed:(id)sender {
     [self refreshGalleryData];
@@ -237,7 +249,7 @@
         //[curGalleryDataItem setThumb:nil];
         
         //get URL for cur thumb
-        NSDictionary *imgDict = [self.imageNames objectAtIndex:curIndexPath.row];
+        NSDictionary *imgDict = [[self.imageNames objectAtIndex:curIndexPath.row] copy];
         NSString *curThumbStr = [imgDict objectForKey:XML_TAG_THUMB_URL];
         NSURL *imgURL = [NSURL URLWithString:curThumbStr];
         

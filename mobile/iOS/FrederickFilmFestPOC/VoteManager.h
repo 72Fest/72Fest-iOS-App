@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 
 #define VOTE_MANGER_IMG_KEY @"voteMangerImageKey"
+#define VOTE_TOTALS_ID_KEY @"id"
+#define VOTE_TOTALS_VOTES_KEY @"votes"
 
 @interface VoteManager : NSObject
 
@@ -16,5 +18,6 @@
 
 - (BOOL)toggleVoteForImgKey:(NSString *)imgKey;
 - (BOOL)hasVoteForImgKey:(NSString *)imgKey;
-
+- (NSArray *)getVoteTotals;
+- (NSInteger)getUpdatedTotalForId:(NSString *)photoId;
 @end

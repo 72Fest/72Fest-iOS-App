@@ -8,7 +8,6 @@
 
 #import "DiskCacheManager.h"
 
-static DiskCacheManager *_diskCacheManager;
 @interface DiskCacheManager()
 
 - (id)initCache;
@@ -18,10 +17,12 @@ static DiskCacheManager *_diskCacheManager;
 
 @implementation DiskCacheManager
 +  (DiskCacheManager *)defaultManager {
-    if (_diskCacheManager == nil) {
+    static DiskCacheManager *_diskCacheManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         _diskCacheManager = [[DiskCacheManager alloc] initCache];
-    }
-    
+    });
+
     return _diskCacheManager;
 }
 
