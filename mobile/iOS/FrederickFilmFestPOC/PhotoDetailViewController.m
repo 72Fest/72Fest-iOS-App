@@ -11,6 +11,7 @@
 #import "ImageCache.h"
 #import "DiskCacheManager.h"
 #import "VoteManager.h"
+#import "VotingOperation.h"
 #import "ConnectionInfo.h"
 //#define USE_DISK_CACHE
 
@@ -25,6 +26,7 @@
 @property (nonatomic, strong) UIBarButtonItem *likeBtn;
 @property (nonatomic, strong) UIBarButtonItem *unlikeBtn;
 @property (nonatomic, strong) NSURLConnection *curConnection;
+@property (nonatomic, strong) NSOperationQueue *votingOperationQueue;
 @end
 
 @implementation PhotoDetailViewController
@@ -66,7 +68,7 @@
     [self.photoAlbumView moveToPageAtIndex:self.selectedPhotIndex animated:NO];
     
     //update the vote total
-    //[self displayVoteTotal];
+    [self displayVoteTotal];
 }
 
 - (void)viewDidUnload
@@ -111,14 +113,17 @@
 
 - (void)displayVoteTotal {
     self.title = @"Loading ...";
-    dispatch_async(dispatch_queue_create("Vote Update Queue", NULL), ^{
-        NSInteger voteTotal = [[VoteManager defaultManager] getUpdatedTotalForId:self.curImageKey];
-        
-        dispatch_async(dispatch_get_main_queue(), ^ {
-            [self setVoteTitleWithTotal:voteTotal];
-        });
-    });
     
+    if (!self.votingOperationQueue) {
+        self.votingOperationQueue = [[NSOperationQueue alloc] init];
+        self.votingOperationQueue.name = @"Voting operations queue";
+    } else {
+        //cancel anything that is happening right now
+        [self.votingOperationQueue cancelAllOperations];
+    }
+    
+    VotingOperation *newVoteOperation = [[VotingOperation alloc] initWithImageKey:self.curImageKey andDelgate:self];
+    [self.votingOperationQueue addOperation:newVoteOperation];
 }
 
 - (void)setVoteTitleWithTotal:(NSInteger)voteTotal {
@@ -144,7 +149,12 @@
 
 #pragma mark - subclassed methods
 - (void)setChromeTitle {
-    //[self displayVoteTotal];
+    [self displayVoteTotal];
+}
+
+#pragma mark - Voting Delegates
+- (void)votingOperationDidReceiveVoteTotal:(VotingOperation *)votingOperation {
+    [self setVoteTitleWithTotal:votingOperation.voteTotal];
 }
 
 #pragma mark - NIPagingScrollViewDelegate
@@ -241,13 +251,15 @@
     //TODO: cache large photo as well
     dispatch_queue_t largePhotoQueue = dispatch_queue_create("Large Photo Queue", NULL);
    
+    __weak PhotoDetailViewController *weakSelf = self;
+    NSString *fullUrlStr = [[imgDict valueForKey:XML_TAG_FULL_URL] copy];
     dispatch_async(largePhotoQueue, ^{
-        //NSString *fullUrlStr = [imgDict valueForKey:XML_TAG_FULL_URL];
         //NSString *fileName = [fullUrlStr lastPathComponent];
         NSData *imgData = nil;
         
 #ifdef USE_DISK_CACHE
-        NSString *imageKey = [[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent];
+        NSLog(@"***Using disk cache");
+        NSString *imageKey = [fullUrlStr lastPathComponent];
         //check disk cache first
         if ([[DiskCacheManager defaultManager] existsInCache:imageKey]) {
             //we found it in the disk cache, lets save the pull from the
@@ -257,7 +269,8 @@
         } else {
 #endif
             //pull it from the network, but then save to the cache
-            imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[imgDict valueForKey:XML_TAG_FULL_URL]]];
+            imgData = nil;//[NSData dataWithContentsOfURL:[NSURL URLWithString:fullUrlStr]];
+            NSLog(@"ULR:%@", fullUrlStr);
 #ifdef USE_DISK_CACHE
             if (imgData) {
                 [[DiskCacheManager defaultManager] saveToCache:imgData withFilename:imageKey];
@@ -273,12 +286,12 @@
         }
         
         
-        dispatch_async(dispatch_get_main_queue(), ^ {
-            
-            [self.photoAlbumView didLoadPhoto: loadedImg
-                                      atIndex: photoIndex
-                                    photoSize: NIPhotoScrollViewPhotoSizeOriginal];
-        });
+//        dispatch_async(dispatch_get_main_queue(), ^ {
+//            
+//            [weakSelf.photoAlbumView didLoadPhoto: loadedImg
+//                                      atIndex: photoIndex
+//                                    photoSize: NIPhotoScrollViewPhotoSizeOriginal];
+//        });
         
         *isLoading = NO;
     });

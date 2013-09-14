@@ -7,13 +7,15 @@
 //
 
 #import "NIToolbarPhotoViewController.h"
+#import "VotingOperationDelegate.h"
+
 #define VOTE_UP_ICON_IMG [UIImage imageNamed:@"voteUpIcon.png"]
 #define VOTE_DOWN_ICON_IMG [UIImage imageNamed:@"voteDownIcon.png"]
 
 #define VOTE_RESULT_STATUS_KEY @"status"
 #define VOTE_REULST_TOTALS_KEY @"votes"
 
-@interface PhotoDetailViewController : NIToolbarPhotoViewController <NIPhotoAlbumScrollViewDataSource, NIPagingScrollViewDelegate, NSURLConnectionDelegate>
+@interface PhotoDetailViewController : NIToolbarPhotoViewController <NIPhotoAlbumScrollViewDataSource, NIPagingScrollViewDelegate, NSURLConnectionDelegate, VotingOperationDelegate>
 
 @property (nonatomic, strong) NSArray *photosList;
 @property (nonatomic, assign) NSInteger selectedPhotIndex;
