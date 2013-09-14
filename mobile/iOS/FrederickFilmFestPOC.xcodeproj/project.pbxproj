@@ -48,7 +48,6 @@
 		0740DCFC160C1BF400A7CDAB /* bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0740DCFA160C1BF300A7CDAB /* bkg.png */; };
 		0740DCFD160C1BF400A7CDAB /* bkg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0740DCFB160C1BF300A7CDAB /* bkg@2x.png */; };
 		07446FB817DEC31A006C3E3B /* VoteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07446FB717DEC31A006C3E3B /* VoteManager.m */; };
-		0750DB4D17E041A50040A68E /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0750DB4C17E041A50040A68E /* Social.framework */; };
 		0750DB5217E1273C0040A68E /* voteDownIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0750DB4E17E1273C0040A68E /* voteDownIcon.png */; };
 		0750DB5317E1273C0040A68E /* voteDownIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0750DB4F17E1273C0040A68E /* voteDownIcon@2x.png */; };
 		0750DB5417E1273C0040A68E /* voteUpIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0750DB5017E1273C0040A68E /* voteUpIcon.png */; };
@@ -58,6 +57,7 @@
 		077286A01603EB3300D82E29 /* CountDownView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0772869F1603EB3300D82E29 /* CountDownView.m */; };
 		077286A31604372F00D82E29 /* DigitCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 077286A21604372F00D82E29 /* DigitCountView.m */; };
 		07EFDC921614517E00F54BE4 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */; };
+		07FF017E17E5158800C8BC1C /* VotingOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FF017D17E5158800C8BC1C /* VotingOperation.m */; };
 		8A257FF315A06AB800E9BBB6 /* 01-refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A257FF115A06AB800E9BBB6 /* 01-refresh.png */; };
 		8A257FF415A06AB800E9BBB6 /* 01-refresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A257FF215A06AB800E9BBB6 /* 01-refresh@2x.png */; };
 		8A257FFB15A07C4F00E9BBB6 /* photoFrame.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A257FF915A07C4F00E9BBB6 /* photoFrame.png */; };
@@ -185,8 +185,6 @@
 		0740DCFB160C1BF300A7CDAB /* bkg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bkg@2x.png"; sourceTree = "<group>"; };
 		07446FB617DEC31A006C3E3B /* VoteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoteManager.h; sourceTree = "<group>"; };
 		07446FB717DEC31A006C3E3B /* VoteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoteManager.m; sourceTree = "<group>"; };
-		0750DB4A17E03F4D0040A68E /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
-		0750DB4C17E041A50040A68E /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		0750DB4E17E1273C0040A68E /* voteDownIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = voteDownIcon.png; sourceTree = "<group>"; };
 		0750DB4F17E1273C0040A68E /* voteDownIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "voteDownIcon@2x.png"; sourceTree = "<group>"; };
 		0750DB5017E1273C0040A68E /* voteUpIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = voteUpIcon.png; sourceTree = "<group>"; };
@@ -198,6 +196,9 @@
 		0772869F1603EB3300D82E29 /* CountDownView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountDownView.m; sourceTree = "<group>"; };
 		077286A11604372F00D82E29 /* DigitCountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DigitCountView.h; sourceTree = "<group>"; };
 		077286A21604372F00D82E29 /* DigitCountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DigitCountView.m; sourceTree = "<group>"; };
+		07FF017C17E5158800C8BC1C /* VotingOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VotingOperation.h; sourceTree = "<group>"; };
+		07FF017D17E5158800C8BC1C /* VotingOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VotingOperation.m; sourceTree = "<group>"; };
+		07FF017F17E517C500C8BC1C /* VotingOperationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VotingOperationDelegate.h; sourceTree = "<group>"; };
 		8A257FF115A06AB800E9BBB6 /* 01-refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "01-refresh.png"; sourceTree = "<group>"; };
 		8A257FF215A06AB800E9BBB6 /* 01-refresh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "01-refresh@2x.png"; sourceTree = "<group>"; };
 		8A257FF915A07C4F00E9BBB6 /* photoFrame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photoFrame.png; sourceTree = "<group>"; };
@@ -397,6 +398,9 @@
 			children = (
 				07446FB617DEC31A006C3E3B /* VoteManager.h */,
 				07446FB717DEC31A006C3E3B /* VoteManager.m */,
+				07FF017C17E5158800C8BC1C /* VotingOperation.h */,
+				07FF017D17E5158800C8BC1C /* VotingOperation.m */,
+				07FF017F17E517C500C8BC1C /* VotingOperationDelegate.h */,
 			);
 			name = Voting;
 			sourceTree = "<group>";
@@ -884,6 +888,7 @@
 				8AC6A29817DBC2CA00D634B4 /* NIPhotoScrubberView.m in Sources */,
 				8AC6A29917DBC2CA00D634B4 /* NIToolbarPhotoViewController.m in Sources */,
 				07446FB817DEC31A006C3E3B /* VoteManager.m in Sources */,
+				07FF017E17E5158800C8BC1C /* VotingOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
