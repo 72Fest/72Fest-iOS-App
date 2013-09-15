@@ -13,7 +13,7 @@
 #import "VoteManager.h"
 #import "VotingOperation.h"
 #import "ConnectionInfo.h"
-//#define USE_DISK_CACHE
+#define USE_DISK_CACHE
 
 @interface PhotoDetailViewController ()
 - (void)setupVoteIconWithVoteVal:(BOOL)hasVote;
