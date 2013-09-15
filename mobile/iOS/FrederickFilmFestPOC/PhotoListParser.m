@@ -63,7 +63,6 @@
         }
     });
 
-    dispatch_release(photoLoaderQueue);
 }
 
 - (void)sortByOrder {
