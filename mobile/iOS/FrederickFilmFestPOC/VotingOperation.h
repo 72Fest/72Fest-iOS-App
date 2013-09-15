@@ -11,6 +11,6 @@
 @interface VotingOperation : NSOperation
 - (id)initWithImageKey:(NSString *)imageKey andDelgate:(id <VotingOperationDelegate>)delegate;
 
-@property (nonatomic, assign) id  <VotingOperationDelegate> delegate;
+@property (nonatomic, weak) id  <VotingOperationDelegate> delegate;
 @property (nonatomic, assign) NSInteger voteTotal;
 @end

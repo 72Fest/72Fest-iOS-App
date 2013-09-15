@@ -15,14 +15,8 @@
 #import "ConnectionInfo.h"
 #import <Social/Social.h>
 #import "NIPhotoScrollView.h"
-#define USE_DISK_CACHE
 
-typedef enum {
-    SHARE_ITEM_TWITTER,
-    SHARE_ITEM_FACEBOOK,
-    SHARE_ITEM_CAMERA_ROLL,
-    SHARE_ITEM_NONE
-} ShareItem;
+#define USE_DISK_CACHE
 
 @interface PhotoDetailViewController ()
 - (void)setupVoteIconWithVoteVal:(BOOL)hasVote;
@@ -36,6 +30,7 @@ typedef enum {
 - (void)shareOnFacebookForImage:(UIImage *)img;
 - (void)shareForServiceType:(NSString *)serviceType withImage:(UIImage *)img;
 - (void)shareToCameraRollForImage:(UIImage *)img;
+- (void)shareOnEmailForImage:(UIImage *)img;
 
 @property (nonatomic, strong) UIBarButtonItem *likeBtn;
 @property (nonatomic, strong) UIBarButtonItem *unlikeBtn;
@@ -173,8 +168,10 @@ typedef enum {
         return;
     }
     
+    //we only want to share the full size image so
+    //lets make sure to check that it's load
     if (selectedPage.photoSize != NIPhotoScrollViewPhotoSizeOriginal) {
-        UIAlertView *loadAlert = [[UIAlertView alloc] initWithTitle:@"Loading error" message:@"The full sized image still isn't loaded!" delegate:nil cancelButtonTitle:@"Close" otherButtonTitles: nil];
+        UIAlertView *loadAlert = [[UIAlertView alloc] initWithTitle:@"Loading error" message:@"The full sized image still isn't loaded! Try again after the image is finished loading." delegate:nil cancelButtonTitle:@"Close" otherButtonTitles: nil];
         
         [loadAlert show];
         return;
@@ -190,6 +187,9 @@ typedef enum {
             break;
         case SHARE_ITEM_CAMERA_ROLL:
             [self shareToCameraRollForImage:selectedPage.image];
+            break;
+        case Share_ITEM_EMAIL:
+            [self shareOnEmailForImage:selectedPage.image];
             break;
         default:
             break;
@@ -235,6 +235,19 @@ typedef enum {
     UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
 }
 
+- (void)shareOnEmailForImage:(UIImage *)img {
+    MFMailComposeViewController *mailVC = [[MFMailComposeViewController alloc] init];
+    mailVC.mailComposeDelegate = self;
+    [mailVC setSubject:PHOTO_EMAIL_SUBJECT_TEXT];
+
+    
+    NSData *imgData = UIImageJPEGRepresentation(img, 0.9);
+    [mailVC addAttachmentData:imgData mimeType:@"image/jpeg" fileName:@"72FestPhoto.jpg"];
+    [mailVC setMessageBody:PHOTO_EMAIL_BODY_TEXT isHTML:YES];
+    
+    [self presentViewController:mailVC animated:YES completion:nil];
+}
+
 #pragma mark - action selectors
 - (void)likeBtnPressed:(id)sender {
     NSLog(@"Like button pressed! %d",  self.photoAlbumView.centerPageIndex);
@@ -251,7 +264,7 @@ typedef enum {
 }
 
  - (void)shareBtnPressed:(id)sender {
-     UIActionSheet *shareSheet = [[UIActionSheet alloc] initWithTitle:@"Share your photo!" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Twitter", @"Facebook", @"Save to Camera Roll", nil];
+     UIActionSheet *shareSheet = [[UIActionSheet alloc] initWithTitle:@"Share your photo!" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Twitter", @"Facebook", @"Camera Roll", @"Email", nil];
      [shareSheet showInView:self.view];
  }
 
@@ -469,5 +482,15 @@ typedef enum {
     
 }
 
+#pragma mark - delegate methods for email
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+    
+    switch (result) {
+        default:
+            [self dismissViewControllerAnimated:YES completion:nil];
+            break;
+    }
+    
+}
 
 @end
