@@ -14,6 +14,7 @@
 #import "VotingOperation.h"
 #import "ConnectionInfo.h"
 #import <Social/Social.h>
+#import "NIPhotoScrollView.h"
 #define USE_DISK_CACHE
 
 typedef enum {
@@ -32,6 +33,7 @@ typedef enum {
 - (void)processShareItem:(ShareItem)item;
 - (void)shareOnTwitterForImage:(UIImage *)img;
 - (void)shareOnFacebookForImage:(UIImage *)img;
+- (void)shareForServiceType:(NSString *)serviceType withImage:(UIImage *)img;
 
 @property (nonatomic, strong) UIBarButtonItem *likeBtn;
 @property (nonatomic, strong) UIBarButtonItem *unlikeBtn;
@@ -151,12 +153,38 @@ typedef enum {
 }
 
 - (void)processShareItem:(ShareItem)item {
+    //first check if image is loaded yet
+    NSInteger selectedIdx = self.photoAlbumView.centerPageIndex;
+    
+    NIPhotoScrollView *selectedPage = nil;
+    for (NIPhotoScrollView *page in self.photoAlbumView.visiblePages) {
+        if (page.pageIndex == selectedIdx) {
+            selectedPage = page;
+        }
+    }
+    
+    //This should never happen but check for if the current scroll page could not be found
+    if (!selectedPage) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Loading error" message:@"Could not load photo!" delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil];
+        
+        [alert show];
+        return;
+    }
+    
+    if (selectedPage.photoSize != NIPhotoScrollViewPhotoSizeOriginal) {
+        UIAlertView *loadAlert = [[UIAlertView alloc] initWithTitle:@"Loading error" message:@"The full sized image still isn't loaded!" delegate:nil cancelButtonTitle:@"Close" otherButtonTitles: nil];
+        
+        [loadAlert show];
+        return;
+    }
+    
+    
     switch (item) {
         case SHARE_ITEM_TWITTER:
-            [self shareOnTwitterForImage:nil];
+            [self shareOnTwitterForImage:selectedPage.image];
             break;
         case SHARE_ITEM_FACEBOOK:
-            [self shareOnFacebookForImage:nil];
+            [self shareOnFacebookForImage:selectedPage.image];
             break;
         default:
             break;
@@ -164,9 +192,17 @@ typedef enum {
 }
              
 - (void)shareOnTwitterForImage:(UIImage *)img {
-    SLComposeViewController *tweetSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+    [self shareForServiceType:SLServiceTypeTwitter withImage:img];
+}
+
+- (void)shareOnFacebookForImage:(UIImage *)img {
+    [self shareForServiceType:SLServiceTypeFacebook withImage:img];
+}
+
+- (void)shareForServiceType:(NSString *)serviceType withImage:(UIImage *)img {
+    SLComposeViewController *socialSheet = [SLComposeViewController composeViewControllerForServiceType:serviceType];
     
-    tweetSheet.completionHandler = ^(SLComposeViewControllerResult result) {
+    socialSheet.completionHandler = ^(SLComposeViewControllerResult result) {
         switch(result) {
             case SLComposeViewControllerResultCancelled:
                 //cancel was pressed
@@ -176,21 +212,18 @@ typedef enum {
                 break;
         }
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self dismissViewControllerAnimated:NO completion:^{
-                NSLog(@"Dismissed!");
-            }];
-        });
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self dismissViewControllerAnimated:NO completion:^{
+//                NSLog(@"Dismissed!");
+//            }];
+//        });
         
     };
     
-    [tweetSheet setInitialText:@"#72Fest"];
+    [socialSheet setInitialText:@"#72Fest"];
+    [socialSheet addImage:img];
     
-    [self presentViewController:tweetSheet animated:YES completion:nil];
-}
-
-- (void)shareOnFacebookForImage:(UIImage *)img {
-    
+    [self presentViewController:socialSheet animated:YES completion:nil];
 }
 
 #pragma mark - action selectors
