@@ -10,7 +10,7 @@
 
 
 @interface ImageCache()
-@property (nonatomic, assign) dispatch_queue_t thumbCacheQueue;
+@property (nonatomic, strong) dispatch_queue_t thumbCacheQueue;
 @property (nonatomic, strong) NSMutableDictionary *hashTable;
 @end
 
