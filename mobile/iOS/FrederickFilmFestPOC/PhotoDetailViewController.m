@@ -253,6 +253,7 @@
    
     __weak PhotoDetailViewController *weakSelf = self;
     NSString *fullUrlStr = [[imgDict valueForKey:XML_TAG_FULL_URL] copy];
+    __block UIImage *loadedImg;
     dispatch_async(largePhotoQueue, ^{
         //NSString *fileName = [fullUrlStr lastPathComponent];
         NSData *imgData = nil;
@@ -269,7 +270,7 @@
         } else {
 #endif
             //pull it from the network, but then save to the cache
-            imgData = nil;//[NSData dataWithContentsOfURL:[NSURL URLWithString:fullUrlStr]];
+            imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:fullUrlStr]];
             NSLog(@"ULR:%@", fullUrlStr);
 #ifdef USE_DISK_CACHE
             if (imgData) {
@@ -278,7 +279,7 @@
 
         }
 #endif
-        UIImage *loadedImg = [UIImage imageWithData:imgData];
+        loadedImg = [UIImage imageWithData:imgData];
         
         if (loadedImg == nil) {
             NSLog(@"*****PhotDetailView:loadedImg == nil!");
@@ -286,12 +287,12 @@
         }
         
         
-//        dispatch_async(dispatch_get_main_queue(), ^ {
-//            
-//            [weakSelf.photoAlbumView didLoadPhoto: loadedImg
-//                                      atIndex: photoIndex
-//                                    photoSize: NIPhotoScrollViewPhotoSizeOriginal];
-//        });
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            
+            [weakSelf.photoAlbumView didLoadPhoto: loadedImg
+                                      atIndex: photoIndex
+                                    photoSize: NIPhotoScrollViewPhotoSizeOriginal];
+        });
         
         *isLoading = NO;
     });
