@@ -55,6 +55,7 @@
 		0750DB5517E1273C0040A68E /* voteUpIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0750DB5117E1273C0040A68E /* voteUpIcon@2x.png */; };
 		076B7ACB16130A0000DF6BA5 /* 72FestBanner.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7AC916130A0000DF6BA5 /* 72FestBanner.png */; };
 		076B7ACC16130A0000DF6BA5 /* 72FestBanner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */; };
+		076DB9E317E617AF00D0E1F6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076DB9E217E617AF00D0E1F6 /* MessageUI.framework */; };
 		077286A01603EB3300D82E29 /* CountDownView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0772869F1603EB3300D82E29 /* CountDownView.m */; };
 		077286A31604372F00D82E29 /* DigitCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 077286A21604372F00D82E29 /* DigitCountView.m */; };
 		07EFDC921614517E00F54BE4 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */; };
@@ -194,6 +195,7 @@
 		076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		076B7AC916130A0000DF6BA5 /* 72FestBanner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 72FestBanner.png; sourceTree = "<group>"; };
 		076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "72FestBanner@2x.png"; sourceTree = "<group>"; };
+		076DB9E217E617AF00D0E1F6 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		0772869E1603EB3300D82E29 /* CountDownView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountDownView.h; sourceTree = "<group>"; };
 		0772869F1603EB3300D82E29 /* CountDownView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountDownView.m; sourceTree = "<group>"; };
 		077286A11604372F00D82E29 /* DigitCountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DigitCountView.h; sourceTree = "<group>"; };
@@ -355,6 +357,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				076DB9E317E617AF00D0E1F6 /* MessageUI.framework in Frameworks */,
 				07443BF817E5E6C600D77C76 /* Social.framework in Frameworks */,
 				8AEA3A85159ABED20006891F /* QuartzCore.framework in Frameworks */,
 				8A430B25142C2D38007B72F5 /* SystemConfiguration.framework in Frameworks */,
@@ -483,6 +486,7 @@
 		8AC0A2EC141D773800F0E4B0 = {
 			isa = PBXGroup;
 			children = (
+				076DB9E217E617AF00D0E1F6 /* MessageUI.framework */,
 				07443BF717E5E6C500D77C76 /* Social.framework */,
 				0703D11616131508004870A5 /* Default.png */,
 				0703D11416131500004870A5 /* Default@2x.png */,
