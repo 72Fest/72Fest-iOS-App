@@ -66,6 +66,10 @@ typedef enum {
     self.navigationItem.rightBarButtonItem =
         [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareBtnPressed:)];
     
+    //adding share button
+    self.navigationItem.rightBarButtonItem =
+        [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareBtnPressed:)];
+    
     [self setupVoteIconWithVoteVal:NO];
     
     //load up all the data
