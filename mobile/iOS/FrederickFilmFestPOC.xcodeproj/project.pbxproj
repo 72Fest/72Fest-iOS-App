@@ -47,6 +47,7 @@
 		0740DCF9160C141700A7CDAB /* filmFestLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0740DCF7160C141600A7CDAB /* filmFestLogo@2x.png */; };
 		0740DCFC160C1BF400A7CDAB /* bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0740DCFA160C1BF300A7CDAB /* bkg.png */; };
 		0740DCFD160C1BF400A7CDAB /* bkg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0740DCFB160C1BF300A7CDAB /* bkg@2x.png */; };
+		07443BF817E5E6C600D77C76 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07443BF717E5E6C500D77C76 /* Social.framework */; };
 		07446FB817DEC31A006C3E3B /* VoteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07446FB717DEC31A006C3E3B /* VoteManager.m */; };
 		0750DB5217E1273C0040A68E /* voteDownIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0750DB4E17E1273C0040A68E /* voteDownIcon.png */; };
 		0750DB5317E1273C0040A68E /* voteDownIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0750DB4F17E1273C0040A68E /* voteDownIcon@2x.png */; };
@@ -183,6 +184,7 @@
 		0740DCF7160C141600A7CDAB /* filmFestLogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filmFestLogo@2x.png"; sourceTree = "<group>"; };
 		0740DCFA160C1BF300A7CDAB /* bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bkg.png; sourceTree = "<group>"; };
 		0740DCFB160C1BF300A7CDAB /* bkg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bkg@2x.png"; sourceTree = "<group>"; };
+		07443BF717E5E6C500D77C76 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		07446FB617DEC31A006C3E3B /* VoteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoteManager.h; sourceTree = "<group>"; };
 		07446FB717DEC31A006C3E3B /* VoteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoteManager.m; sourceTree = "<group>"; };
 		0750DB4E17E1273C0040A68E /* voteDownIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = voteDownIcon.png; sourceTree = "<group>"; };
@@ -353,7 +355,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0750DB4D17E041A50040A68E /* Social.framework in Frameworks */,
+				07443BF817E5E6C600D77C76 /* Social.framework in Frameworks */,
 				8AEA3A85159ABED20006891F /* QuartzCore.framework in Frameworks */,
 				8A430B25142C2D38007B72F5 /* SystemConfiguration.framework in Frameworks */,
 				8AC0A2FC141D773800F0E4B0 /* UIKit.framework in Frameworks */,
@@ -481,7 +483,7 @@
 		8AC0A2EC141D773800F0E4B0 = {
 			isa = PBXGroup;
 			children = (
-				0750DB4C17E041A50040A68E /* Social.framework */,
+				07443BF717E5E6C500D77C76 /* Social.framework */,
 				0703D11616131508004870A5 /* Default.png */,
 				0703D11416131500004870A5 /* Default@2x.png */,
 				076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */,
@@ -508,7 +510,6 @@
 		8AC0A2FA141D773800F0E4B0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				0750DB4A17E03F4D0040A68E /* Twitter.framework */,
 				8AEA3A84159ABED20006891F /* QuartzCore.framework */,
 				8A430B24142C2D38007B72F5 /* SystemConfiguration.framework */,
 				8AC0A2FB141D773800F0E4B0 /* UIKit.framework */,

@@ -153,7 +153,7 @@ typedef enum {
 - (void)processShareItem:(ShareItem)item {
     switch (item) {
         case SHARE_ITEM_TWITTER:
-            [self shareOnTwitterForImage:self.photoAlbumView];
+            [self shareOnTwitterForImage:nil];
             break;
         case SHARE_ITEM_FACEBOOK:
             [self shareOnFacebookForImage:nil];
