@@ -20,6 +20,7 @@
 typedef enum {
     SHARE_ITEM_TWITTER,
     SHARE_ITEM_FACEBOOK,
+    SHARE_ITEM_CAMERA_ROLL,
     SHARE_ITEM_NONE
 } ShareItem;
 
@@ -34,6 +35,7 @@ typedef enum {
 - (void)shareOnTwitterForImage:(UIImage *)img;
 - (void)shareOnFacebookForImage:(UIImage *)img;
 - (void)shareForServiceType:(NSString *)serviceType withImage:(UIImage *)img;
+- (void)shareToCameraRollForImage:(UIImage *)img;
 
 @property (nonatomic, strong) UIBarButtonItem *likeBtn;
 @property (nonatomic, strong) UIBarButtonItem *unlikeBtn;
@@ -186,6 +188,9 @@ typedef enum {
         case SHARE_ITEM_FACEBOOK:
             [self shareOnFacebookForImage:selectedPage.image];
             break;
+        case SHARE_ITEM_CAMERA_ROLL:
+            [self shareToCameraRollForImage:selectedPage.image];
+            break;
         default:
             break;
     }
@@ -226,6 +231,10 @@ typedef enum {
     [self presentViewController:socialSheet animated:YES completion:nil];
 }
 
+- (void)shareToCameraRollForImage:(UIImage *)img {
+    UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
+}
+
 #pragma mark - action selectors
 - (void)likeBtnPressed:(id)sender {
     NSLog(@"Like button pressed! %d",  self.photoAlbumView.centerPageIndex);
@@ -242,7 +251,7 @@ typedef enum {
 }
 
  - (void)shareBtnPressed:(id)sender {
-     UIActionSheet *shareSheet = [[UIActionSheet alloc] initWithTitle:@"Share your photo!" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Twitter", @"Facebook", nil];
+     UIActionSheet *shareSheet = [[UIActionSheet alloc] initWithTitle:@"Share your photo!" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Twitter", @"Facebook", @"Save to Camera Roll", nil];
      [shareSheet showInView:self.view];
  }
 
