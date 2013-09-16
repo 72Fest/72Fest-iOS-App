@@ -268,10 +268,10 @@
         } else {
             //image is not retrieved yet, pull it from the site
             dispatch_queue_t imageThumbCellQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-            
+
+            __block UIImage *img;
+             NSString *curFilename = [curThumbStr lastPathComponent];
             dispatch_async(imageThumbCellQueue, ^{
-                UIImage  *img;
-                NSString *curFilename = [curThumbStr lastPathComponent];
                 if ([[DiskCacheManager defaultManager] existsInCache:curFilename]) {
                     //TODO:Seems to be a problem here
                     img = [UIImage imageWithData:[[DiskCacheManager defaultManager] retrieveFromCache:curFilename]];
