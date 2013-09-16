@@ -61,7 +61,7 @@
     self.view.backgroundColor = THEME_BG_CLR;
     self.photoAlbumView.dataSource = self;
     self.photoAlbumView.delegate = self;
-    self.photoAlbumView.zoomingIsEnabled = NO;
+    self.photoAlbumView.zoomingIsEnabled = YES;
     self.hidesChromeWhenScrolling = NO;
     self.chromeCanBeHidden = YES;
     
@@ -89,9 +89,9 @@
     [self displayVoteTotal];
     
     //style for iOS 7
-    [self.navigationController.navigationBar setTintColor:THEME_CLR];
+    [self.navigationController.navigationBar setTintColor:THEME_BG_CLR];
     
-    [self.toolbar setTintColor:THEME_CLR];
+    [self.toolbar setTintColor:THEME_BG_CLR];
 }
 
 - (void)viewDidUnload

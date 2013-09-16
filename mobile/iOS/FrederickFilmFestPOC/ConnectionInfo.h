@@ -9,7 +9,7 @@
 #ifndef FrederickFilmFestPOC_ConnectionInfo_h
 #define FrederickFilmFestPOC_ConnectionInfo_h
 //URL Macros
-#define BASE_URL @"http://54.227.130.170/photoapp"
+#define BASE_URL @"http://phoshow.me/photoapp"
 #define GEN_URL(URL) [NSString stringWithFormat:@"%@/%@", BASE_URL, URL]
 
 //URL definitions
