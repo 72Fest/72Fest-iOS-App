@@ -64,7 +64,7 @@
     self.uploadTextView.font = LABEL_FONT;
     
     // add a bg image
-    CGRect frame = self.view.frame;
+    CGRect frame = [[UIScreen mainScreen] bounds];
     UIView *v = [[UIView alloc] initWithFrame:frame];
     UIImage *i = [UIImage imageNamed:@"bkg.png"];
     UIColor *c = [[UIColor alloc] initWithPatternImage:i];

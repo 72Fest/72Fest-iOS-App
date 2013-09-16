@@ -14,6 +14,7 @@
 #import "DiskCacheManager.h"
 #import "VoteManager.h"
 #import "FrederickFilmFestPOCAppDelegate.h"
+#import "UIImage+Color.h"
 
 @interface GalleryViewController ()
 
@@ -52,6 +53,11 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    
+    //set tint for nav controller
+    [[self.navigationController navigationBar] setTintColor:THEME_CLR];
+    [[self.navigationController navigationBar] setBackgroundImage:[UIImage imageWithColor:THEME_CLR] forBarMetrics:UIBarMetricsDefault];
     
     //set up refresh button
     //self.refreshBtn = [[UIBarButtonItem alloc] initWithTitle:@"Refresh" style:UIBarButtonSystemItemAction target:self action:@selector(refreshPressed:)];
@@ -267,6 +273,7 @@
                 UIImage  *img;
                 NSString *curFilename = [curThumbStr lastPathComponent];
                 if ([[DiskCacheManager defaultManager] existsInCache:curFilename]) {
+                    //TODO:Seems to be a problem here
                     img = [UIImage imageWithData:[[DiskCacheManager defaultManager] retrieveFromCache:curFilename]];
                 } else {
                     NSData *imgData = [NSData dataWithContentsOfURL:imgURL];
