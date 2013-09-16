@@ -9,6 +9,7 @@
 #import "FrederickFilmFestPOCAppDelegate.h"
 #import "PhotoUploadViewController.h"
 #import "GalleryViewController.h"
+#import "UIImage+Color.h"
 
 #define TAB_BAR_UPLOAD_SELECTED_IMG @"btnCameraSelectedState.png"
 #define TAB_BAR_GALLERY_SELECTED_IMG @"btnGallerySelectedState.png"
@@ -46,6 +47,7 @@
     
     //set tint for nav controller
     [[self.navController navigationBar] setTintColor:THEME_CLR];
+    [[self.navController navigationBar] setBackgroundImage:[UIImage imageWithColor:THEME_CLR] forBarMetrics:UIBarMetricsDefault];
     
     //gallery controller
     GalleryViewController *galleryVC = [[GalleryViewController alloc] initWithNibName:nil bundle:nil];

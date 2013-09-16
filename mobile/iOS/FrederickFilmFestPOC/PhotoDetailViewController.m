@@ -15,6 +15,7 @@
 #import "ConnectionInfo.h"
 #import <Social/Social.h>
 #import "NIPhotoScrollView.h"
+#import "FrederickFilmFestPOCAppDelegate.h"
 
 #define USE_DISK_CACHE
 
@@ -57,7 +58,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    self.view.backgroundColor = [UIColor blackColor];
+    self.view.backgroundColor = THEME_BG_CLR;
     self.photoAlbumView.dataSource = self;
     self.photoAlbumView.delegate = self;
     self.photoAlbumView.zoomingIsEnabled = NO;
@@ -86,6 +87,11 @@
     
     //update the vote total
     [self displayVoteTotal];
+    
+    //style for iOS 7
+    [self.navigationController.navigationBar setTintColor:THEME_CLR];
+    
+    [self.toolbar setTintColor:THEME_CLR];
 }
 
 - (void)viewDidUnload

@@ -18,7 +18,7 @@
 @implementation VoteManager
 
 + (VoteManager *)defaultManager {
-    static VoteManager *_voteManager = nil;
+    __strong static VoteManager *_voteManager = nil;
     static dispatch_once_t onceToken;
 
     dispatch_once(&onceToken, ^{

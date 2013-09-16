@@ -40,6 +40,16 @@
 }
 
 - (void)setThumb:(UIImage *)thumbImg forKey:(NSString *)key {
+    if (!key) {
+        NSLog(@"ImageCache::setThumb:forKey - key is nil!");
+        return;
+    }
+    
+    if (!thumbImg) {
+        NSLog(@"ImageCache::setThumb:forKey - thumbImg is nil for key:%@!", key);
+        return;
+    }
+    
     dispatch_async(self.thumbCacheQueue, ^{
         if (![self.hashTable objectForKey:key]){
             [self.hashTable setObject:[thumbImg copy] forKey:key];
