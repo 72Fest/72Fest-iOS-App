@@ -203,6 +203,7 @@
 		0772869F1603EB3300D82E29 /* CountDownView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountDownView.m; sourceTree = "<group>"; };
 		077286A11604372F00D82E29 /* DigitCountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DigitCountView.h; sourceTree = "<group>"; };
 		077286A21604372F00D82E29 /* DigitCountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DigitCountView.m; sourceTree = "<group>"; };
+		078CB36C17E7D05F009DBFF6 /* IOSCompatability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOSCompatability.h; sourceTree = "<group>"; };
 		07FF017C17E5158800C8BC1C /* VotingOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VotingOperation.h; sourceTree = "<group>"; };
 		07FF017D17E5158800C8BC1C /* VotingOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VotingOperation.m; sourceTree = "<group>"; };
 		07FF017F17E517C500C8BC1C /* VotingOperationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VotingOperationDelegate.h; sourceTree = "<group>"; };
@@ -539,6 +540,7 @@
 				076DB9E517E62AAE00D0E1F6 /* UIImage+Color.m */,
 				8AC0A30A141D773800F0E4B0 /* FrederickFilmFestPOCAppDelegate.h */,
 				8AC0A30B141D773800F0E4B0 /* FrederickFilmFestPOCAppDelegate.m */,
+				078CB36C17E7D05F009DBFF6 /* IOSCompatability.h */,
 				8AC0A30D141D773800F0E4B0 /* MainWindow.xib */,
 				8A53BBE815A290C40007998A /* ConnectionInfo.h */,
 				8A430ACD142ABA28007B72F5 /* Resources */,

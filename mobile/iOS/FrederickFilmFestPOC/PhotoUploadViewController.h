@@ -61,5 +61,6 @@
 @property (strong, nonatomic) IBOutlet CountDownView *countDownTimer;
 @property (nonatomic, strong) UITabBar *parentTabBar;
 @property (strong, nonatomic) IBOutlet UITextView *uploadTextView;
+@property (weak, nonatomic) IBOutlet UIView *uploadContainer;
 
 @end
