@@ -13,6 +13,7 @@
 #import "ConnectionInfo.h"
 #import "CountDownView.h"
 #import "FrederickFilmFestPOCAppDelegate.h"
+#import "IOSCompatability.h"
 
 @implementation PhotoUploadViewController
 @synthesize curImage = _curImage;
@@ -85,8 +86,12 @@
     
     // attempt to retrieve the count down metata data
     [self requestCountdownMetadata:COUNTDOWN_METADATA_URL];
-
-    [super viewDidLoad];
+    
+    if (SYSTEM_IS_IOS7) {
+        CGRect containerFrame = self.uploadContainer.frame;
+        containerFrame.origin.y += self.navigationController.navigationBar.frame.size.height + 20.0;
+        self.uploadContainer.frame = containerFrame;
+    }
 }
 
 
@@ -244,6 +249,12 @@
 
 - (void)displayCountdownWithCaption:(NSString *)captionStr andDate:(NSDate *)countDownDate {
     CGRect cFrame = CGRectMake(43, 7, 235, 80);
+    
+    //adjust placement for iOS7
+    if (SYSTEM_IS_IOS7) {
+        cFrame.origin.y += self.navigationController.navigationBar.frame.size.height + 20.0;
+    }
+    
     CountDownView *cdv = [[CountDownView alloc] initWithFrame:cFrame andCountDownDate:countDownDate];
     [cdv setCaption:captionStr];
     

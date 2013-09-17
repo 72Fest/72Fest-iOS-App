@@ -8,6 +8,8 @@
 
 #import "InfoViewController.h"
 #import "ConnectionInfo.h"
+#import "FrederickFilmFestPOCAppDelegate.h"
+#import "IOSCompatability.h"
 
 
 @implementation InfoViewController
@@ -39,6 +41,13 @@
     UIImageView *iv =
     [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"filmFestLogo.png"]];
     [[self navigationItem] setTitleView:iv];
+    
+    if (SYSTEM_IS_IOS7) {
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+        
+    } else {
+        self.navigationController.navigationBar.tintColor = THEME_CLR;
+    }
     
     //set background
     CGRect frame = self.view.frame;

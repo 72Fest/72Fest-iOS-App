@@ -16,6 +16,7 @@
 #import <Social/Social.h>
 #import "NIPhotoScrollView.h"
 #import "FrederickFilmFestPOCAppDelegate.h"
+#import "IOSCompatability.h"
 
 #define USE_DISK_CACHE
 
@@ -73,10 +74,6 @@
     self.navigationItem.rightBarButtonItem =
         [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareBtnPressed:)];
     
-    //adding share button
-    self.navigationItem.rightBarButtonItem =
-        [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareBtnPressed:)];
-    
     [self setupVoteIconWithVoteVal:NO];
     
     //load up all the data
@@ -89,9 +86,14 @@
     [self displayVoteTotal];
     
     //style for iOS 7
-    [self.navigationController.navigationBar setTintColor:THEME_BG_CLR];
-    
-    [self.toolbar setTintColor:THEME_BG_CLR];
+    if (SYSTEM_IS_IOS7) {
+        [self.navigationController.navigationBar setTintColor:THEME_CLR];
+        [self.toolbar setTintColor:THEME_CLR];
+
+    } else {
+        [self.navigationController.navigationBar setTintColor:THEME_BG_CLR];
+        [self.toolbar setTintColor:THEME_BG_CLR];
+    }
 }
 
 - (void)viewDidUnload
@@ -115,11 +117,11 @@
     
     if (hasVote) {
         self.toolbar.items = @[self.previousButton,
-                               flexibleSpace, self.unlikeBtn, flexibleSpace,
+                               flexibleSpace, self.likeBtn, flexibleSpace,
                                self.nextButton];
     } else {
         self.toolbar.items = @[ self.previousButton,
-                               flexibleSpace, self.likeBtn, flexibleSpace,
+                               flexibleSpace, self.unlikeBtn, flexibleSpace,
                                self.nextButton];
     }
 }
@@ -270,7 +272,7 @@
 }
 
  - (void)shareBtnPressed:(id)sender {
-     UIActionSheet *shareSheet = [[UIActionSheet alloc] initWithTitle:@"Share your photo!" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Twitter", @"Facebook", @"Camera Roll", @"Email", nil];
+     UIActionSheet *shareSheet = [[UIActionSheet alloc] initWithTitle:@"Share Photos" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Twitter", @"Facebook", @"Camera Roll", @"Email", nil];
      [shareSheet showInView:self.view];
  }
 
