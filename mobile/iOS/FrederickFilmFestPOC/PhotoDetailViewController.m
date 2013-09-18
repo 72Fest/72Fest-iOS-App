@@ -19,8 +19,6 @@
 #import "PhotoDownloadOperation.h"
 #import "IOSCompatability.h"
 
-#define USE_DISK_CACHE
-
 @interface PhotoDetailViewController ()
 - (void)setupVoteIconWithVoteVal:(BOOL)hasVote;
 - (NSString *)imageKeyForIndex:(NSInteger)imageIdx;
@@ -385,20 +383,11 @@
         
     }
     
-     //Is this stuff needed?
-    
-    //TODO: cache large photo as well
-//    dispatch_queue_t largePhotoQueue = dispatch_queue_create("Large Photo Queue", NULL);
-//   
-//    __weak PhotoDetailViewController *weakSelf = self;
-//    __block UIImage *loadedImg;
-//    
-//    NSData *imgData = nil;
     NSString *fullUrlStr = [[imgDict valueForKey:XML_TAG_FULL_URL] copy];
     NSString *imageKey = [fullUrlStr lastPathComponent];
     NSURL *imageURL = [NSURL URLWithString:fullUrlStr];
     
-    
+    //Load the image by adding an NSOperation to the Queue
     PhotoDownloadOperation *photoOperation =
         [[PhotoDownloadOperation alloc] initWithURL:imageURL
                                         andImageKey:imageKey
@@ -406,68 +395,6 @@
                                         andDelegate:self];
     
     [self.photosQueue addOperation:photoOperation];
-    
-//    if ([[DiskCacheManager defaultManager] existsInCache:imageKey]) {
-//        //we found it in the disk cache, lets save the pull from the
-//        //network and grab it from the disk cache
-//        
-//        imgData = [[DiskCacheManager defaultManager] retrieveFromCache:imageKey];
-//        loadedImg = [UIImage imageWithData:imgData];
-//    } else {
-//        //CALL OPERATION FROM QUEUE
-//    }
-    
-    
-    
-//    if (loadedImg == nil) {
-//        NSLog(@"*****PhotDetailView:loadedImg == nil!");
-//        return;
-//    }
-//    
-    
-//    dispatch_async(largePhotoQueue, ^{
-//        //NSString *fileName = [fullUrlStr lastPathComponent];
-//        NSData *imgData = nil;
-//        
-//#ifdef USE_DISK_CACHE
-//        NSLog(@"***Using disk cache");
-//        NSString *imageKey = [fullUrlStr lastPathComponent];
-//        //check disk cache first
-//        if ([[DiskCacheManager defaultManager] existsInCache:imageKey]) {
-//            //we found it in the disk cache, lets save the pull from the
-//            //network and grab it from the disk cache
-//
-//            imgData = [[DiskCacheManager defaultManager] retrieveFromCache:imageKey];
-//        } else {
-//#endif
-//            //pull it from the network, but then save to the cache
-//            imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:fullUrlStr]];
-//            NSLog(@"ULR:%@", fullUrlStr);
-//#ifdef USE_DISK_CACHE
-//            if (imgData) {
-//                [[DiskCacheManager defaultManager] saveToCache:imgData withFilename:imageKey];
-//            }
-//
-//        }
-//#endif
-//        loadedImg = [UIImage imageWithData:imgData];
-//        
-//        if (loadedImg == nil) {
-//            NSLog(@"*****PhotDetailView:loadedImg == nil!");
-//            return;
-//        }
-//        
-//        
-//        dispatch_async(dispatch_get_main_queue(), ^ {
-//            
-//            [weakSelf.photoAlbumView didLoadPhoto: loadedImg
-//                                      atIndex: photoIndex
-//                                    photoSize: NIPhotoScrollViewPhotoSizeOriginal];
-//        });
-//        
-//        *isLoading = NO;
-//    });
-//        
     
     return image;
 }
