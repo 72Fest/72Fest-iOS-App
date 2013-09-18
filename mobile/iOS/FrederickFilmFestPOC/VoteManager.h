@@ -19,5 +19,4 @@
 - (BOOL)toggleVoteForImgKey:(NSString *)imgKey;
 - (BOOL)hasVoteForImgKey:(NSString *)imgKey;
 - (NSArray *)getVoteTotals;
-- (NSInteger)getUpdatedTotalForId:(NSString *)photoId;
 @end

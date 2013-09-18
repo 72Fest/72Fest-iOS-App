@@ -50,25 +50,28 @@
         return;
     }
     
+    __block NSMutableDictionary *blockHashTable = self.hashTable;
     dispatch_async(self.thumbCacheQueue, ^{
-        if (![self.hashTable objectForKey:key]){
-            [self.hashTable setObject:[thumbImg copy] forKey:key];
+        if (![blockHashTable objectForKey:key]){
+            [blockHashTable setObject:[thumbImg copy] forKey:key];
         }
     });
 }
 
 - (UIImage *)thumbForKey:(NSString *)key {
     __block UIImage *thumbImg;
+    __block NSMutableDictionary *blockHashTable = self.hashTable;
     dispatch_sync(self.thumbCacheQueue, ^{
-        thumbImg = [(UIImage *)[self.hashTable objectForKey:key] copy];
+        thumbImg = [(UIImage *)[blockHashTable objectForKey:key] copy];
     });
     
     return thumbImg;
 }
 
 - (void)purgeCache {
+    __block NSMutableDictionary *blockHashTable = self.hashTable;
     dispatch_sync(self.thumbCacheQueue, ^{
-        [self.hashTable removeAllObjects];
+        [blockHashTable removeAllObjects];
     });
 }
 @end

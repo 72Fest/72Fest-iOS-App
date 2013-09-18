@@ -8,6 +8,7 @@
 
 #import "NIToolbarPhotoViewController.h"
 #import "VotingOperationDelegate.h"
+#import "PhotoDownloadOperationDelegate.h"
 #import <MessageUI/MessageUI.h>
 
 #define VOTE_UP_ICON_IMG [UIImage imageNamed:@"voteUpIcon.png"]
@@ -27,9 +28,10 @@ typedef enum {
     SHARE_ITEM_NONE
 } ShareItem;
 
-@interface PhotoDetailViewController : NIToolbarPhotoViewController <NIPhotoAlbumScrollViewDataSource, NIPagingScrollViewDelegate, NSURLConnectionDelegate, VotingOperationDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
+@interface PhotoDetailViewController : NIToolbarPhotoViewController <NIPhotoAlbumScrollViewDataSource, NIPagingScrollViewDelegate, NSURLConnectionDelegate, VotingOperationDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, PhotoDownloadOperationDelegate>
 
 @property (nonatomic, strong) NSArray *photosList;
 @property (nonatomic, assign) NSInteger selectedPhotIndex;
+@property (nonatomic, strong) NSOperationQueue *photosQueue;
 
 @end

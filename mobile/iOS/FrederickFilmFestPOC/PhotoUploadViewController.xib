@@ -31,10 +31,6 @@
                             <rect key="frame" x="36" y="95" width="249" height="180"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
-                        <imageView autoresizesSubviews="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" id="15">
-                            <rect key="frame" x="49" y="109" width="222" height="149"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5">
                             <rect key="frame" x="81" y="280" width="158" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -89,6 +85,10 @@ to the 72Fest Gallery!</string>
                             <fontDescription key="fontDescription" name="Noteworthy-Bold" family="Noteworthy" pointSize="19"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
+                        <imageView autoresizesSubviews="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" id="15">
+                            <rect key="frame" x="49" y="109" width="222" height="149"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
                         <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="whiteLarge" id="22">
                             <rect key="frame" x="141" y="169" width="37" height="37"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -103,7 +103,7 @@ to the 72Fest Gallery!</string>
     </objects>
     <resources>
         <image name="btnChoose.png" width="158" height="33"/>
-        <image name="btnUpload.png" width="158" height="33"/>
+        <image name="btnUpload.png" width="160" height="33"/>
         <image name="photoBacker.png" width="260" height="205"/>
     </resources>
 </document>
