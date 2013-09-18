@@ -155,7 +155,7 @@
 
 - (void)setVoteTitleWithTotal:(NSInteger)voteTotal {
     self.title =
-        [NSString stringWithFormat:@"%d vote%@", voteTotal, ((voteTotal == 1) ? @"": @"s")];
+        [NSString stringWithFormat:@"%d like%@", voteTotal, ((voteTotal == 1) ? @"": @"s")];
         //[NSString stringWithFormat:@"%d vote%@ for %@", voteTotal, ((voteTotal == 1) ? @"": @"s"), self.curImageKey ];
 }
 
