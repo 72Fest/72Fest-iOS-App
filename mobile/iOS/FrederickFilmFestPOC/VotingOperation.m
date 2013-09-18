@@ -8,6 +8,7 @@
 
 #import "VotingOperation.h"
 #import "VoteManager.h"
+#import "ConnectionInfo.h"
 
 @interface VotingOperation()
 @property (nonatomic, strong) NSString *imageKey;
@@ -29,8 +30,23 @@
     @autoreleasepool {
         if (self.isCancelled) return;
         
-        self.voteTotal = [[VoteManager defaultManager] getUpdatedTotalForId:self.imageKey];
-
+        self.voteTotal = 0;
+        
+        NSString *url = VOTE_TOTALS_URL_FOR_ID(self.imageKey);
+        NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+        
+        if (self.isCancelled) return;
+        
+        NSError *err = nil;
+        NSArray *totalsArray = [NSJSONSerialization JSONObjectWithData:data options: nil error: &err];
+        
+        if (self.isCancelled) return;
+        
+        if (totalsArray.count) {
+            NSNumber *voteNum = [totalsArray[0] valueForKey:VOTE_TOTALS_VOTES_KEY];
+            self.voteTotal = [voteNum integerValue];
+        }
+        
         if (self.isCancelled) return;
 
         [(NSObject *)self.delegate performSelectorOnMainThread:@selector(votingOperationDidReceiveVoteTotal:) withObject:self waitUntilDone:NO];

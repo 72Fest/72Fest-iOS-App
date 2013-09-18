@@ -57,6 +57,7 @@
 		076B7ACC16130A0000DF6BA5 /* 72FestBanner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */; };
 		076DB9E317E617AF00D0E1F6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076DB9E217E617AF00D0E1F6 /* MessageUI.framework */; };
 		076DB9E617E62AAE00D0E1F6 /* UIImage+Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 076DB9E517E62AAE00D0E1F6 /* UIImage+Color.m */; };
+		0770B12D17E916AE009C6ED5 /* PhotoDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0770B12C17E916AE009C6ED5 /* PhotoDownloadOperation.m */; };
 		077286A01603EB3300D82E29 /* CountDownView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0772869F1603EB3300D82E29 /* CountDownView.m */; };
 		077286A31604372F00D82E29 /* DigitCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 077286A21604372F00D82E29 /* DigitCountView.m */; };
 		07EFDC921614517E00F54BE4 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */; };
@@ -199,6 +200,9 @@
 		076DB9E217E617AF00D0E1F6 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		076DB9E417E62AAE00D0E1F6 /* UIImage+Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Color.h"; sourceTree = "<group>"; };
 		076DB9E517E62AAE00D0E1F6 /* UIImage+Color.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Color.m"; sourceTree = "<group>"; };
+		0770B12B17E916AE009C6ED5 /* PhotoDownloadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDownloadOperation.h; sourceTree = "<group>"; };
+		0770B12C17E916AE009C6ED5 /* PhotoDownloadOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoDownloadOperation.m; sourceTree = "<group>"; };
+		0770B12E17E91714009C6ED5 /* PhotoDownloadOperationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDownloadOperationDelegate.h; sourceTree = "<group>"; };
 		0772869E1603EB3300D82E29 /* CountDownView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountDownView.h; sourceTree = "<group>"; };
 		0772869F1603EB3300D82E29 /* CountDownView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountDownView.m; sourceTree = "<group>"; };
 		077286A11604372F00D82E29 /* DigitCountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DigitCountView.h; sourceTree = "<group>"; };
@@ -415,6 +419,16 @@
 			name = Voting;
 			sourceTree = "<group>";
 		};
+		0770B12A17E91667009C6ED5 /* Photos */ = {
+			isa = PBXGroup;
+			children = (
+				0770B12B17E916AE009C6ED5 /* PhotoDownloadOperation.h */,
+				0770B12C17E916AE009C6ED5 /* PhotoDownloadOperation.m */,
+				0770B12E17E91714009C6ED5 /* PhotoDownloadOperationDelegate.h */,
+			);
+			name = Photos;
+			sourceTree = "<group>";
+		};
 		8A430ACD142ABA28007B72F5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -530,6 +544,7 @@
 		8AC0A301141D773800F0E4B0 /* FrederickFilmFestPOC */ = {
 			isa = PBXGroup;
 			children = (
+				0770B12A17E91667009C6ED5 /* Photos */,
 				07446FB517DEC2D7006C3E3B /* Voting */,
 				8AFCC2D0159D51CB0067181B /* Nimbus */,
 				8AEA3A86159AC6780006891F /* Data */,
@@ -861,6 +876,7 @@
 			files = (
 				8AC0A309141D773800F0E4B0 /* main.m in Sources */,
 				8AC0A30C141D773800F0E4B0 /* FrederickFilmFestPOCAppDelegate.m in Sources */,
+				0770B12D17E916AE009C6ED5 /* PhotoDownloadOperation.m in Sources */,
 				8AC0A31E141D7B7300F0E4B0 /* PhotoUploadViewController.m in Sources */,
 				8A430AD5142ABB32007B72F5 /* UINavigationBar+CustomBackground.m in Sources */,
 				8A430B0B142C0070007B72F5 /* UIImage+Resize.m in Sources */,

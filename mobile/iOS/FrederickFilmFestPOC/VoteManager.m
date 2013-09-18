@@ -84,20 +84,4 @@
     return totalsArray;
 }
 
-- (NSInteger)getUpdatedTotalForId:(NSString *)photoId {
-    NSString *url = VOTE_TOTALS_URL_FOR_ID(photoId);
-    NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
-    
-    NSError *err = nil;
-    NSArray *totalsArray = [NSJSONSerialization JSONObjectWithData:data options: nil error: &err];
-    
-    NSInteger voteTotal = 0;
-    if (totalsArray.count) {
-        NSNumber *voteNum = [totalsArray[0] valueForKey:VOTE_TOTALS_VOTES_KEY];
-        voteTotal = [voteNum integerValue];
-    }
-    
-    return voteTotal;
-}
-
 @end

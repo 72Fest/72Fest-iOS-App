@@ -16,6 +16,7 @@
 #import <Social/Social.h>
 #import "NIPhotoScrollView.h"
 #import "FrederickFilmFestPOCAppDelegate.h"
+#import "PhotoDownloadOperation.h"
 #import "IOSCompatability.h"
 
 #define USE_DISK_CACHE
@@ -50,6 +51,8 @@
     if (self) {
         // By default, set the index to zero
         self.selectedPhotIndex = 0;
+        self.photosQueue = [[NSOperationQueue alloc] init];
+        self.photosQueue.name = @"Photo Download Operation Queue";
     }
     return self;
 }
@@ -65,6 +68,7 @@
     self.photoAlbumView.zoomingIsEnabled = YES;
     self.hidesChromeWhenScrolling = NO;
     self.chromeCanBeHidden = YES;
+    self.animateMovingToNextAndPreviousPhotos = YES;
     
     //set up custom toolbar
     self.likeBtn = [[UIBarButtonItem alloc] initWithImage:VOTE_UP_ICON_IMG style:UIBarButtonItemStylePlain target:self action:@selector(likeBtnPressed:)];
@@ -384,60 +388,110 @@
      //Is this stuff needed?
     
     //TODO: cache large photo as well
-    dispatch_queue_t largePhotoQueue = dispatch_queue_create("Large Photo Queue", NULL);
-   
-    __weak PhotoDetailViewController *weakSelf = self;
+//    dispatch_queue_t largePhotoQueue = dispatch_queue_create("Large Photo Queue", NULL);
+//   
+//    __weak PhotoDetailViewController *weakSelf = self;
+//    __block UIImage *loadedImg;
+//    
+//    NSData *imgData = nil;
     NSString *fullUrlStr = [[imgDict valueForKey:XML_TAG_FULL_URL] copy];
-    __block UIImage *loadedImg;
-    dispatch_async(largePhotoQueue, ^{
-        //NSString *fileName = [fullUrlStr lastPathComponent];
-        NSData *imgData = nil;
-        
-#ifdef USE_DISK_CACHE
-        NSLog(@"***Using disk cache");
-        NSString *imageKey = [fullUrlStr lastPathComponent];
-        //check disk cache first
-        if ([[DiskCacheManager defaultManager] existsInCache:imageKey]) {
-            //we found it in the disk cache, lets save the pull from the
-            //network and grab it from the disk cache
-
-            imgData = [[DiskCacheManager defaultManager] retrieveFromCache:imageKey];
-        } else {
-#endif
-            //pull it from the network, but then save to the cache
-            imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:fullUrlStr]];
-            NSLog(@"ULR:%@", fullUrlStr);
-#ifdef USE_DISK_CACHE
-            if (imgData) {
-                [[DiskCacheManager defaultManager] saveToCache:imgData withFilename:imageKey];
-            }
-
-        }
-#endif
-        loadedImg = [UIImage imageWithData:imgData];
-        
-        if (loadedImg == nil) {
-            NSLog(@"*****PhotDetailView:loadedImg == nil!");
-            return;
-        }
-        
-        
-        dispatch_async(dispatch_get_main_queue(), ^ {
-            
-            [weakSelf.photoAlbumView didLoadPhoto: loadedImg
-                                      atIndex: photoIndex
-                                    photoSize: NIPhotoScrollViewPhotoSizeOriginal];
-        });
-        
-        *isLoading = NO;
-    });
-        
+    NSString *imageKey = [fullUrlStr lastPathComponent];
+    NSURL *imageURL = [NSURL URLWithString:fullUrlStr];
+    
+    
+    PhotoDownloadOperation *photoOperation =
+        [[PhotoDownloadOperation alloc] initWithURL:imageURL
+                                        andImageKey:imageKey
+                                      andImageIndex:photoIndex
+                                        andDelegate:self];
+    
+    [self.photosQueue addOperation:photoOperation];
+    
+//    if ([[DiskCacheManager defaultManager] existsInCache:imageKey]) {
+//        //we found it in the disk cache, lets save the pull from the
+//        //network and grab it from the disk cache
+//        
+//        imgData = [[DiskCacheManager defaultManager] retrieveFromCache:imageKey];
+//        loadedImg = [UIImage imageWithData:imgData];
+//    } else {
+//        //CALL OPERATION FROM QUEUE
+//    }
+    
+    
+    
+//    if (loadedImg == nil) {
+//        NSLog(@"*****PhotDetailView:loadedImg == nil!");
+//        return;
+//    }
+//    
+    
+//    dispatch_async(largePhotoQueue, ^{
+//        //NSString *fileName = [fullUrlStr lastPathComponent];
+//        NSData *imgData = nil;
+//        
+//#ifdef USE_DISK_CACHE
+//        NSLog(@"***Using disk cache");
+//        NSString *imageKey = [fullUrlStr lastPathComponent];
+//        //check disk cache first
+//        if ([[DiskCacheManager defaultManager] existsInCache:imageKey]) {
+//            //we found it in the disk cache, lets save the pull from the
+//            //network and grab it from the disk cache
+//
+//            imgData = [[DiskCacheManager defaultManager] retrieveFromCache:imageKey];
+//        } else {
+//#endif
+//            //pull it from the network, but then save to the cache
+//            imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:fullUrlStr]];
+//            NSLog(@"ULR:%@", fullUrlStr);
+//#ifdef USE_DISK_CACHE
+//            if (imgData) {
+//                [[DiskCacheManager defaultManager] saveToCache:imgData withFilename:imageKey];
+//            }
+//
+//        }
+//#endif
+//        loadedImg = [UIImage imageWithData:imgData];
+//        
+//        if (loadedImg == nil) {
+//            NSLog(@"*****PhotDetailView:loadedImg == nil!");
+//            return;
+//        }
+//        
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^ {
+//            
+//            [weakSelf.photoAlbumView didLoadPhoto: loadedImg
+//                                      atIndex: photoIndex
+//                                    photoSize: NIPhotoScrollViewPhotoSizeOriginal];
+//        });
+//        
+//        *isLoading = NO;
+//    });
+//        
     
     return image;
 }
 
 - (id<NIPagingScrollViewPage>)pagingScrollView:(NIPagingScrollView *)pagingScrollView pageViewForIndex:(NSInteger)pageIndex {
     return [self.photoAlbumView pagingScrollView:pagingScrollView pageViewForIndex:pageIndex];
+}
+
+- (void)photoAlbumScrollView:(NIPhotoAlbumScrollView *)photoAlbumScrollView stopLoadingPhotoAtIndex:(NSInteger)photoIndex {
+    
+    for (PhotoDownloadOperation *curPhotoOp in self.photosQueue.operations) {
+        if (curPhotoOp.imageIndex == photoIndex) {
+            NSLog(@"Canceling some threads!!!");
+            [curPhotoOp cancel];
+            break;
+        }
+    }
+}
+
+#pragma mark - Photo Download Operation delegate method
+- (void)photoDownloadOperationComplete:(PhotoDownloadOperation *)photoOperation {
+    [self.photoAlbumView didLoadPhoto:photoOperation.image
+                              atIndex:photoOperation.imageIndex
+                            photoSize:NIPhotoScrollViewPhotoSizeOriginal];
 }
 
 #pragma mark - NSURL delegate methods
