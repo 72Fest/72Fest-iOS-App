@@ -9,6 +9,8 @@
 #import "FrederickFilmFestPOCAppDelegate.h"
 #import "PhotoUploadViewController.h"
 #import "GalleryViewController.h"
+#import "UIImage+Color.h"
+#import "IOSCompatability.h"
 
 #define TAB_BAR_UPLOAD_SELECTED_IMG @"btnCameraSelectedState.png"
 #define TAB_BAR_GALLERY_SELECTED_IMG @"btnGallerySelectedState.png"
@@ -37,7 +39,8 @@
     
     //nav controller
     self.navController = [[UINavigationController alloc] initWithRootViewController:self.photoUploadController];
-        
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     //set up tab bar item
 //    UITabBarItem *tbi = [[UITabBarItem alloc] initWithTitle:@"Upload" image:[UIImage imageNamed:@"upload-photo.png"] tag:1];
 //    
@@ -45,7 +48,14 @@
 //    [tbi release];
     
     //set tint for nav controller
-    [[self.navController navigationBar] setTintColor:THEME_CLR];
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7")) {
+        [[self.navController navigationBar] setTintColor:[UIColor whiteColor]];
+        [self.navController.navigationBar performSelector:@selector(setBarTintColor) withObject:THEME_CLR];
+        //[[self.navController navigationBar] setBarTintColor:THEME_CLR];
+    } else {
+        [[self.navController navigationBar] setTintColor:THEME_CLR];
+        [[self.navController navigationBar] setBackgroundImage:[UIImage imageWithColor:THEME_CLR] forBarMetrics:UIBarMetricsDefault];
+    }
     
     //gallery controller
     GalleryViewController *galleryVC = [[GalleryViewController alloc] initWithNibName:nil bundle:nil];

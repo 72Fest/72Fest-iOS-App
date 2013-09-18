@@ -132,7 +132,7 @@
     //[self.captionLbl setFont:[UIFont boldSystemFontOfSize:CAPTION_FONT_SIZE]];
     [self.captionLbl setFont:[UIFont fontWithName:LABEL_FONT_NAME size:CAPTION_FONT_SIZE]];
     [self.captionLbl setTextAlignment:NSTextAlignmentCenter];
-    [self.captionLbl setMinimumFontSize:10.0];
+    //[self.captionLbl setMinimumFontSize:10.0];
     [self.captionLbl setText:self.caption];
     [self addSubview:self.captionLbl];
     

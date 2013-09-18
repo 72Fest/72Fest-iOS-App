@@ -12,9 +12,13 @@
 #import "ImageCache.h"
 #import "LoaderBoxViewController.h"
 #import "DiskCacheManager.h"
+#import "VoteManager.h"
 #import "FrederickFilmFestPOCAppDelegate.h"
+#import "UIImage+Color.h"
 
 @interface GalleryViewController ()
+
+- (void)getVoteTotals;
 
 @property (nonatomic, strong) UIBarButtonItem *refreshBtn;
 @property (nonatomic, strong) UINib *nibLoader;
@@ -50,6 +54,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    
+    //set tint for nav controller
+    [[self.navigationController navigationBar] setTintColor:THEME_CLR];
+    [[self.navigationController navigationBar] setBackgroundImage:[UIImage imageWithColor:THEME_CLR] forBarMetrics:UIBarMetricsDefault];
+    
     //set up refresh button
     //self.refreshBtn = [[UIBarButtonItem alloc] initWithTitle:@"Refresh" style:UIBarButtonSystemItemAction target:self action:@selector(refreshPressed:)];
     self.refreshBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"01-refresh.png"] style:UIBarButtonSystemItemAction target:self action:@selector(refreshPressed:)];
@@ -79,6 +88,9 @@
     //remove the cell separators
     [self.galleryTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.galleryTableView setRowHeight:GALLERY_TABLE_CELL_HEIGHT];
+    
+    //load request for vote totals
+    [self getVoteTotals];
     
     //load request for images
     self.photoListParser = [[PhotoListParser alloc] init];
@@ -134,7 +146,13 @@
     [self setIsRefreshing:YES];
     [self.photoListParser loadURL:[NSURL URLWithString:PHOTO_LIST_URL_STR]];
 }
-                                   
+
+- (void)getVoteTotals {
+    dispatch_async(dispatch_queue_create("Vote Totals Queue", NULL), ^{
+        [[VoteManager defaultManager] getVoteTotals];
+    }); 
+}
+
 #pragma mark - button actions
 - (void)refreshPressed:(id)sender {
     [self refreshGalleryData];
@@ -153,13 +171,13 @@
     
     detailVC.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(photoDetailCloseBtnPressed:)];
     
-    [self presentModalViewController:nc animated:YES];
+    [self presentViewController:nc animated:YES completion:nil];
     
 }
 
 - (void)photoDetailCloseBtnPressed:(id)sender {
      //UITabBarController *tbc = [(FrederickFilmFestPOCAppDelegate *)[[UIApplication sharedApplication] delegate] tabBarController];
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Photo Galleries Protocol
@@ -237,7 +255,7 @@
         //[curGalleryDataItem setThumb:nil];
         
         //get URL for cur thumb
-        NSDictionary *imgDict = [self.imageNames objectAtIndex:curIndexPath.row];
+        NSDictionary *imgDict = [[self.imageNames objectAtIndex:curIndexPath.row] copy];
         NSString *curThumbStr = [imgDict objectForKey:XML_TAG_THUMB_URL];
         NSURL *imgURL = [NSURL URLWithString:curThumbStr];
         
@@ -250,11 +268,12 @@
         } else {
             //image is not retrieved yet, pull it from the site
             dispatch_queue_t imageThumbCellQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-            
+
+            __block UIImage *img;
+             NSString *curFilename = [curThumbStr lastPathComponent];
             dispatch_async(imageThumbCellQueue, ^{
-                UIImage  *img;
-                NSString *curFilename = [curThumbStr lastPathComponent];
                 if ([[DiskCacheManager defaultManager] existsInCache:curFilename]) {
+                    //TODO:Seems to be a problem here
                     img = [UIImage imageWithData:[[DiskCacheManager defaultManager] retrieveFromCache:curFilename]];
                 } else {
                     NSData *imgData = [NSData dataWithContentsOfURL:imgURL];
@@ -271,7 +290,6 @@
                 
                 
             });
-            dispatch_release(imageThumbCellQueue);
         }
     }
 

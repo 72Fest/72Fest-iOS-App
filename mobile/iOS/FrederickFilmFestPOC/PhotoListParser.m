@@ -33,6 +33,12 @@
     dispatch_async(photoLoaderQueue, ^{
         
         NSData *data=[NSData dataWithContentsOfURL:url];
+        
+        if (!data) {
+            NSLog(@"Failed to retrieve photo data!");
+            return;
+        }
+        
         NSError *e = nil;
         NSArray *jsonArray = [NSJSONSerialization JSONObjectWithData: data options: NSJSONReadingMutableContainers error: &e];
         
@@ -57,7 +63,6 @@
         }
     });
 
-    dispatch_release(photoLoaderQueue);
 }
 
 - (void)sortByOrder {
