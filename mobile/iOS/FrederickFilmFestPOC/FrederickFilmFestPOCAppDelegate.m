@@ -50,7 +50,7 @@
     //set tint for nav controller
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7")) {
         [[self.navController navigationBar] setTintColor:[UIColor whiteColor]];
-        [self.navController.navigationBar performSelector:@selector(setBarTintColor) withObject:THEME_CLR];
+        [self.navController.navigationBar performSelector:@selector(setBarTintColor:) withObject:THEME_CLR];
         //[[self.navController navigationBar] setBarTintColor:THEME_CLR];
     } else {
         [[self.navController navigationBar] setTintColor:THEME_CLR];
