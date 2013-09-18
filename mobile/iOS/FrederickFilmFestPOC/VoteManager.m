@@ -73,6 +73,12 @@
     NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString:VOTE_TOTALS_URL_STR]];
     
     NSError *err = nil;
+    if (!data) {
+        NSLog(@"Could not retrieve votes");
+        
+        return [NSArray array];
+    }
+    
     NSArray *totalsArray = [NSJSONSerialization JSONObjectWithData:data options: nil error: &err];
     
     //clear out the current dictionary

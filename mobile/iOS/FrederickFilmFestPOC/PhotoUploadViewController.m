@@ -233,6 +233,10 @@
         //lets check to see if the date has expired
         if ([curDate compare:countDownDate] == NSOrderedDescending) {
             NSLog(@"Countdown date has expired!");
+            dispatch_async(dispatch_get_main_queue(), ^ {
+                [self displayCountdownWithCaption:@"Countdown expired!"
+                                          andDate:countDownDate];
+            });
         } else {
             NSLog(@"Retrieved countdown date:%@", countDownDate);
             
