@@ -9,7 +9,7 @@
 <link href="css/approval.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript" src="js/klass.min.js"></script>
-<script src="../js/jquery.js" type="text/javascript"></script>
+<script src="../js/jquery-1.8.2.min.js" type="text/javascript"></script>
 <script src="../js/jquery.lazyload.js" type="text/javascript"></script>
 <!-- <script type="text/javascript" src="js/code.photoswipe.jquery-3.0.5.min.js"></script> -->
 <script type="text/javascript" src="js/code.photoswipe-3.0.5.min.js"></script>

@@ -1,10 +1,13 @@
 <?php
- include('SimpleImage.php');
-ini_set('max_upload_filesize', 8388608);
-$link = mysql_connect("localhost", "phoshow", "phoshow")                                                                            
+  include('SimpleImage.php');
+  ini_set('max_upload_filesize', 8388608);
+  $link = mysql_connect("localhost", "phoshow", "phoshow")                                                                            
   or die("could not connect");                                                                                                    
   mysql_select_db("putpocket") or die ("No DB");
   
+  #change for default approvals
+  $is_approved_val = 1; //valid values 0 or 1
+
 
   if ($_FILES["file"]["error"] > 0)
   {
@@ -21,9 +24,9 @@ $link = mysql_connect("localhost", "phoshow", "phoshow")
     $newFileName = $newPhotoId . ".jpg";
     $basePath = "upload/";
     $fullPath = $basePath.$newFileName;
-    error_log("INSERT INTO photos (id, event_id, ss_order, approved) VALUES($newPhotoId, 1, 0, 0)");
-    mysql_query("INSERT INTO photos (id, event_id, ss_order, approved) VALUES($newPhotoId, 1, 0, 0)") or die(mysql_error());
-    error_log("after mysql");
+    //error_log("INSERT INTO photos (id, event_id, ss_order, approved) VALUES($newPhotoId, 1, 0, 0)");
+    mysql_query("INSERT INTO photos (id, event_id, ss_order, approved) VALUES($newPhotoId, 1, 0, $is_approved_val)") or die(mysql_error());
+    //error_log("after mysql");
     //if (file_exists("upload/" . $_FILES["file"]["name"]))
     
     if (file_exists("upload/" . $newFileName))
@@ -34,10 +37,11 @@ $link = mysql_connect("localhost", "phoshow", "phoshow")
     {
       move_uploaded_file($_FILES["file"]["tmp_name"],
       "upload/" . $newFileName);
-      error_log ("Stored in: " . "upload/" . $_FILES["file"]["name"]);
+      //error_log ("Stored in: " . "upload/" . $_FILES["file"]["name"]);
        $image = new SimpleImage();
+      //error_log ("Full path: $fullPath");
    $image->load($fullPath);
-   if ($image->getWidth > $image->getHeight) {
+   if ($image->getWidth() > $image->getHeight()) {
       $image->resizeToWidth(160);
    } else {
       $image->resizeToHeight(160);
