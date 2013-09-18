@@ -15,6 +15,7 @@
 #import "VoteManager.h"
 #import "FrederickFilmFestPOCAppDelegate.h"
 #import "UIImage+Color.h"
+#import "IOSCompatability.h"
 
 @interface GalleryViewController ()
 
@@ -53,11 +54,17 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+
+    if (SYSTEM_IS_IOS7) {
+        //set tint for nav controller
+        [[self.navigationController navigationBar] setTintColor:[UIColor whiteColor]];
+        [self.navigationController.navigationBar performSelector:@selector(setBarTintColor:) withObject:THEME_CLR];
+        
+    } else {
+        [[self.navigationController navigationBar] setTintColor:THEME_CLR];
+        [[self.navigationController navigationBar] setBackgroundImage:[UIImage imageWithColor:THEME_CLR] forBarMetrics:UIBarMetricsDefault];
+    }
     
-    
-    //set tint for nav controller
-    [[self.navigationController navigationBar] setTintColor:THEME_CLR];
-    [[self.navigationController navigationBar] setBackgroundImage:[UIImage imageWithColor:THEME_CLR] forBarMetrics:UIBarMetricsDefault];
     
     //set up refresh button
     //self.refreshBtn = [[UIBarButtonItem alloc] initWithTitle:@"Refresh" style:UIBarButtonSystemItemAction target:self action:@selector(refreshPressed:)];
