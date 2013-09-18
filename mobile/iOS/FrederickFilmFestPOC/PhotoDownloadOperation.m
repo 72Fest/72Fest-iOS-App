@@ -41,9 +41,10 @@
             //pull it from the network, but then save to the cache
             imgData = [NSData dataWithContentsOfURL:self.imageURL];
 
-            if (self.isCancelled) return;
+            //if we got thus far, may as well just cache the image
+            //instead of canceling
             
-            NSLog(@"ULR:%@", self.imageURL);
+            NSLog(@"Downloaded ULR:%@", self.imageURL);
             if (imgData) {
                 [[DiskCacheManager defaultManager] saveToCache:imgData withFilename:self.imageKey];
             }
