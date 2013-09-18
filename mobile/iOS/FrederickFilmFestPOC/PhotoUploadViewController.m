@@ -13,6 +13,7 @@
 #import "ConnectionInfo.h"
 #import "CountDownView.h"
 #import "FrederickFilmFestPOCAppDelegate.h"
+#import "IOSCompatability.h"
 
 @implementation PhotoUploadViewController
 @synthesize curImage = _curImage;
@@ -64,7 +65,7 @@
     self.uploadTextView.font = LABEL_FONT;
     
     // add a bg image
-    CGRect frame = self.view.frame;
+    CGRect frame = [[UIScreen mainScreen] bounds];
     UIView *v = [[UIView alloc] initWithFrame:frame];
     UIImage *i = [UIImage imageNamed:@"bkg.png"];
     UIColor *c = [[UIColor alloc] initWithPatternImage:i];
@@ -85,8 +86,12 @@
     
     // attempt to retrieve the count down metata data
     [self requestCountdownMetadata:COUNTDOWN_METADATA_URL];
-
-    [super viewDidLoad];
+    
+    if (SYSTEM_IS_IOS7) {
+        CGRect containerFrame = self.uploadContainer.frame;
+        containerFrame.origin.y += self.navigationController.navigationBar.frame.size.height + 20.0;
+        self.uploadContainer.frame = containerFrame;
+    }
 }
 
 
@@ -240,11 +245,16 @@
         
         
     });
-    dispatch_release(countDownRetreivalQueue);
 }
 
 - (void)displayCountdownWithCaption:(NSString *)captionStr andDate:(NSDate *)countDownDate {
     CGRect cFrame = CGRectMake(43, 7, 235, 80);
+    
+    //adjust placement for iOS7
+    if (SYSTEM_IS_IOS7) {
+        cFrame.origin.y += self.navigationController.navigationBar.frame.size.height + 20.0;
+    }
+    
     CountDownView *cdv = [[CountDownView alloc] initWithFrame:cFrame andCountDownDate:countDownDate];
     [cdv setCaption:captionStr];
     
@@ -329,11 +339,11 @@
     [self.uploadBtn setEnabled:YES];
     [self.uploadBtn setHidden:NO];
     
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Action Sheet delegate methods
@@ -371,8 +381,8 @@
     
     [imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
     [imagePicker setDelegate:self];
-    
-    [self  presentModalViewController:imagePicker animated:YES];
+
+    [self presentViewController:imagePicker animated:YES completion:nil];
     
 }
 
@@ -385,7 +395,7 @@
     [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
     [imagePicker setDelegate:self];
     [imagePicker setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-    [self  presentModalViewController:imagePicker animated:YES];
+    [self presentViewController:imagePicker animated:YES completion:nil];
     
 }
 
@@ -401,13 +411,11 @@
     //set up nav bar header
     
     
-    
-    [self presentModalViewController:nc animated:YES];
-    
+    [self presentViewController:nc animated:YES completion:nil];
 }
 
 - (void)infoViewClosed:(id)sender {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - IBActions

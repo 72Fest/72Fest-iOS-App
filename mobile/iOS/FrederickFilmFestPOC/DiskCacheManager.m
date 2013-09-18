@@ -8,7 +8,7 @@
 
 #import "DiskCacheManager.h"
 
-static DiskCacheManager *_diskCacheManager;
+static dispatch_queue_t diskCacheQueue;
 @interface DiskCacheManager()
 
 - (id)initCache;
@@ -18,10 +18,13 @@ static DiskCacheManager *_diskCacheManager;
 
 @implementation DiskCacheManager
 +  (DiskCacheManager *)defaultManager {
-    if (_diskCacheManager == nil) {
+    static DiskCacheManager *_diskCacheManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         _diskCacheManager = [[DiskCacheManager alloc] initCache];
-    }
-    
+        diskCacheQueue = dispatch_queue_create("Disk Cache Queue", NULL);
+    });
+
     return _diskCacheManager;
 }
 
@@ -39,12 +42,18 @@ static DiskCacheManager *_diskCacheManager;
 
 
 - (BOOL)existsInCache:(NSString *)fileName {
-    return [[NSFileManager defaultManager] fileExistsAtPath:[self.cachePath stringByAppendingPathComponent:fileName]];
+    __block BOOL fileExists;
+    
+    dispatch_sync(diskCacheQueue, ^{
+        fileExists = [[NSFileManager defaultManager] fileExistsAtPath:[self.cachePath stringByAppendingPathComponent:fileName]];
+    });
+    
+    return fileExists;
 }
 
 - (void)saveToCache:(NSData *)data withFilename:(NSString *)fileName {
-    if (![self existsInCache:fileName])
-        [data writeToFile:[self.cachePath stringByAppendingPathComponent:fileName] atomically:NO];
+    //if (![self existsInCache:fileName])
+        [data writeToFile:[self.cachePath stringByAppendingPathComponent:fileName] atomically:YES];
 }
 
 - (NSData *)retrieveFromCache:(NSString *)fileName {

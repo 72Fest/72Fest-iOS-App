@@ -11,18 +11,32 @@
 #import "ImageCache.h"
 #import "DiskCacheManager.h"
 #import "VoteManager.h"
+#import "VotingOperation.h"
 #import "ConnectionInfo.h"
-//#define USE_DISK_CACHE
+#import <Social/Social.h>
+#import "NIPhotoScrollView.h"
+#import "FrederickFilmFestPOCAppDelegate.h"
+#import "PhotoDownloadOperation.h"
+#import "IOSCompatability.h"
 
 @interface PhotoDetailViewController ()
 - (void)setupVoteIconWithVoteVal:(BOOL)hasVote;
 - (NSString *)imageKeyForIndex:(NSInteger)imageIdx;
 - (void)submitVoteWithVoteValue:(BOOL)hasVote andImageKey:(NSString *)imageKey;
 - (NSString *)curImageKey;
+- (void)displayVoteTotal;
+- (void)setVoteTitleWithTotal:(NSInteger)voteTotal;
+- (void)processShareItem:(ShareItem)item;
+- (void)shareOnTwitterForImage:(UIImage *)img;
+- (void)shareOnFacebookForImage:(UIImage *)img;
+- (void)shareForServiceType:(NSString *)serviceType withImage:(UIImage *)img;
+- (void)shareToCameraRollForImage:(UIImage *)img;
+- (void)shareOnEmailForImage:(UIImage *)img;
 
 @property (nonatomic, strong) UIBarButtonItem *likeBtn;
 @property (nonatomic, strong) UIBarButtonItem *unlikeBtn;
 @property (nonatomic, strong) NSURLConnection *curConnection;
+@property (nonatomic, strong) NSOperationQueue *votingOperationQueue;
 @end
 
 @implementation PhotoDetailViewController
@@ -35,6 +49,8 @@
     if (self) {
         // By default, set the index to zero
         self.selectedPhotIndex = 0;
+        self.photosQueue = [[NSOperationQueue alloc] init];
+        self.photosQueue.name = @"Photo Download Operation Queue";
     }
     return self;
 }
@@ -44,13 +60,21 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    self.view.backgroundColor = [UIColor blackColor];
+    self.view.backgroundColor = THEME_BG_CLR;
     self.photoAlbumView.dataSource = self;
     self.photoAlbumView.delegate = self;
+    self.photoAlbumView.zoomingIsEnabled = YES;
+    self.hidesChromeWhenScrolling = NO;
+    self.chromeCanBeHidden = YES;
+    self.animateMovingToNextAndPreviousPhotos = YES;
     
     //set up custom toolbar
     self.likeBtn = [[UIBarButtonItem alloc] initWithImage:VOTE_UP_ICON_IMG style:UIBarButtonItemStylePlain target:self action:@selector(likeBtnPressed:)];
     self.unlikeBtn = [[UIBarButtonItem alloc] initWithImage:VOTE_DOWN_ICON_IMG style:UIBarButtonItemStylePlain  target:self action:@selector(likeBtnPressed:)];
+    
+    //adding share button
+    self.navigationItem.rightBarButtonItem =
+        [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareBtnPressed:)];
     
     [self setupVoteIconWithVoteVal:NO];
     
@@ -59,6 +83,19 @@
     
     //jump to the selected photo
     [self.photoAlbumView moveToPageAtIndex:self.selectedPhotIndex animated:NO];
+    
+    //update the vote total
+    [self displayVoteTotal];
+    
+    //style for iOS 7
+    if (SYSTEM_IS_IOS7) {
+        [self.navigationController.navigationBar setTintColor:THEME_CLR];
+        [self.toolbar setTintColor:THEME_CLR];
+
+    } else {
+        [self.navigationController.navigationBar setTintColor:THEME_BG_CLR];
+        [self.toolbar setTintColor:THEME_BG_CLR];
+    }
 }
 
 - (void)viewDidUnload
@@ -82,11 +119,11 @@
     
     if (hasVote) {
         self.toolbar.items = @[self.previousButton,
-                               flexibleSpace, self.unlikeBtn, flexibleSpace,
+                               flexibleSpace, self.likeBtn, flexibleSpace,
                                self.nextButton];
     } else {
         self.toolbar.items = @[ self.previousButton,
-                               flexibleSpace, self.likeBtn, flexibleSpace,
+                               flexibleSpace, self.unlikeBtn, flexibleSpace,
                                self.nextButton];
     }
 }
@@ -101,6 +138,126 @@
     return imgKey;
 }
 
+- (void)displayVoteTotal {
+    self.title = @"Loading ...";
+    
+    if (!self.votingOperationQueue) {
+        self.votingOperationQueue = [[NSOperationQueue alloc] init];
+        self.votingOperationQueue.name = @"Voting operations queue";
+    } else {
+        //cancel anything that is happening right now
+        [self.votingOperationQueue cancelAllOperations];
+    }
+    
+    VotingOperation *newVoteOperation = [[VotingOperation alloc] initWithImageKey:self.curImageKey andDelgate:self];
+    [self.votingOperationQueue addOperation:newVoteOperation];
+}
+
+- (void)setVoteTitleWithTotal:(NSInteger)voteTotal {
+    self.title =
+        [NSString stringWithFormat:@"%d vote%@", voteTotal, ((voteTotal == 1) ? @"": @"s")];
+        //[NSString stringWithFormat:@"%d vote%@ for %@", voteTotal, ((voteTotal == 1) ? @"": @"s"), self.curImageKey ];
+}
+
+- (void)processShareItem:(ShareItem)item {
+    //first check if image is loaded yet
+    NSInteger selectedIdx = self.photoAlbumView.centerPageIndex;
+    
+    NIPhotoScrollView *selectedPage = nil;
+    for (NIPhotoScrollView *page in self.photoAlbumView.visiblePages) {
+        if (page.pageIndex == selectedIdx) {
+            selectedPage = page;
+        }
+    }
+    
+    //This should never happen but check for if the current scroll page could not be found
+    if (!selectedPage) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Loading error" message:@"Could not load photo!" delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil];
+        
+        [alert show];
+        return;
+    }
+    
+    //we only want to share the full size image so
+    //lets make sure to check that it's load
+    if (selectedPage.photoSize != NIPhotoScrollViewPhotoSizeOriginal) {
+        UIAlertView *loadAlert = [[UIAlertView alloc] initWithTitle:@"Loading error" message:@"The full sized image still isn't loaded! Try again after the image is finished loading." delegate:nil cancelButtonTitle:@"Close" otherButtonTitles: nil];
+        
+        [loadAlert show];
+        return;
+    }
+    
+    
+    switch (item) {
+        case SHARE_ITEM_TWITTER:
+            [self shareOnTwitterForImage:selectedPage.image];
+            break;
+        case SHARE_ITEM_FACEBOOK:
+            [self shareOnFacebookForImage:selectedPage.image];
+            break;
+        case SHARE_ITEM_CAMERA_ROLL:
+            [self shareToCameraRollForImage:selectedPage.image];
+            break;
+        case Share_ITEM_EMAIL:
+            [self shareOnEmailForImage:selectedPage.image];
+            break;
+        default:
+            break;
+    }
+}
+             
+- (void)shareOnTwitterForImage:(UIImage *)img {
+    [self shareForServiceType:SLServiceTypeTwitter withImage:img];
+}
+
+- (void)shareOnFacebookForImage:(UIImage *)img {
+    [self shareForServiceType:SLServiceTypeFacebook withImage:img];
+}
+
+- (void)shareForServiceType:(NSString *)serviceType withImage:(UIImage *)img {
+    SLComposeViewController *socialSheet = [SLComposeViewController composeViewControllerForServiceType:serviceType];
+    
+    socialSheet.completionHandler = ^(SLComposeViewControllerResult result) {
+        switch(result) {
+            case SLComposeViewControllerResultCancelled:
+                //cancel was pressed
+                break;
+            case SLComposeViewControllerResultDone:
+                //send was pressed
+                break;
+        }
+        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self dismissViewControllerAnimated:NO completion:^{
+//                NSLog(@"Dismissed!");
+//            }];
+//        });
+        
+    };
+    
+    [socialSheet setInitialText:@"#72Fest"];
+    [socialSheet addImage:img];
+    
+    [self presentViewController:socialSheet animated:YES completion:nil];
+}
+
+- (void)shareToCameraRollForImage:(UIImage *)img {
+    UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
+}
+
+- (void)shareOnEmailForImage:(UIImage *)img {
+    MFMailComposeViewController *mailVC = [[MFMailComposeViewController alloc] init];
+    mailVC.mailComposeDelegate = self;
+    [mailVC setSubject:PHOTO_EMAIL_SUBJECT_TEXT];
+
+    
+    NSData *imgData = UIImageJPEGRepresentation(img, 0.9);
+    [mailVC addAttachmentData:imgData mimeType:@"image/jpeg" fileName:@"72FestPhoto.jpg"];
+    [mailVC setMessageBody:PHOTO_EMAIL_BODY_TEXT isHTML:YES];
+    
+    [self presentViewController:mailVC animated:YES completion:nil];
+}
+
 #pragma mark - action selectors
 - (void)likeBtnPressed:(id)sender {
     NSLog(@"Like button pressed! %d",  self.photoAlbumView.centerPageIndex);
@@ -108,16 +265,38 @@
     BOOL hasVote = [[VoteManager defaultManager] toggleVoteForImgKey:self.curImageKey];
 
     NSString *keyVal = self.curImageKey;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self submitVoteWithVoteValue:hasVote andImageKey:keyVal];
-    });
+    
+    [self submitVoteWithVoteValue:hasVote andImageKey:keyVal];
+
     //toggle like icon (for some reason I'm colling it vote)
     [self setupVoteIconWithVoteVal:hasVote];
     
 }
 
+ - (void)shareBtnPressed:(id)sender {
+     UIActionSheet *shareSheet = [[UIActionSheet alloc] initWithTitle:@"Share Photos" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Twitter", @"Facebook", @"Camera Roll", @"Email", nil];
+     [shareSheet showInView:self.view];
+ }
+
+#pragma mark - action sheet delegate methods
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    NSLog(@"Pressed share item: %d!", buttonIndex);
+    [self processShareItem:buttonIndex];
+}
+
+#pragma mark - subclassed methods
+- (void)setChromeTitle {
+    [self displayVoteTotal];
+}
+
+#pragma mark - Voting Delegates
+- (void)votingOperationDidReceiveVoteTotal:(VotingOperation *)votingOperation {
+    [self setVoteTitleWithTotal:votingOperation.voteTotal];
+}
+
 #pragma mark - NIPagingScrollViewDelegate
 - (void)pagingScrollViewDidChangePages:(NIPagingScrollView *)pagingScrollView {
+    [super pagingScrollViewDidChangePages:pagingScrollView];
     NSString *imgKey = self.curImageKey;
     [self setupVoteIconWithVoteVal:[[VoteManager defaultManager] hasVoteForImgKey:imgKey]];
 }
@@ -156,7 +335,6 @@
     [request setHTTPBody:body];
     
     self.curConnection = [NSURLConnection connectionWithRequest:request delegate:self];
-    
 }
 
 #pragma mark - NIPhotoAlbumScrollViewDataSource
@@ -205,56 +383,18 @@
         
     }
     
-     //Is this stuff needed?
+    NSString *fullUrlStr = [[imgDict valueForKey:XML_TAG_FULL_URL] copy];
+    NSString *imageKey = [fullUrlStr lastPathComponent];
+    NSURL *imageURL = [NSURL URLWithString:fullUrlStr];
     
-    //TODO: cache large photo as well
-    dispatch_queue_t largePhotoQueue = dispatch_queue_create("Large Photo Queue", NULL);
-   
-    dispatch_async(largePhotoQueue, ^{
-        //NSString *fullUrlStr = [imgDict valueForKey:XML_TAG_FULL_URL];
-        //NSString *fileName = [fullUrlStr lastPathComponent];
-        NSData *imgData = nil;
-        
-#ifdef USE_DISK_CACHE
-        NSString *imageKey = [[imgDict valueForKey:XML_TAG_FULL_URL] lastPathComponent];
-        //check disk cache first
-        if ([[DiskCacheManager defaultManager] existsInCache:imageKey]) {
-            //we found it in the disk cache, lets save the pull from the
-            //network and grab it from the disk cache
-
-            imgData = [[DiskCacheManager defaultManager] retrieveFromCache:imageKey];
-        } else {
-#endif
-            //pull it from the network, but then save to the cache
-            imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[imgDict valueForKey:XML_TAG_FULL_URL]]];
-#ifdef USE_DISK_CACHE
-            if (imgData) {
-                [[DiskCacheManager defaultManager] saveToCache:imgData withFilename:imageKey];
-            }
-
-        }
-#endif
-        UIImage *loadedImg = [UIImage imageWithData:imgData];
-        
-        if (loadedImg == nil) {
-            NSLog(@"*****PhotDetailView:loadedImg == nil!");
-            return;
-        }
-        
-        
-        dispatch_async(dispatch_get_main_queue(), ^ {
-            
-            [self.photoAlbumView didLoadPhoto: loadedImg
-                                      atIndex: photoIndex
-                                    photoSize: NIPhotoScrollViewPhotoSizeOriginal];
-        });
-        
-        *isLoading = NO;
-    });
+    //Load the image by adding an NSOperation to the Queue
+    PhotoDownloadOperation *photoOperation =
+        [[PhotoDownloadOperation alloc] initWithURL:imageURL
+                                        andImageKey:imageKey
+                                      andImageIndex:photoIndex
+                                        andDelegate:self];
     
-    
-    dispatch_release(largePhotoQueue);
-        
+    [self.photosQueue addOperation:photoOperation];
     
     return image;
 }
@@ -263,15 +403,48 @@
     return [self.photoAlbumView pagingScrollView:pagingScrollView pageViewForIndex:pageIndex];
 }
 
-#pragma mark - NSURL delegate methods
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+- (void)photoAlbumScrollView:(NIPhotoAlbumScrollView *)photoAlbumScrollView stopLoadingPhotoAtIndex:(NSInteger)photoIndex {
     
-    NSString *content = [NSString stringWithUTF8String:[data bytes]];
-    NSLog(@"got vote result:%@", content );
+    for (PhotoDownloadOperation *curPhotoOp in self.photosQueue.operations) {
+        if (curPhotoOp.imageIndex == photoIndex) {
+            NSLog(@"Canceling some threads!!!");
+            [curPhotoOp cancel];
+            break;
+        }
+    }
 }
 
+#pragma mark - Photo Download Operation delegate method
+- (void)photoDownloadOperationComplete:(PhotoDownloadOperation *)photoOperation {
+    [self.photoAlbumView didLoadPhoto:photoOperation.image
+                              atIndex:photoOperation.imageIndex
+                            photoSize:NIPhotoScrollViewPhotoSizeOriginal];
+}
+
+#pragma mark - NSURL delegate methods
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    NSError *error;
+    NSDictionary *voteResults;
+    
+    //NSString *content = [NSString stringWithUTF8String:[data bytes]];
+    if (data) {
+        voteResults = [NSJSONSerialization JSONObjectWithData:data options:nil error:&error];
+    }
+    NSLog(@"got vote status:%@ and results:%@",
+          voteResults[VOTE_RESULT_STATUS_KEY], voteResults[VOTE_REULST_TOTALS_KEY]);
+
+    NSInteger voteTotal = [voteResults[VOTE_REULST_TOTALS_KEY] integerValue];
+    if ([voteResults[VOTE_RESULT_STATUS_KEY] integerValue]) {
+        NSLog(@"Vote failed!");
+        //TODO: We need to reset or send a message or something???
+    } else {
+        [self setVoteTitleWithTotal:voteTotal];
+    }
+}
+
+
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    NSLog(@"finished loading");
+    NSLog(@"finished voting");
     
     /*
     UIAlertView *alert =
@@ -298,5 +471,15 @@
     
 }
 
+#pragma mark - delegate methods for email
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+    
+    switch (result) {
+        default:
+            [self dismissViewControllerAnimated:YES completion:nil];
+            break;
+    }
+    
+}
 
 @end
