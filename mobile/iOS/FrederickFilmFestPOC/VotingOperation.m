@@ -37,6 +37,11 @@
         
         if (self.isCancelled) return;
         
+        if (!data) {
+            NSLog(@"Failed to retieve votes in thread");
+            return;
+        }
+        
         NSError *err = nil;
         NSArray *totalsArray = [NSJSONSerialization JSONObjectWithData:data options: nil error: &err];
         
