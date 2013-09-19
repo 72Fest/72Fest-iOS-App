@@ -203,6 +203,11 @@
         
         NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&err];
         
+        if (!data) {
+            //For now we will just return
+            return ;
+        }
+        
         NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:nil error:&jsonErr];
         
         
