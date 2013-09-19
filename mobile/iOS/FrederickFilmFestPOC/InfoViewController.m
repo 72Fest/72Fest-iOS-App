@@ -44,7 +44,7 @@
     
     if (SYSTEM_IS_IOS7) {
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-        
+        [self.navigationController.navigationBar performSelector:@selector(setBarTintColor:) withObject:THEME_CLR];
     } else {
         self.navigationController.navigationBar.tintColor = THEME_CLR;
     }
