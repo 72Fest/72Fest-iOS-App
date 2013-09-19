@@ -62,7 +62,8 @@
     [self.uploadBtn setEnabled:([self.selectedImage image] == nil) ? NO : YES];
 
     //set up custom font
-    self.uploadTextView.font = LABEL_FONT;
+    [self.uploadTextLabel setFont:LABEL_FONT];
+    
     
     // add a bg image
     CGRect frame = [[UIScreen mainScreen] bounds];
@@ -110,8 +111,6 @@
     self.parentTabBar = nil;
     
     [self setCountDownTimer:nil];
-    [self setUploadTextView:nil];
-    [self setUploadTextView:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;    
