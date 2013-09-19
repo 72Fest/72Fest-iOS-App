@@ -53,6 +53,7 @@
 		0750DB5317E1273C0040A68E /* voteDownIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0750DB4F17E1273C0040A68E /* voteDownIcon@2x.png */; };
 		0750DB5417E1273C0040A68E /* voteUpIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0750DB5017E1273C0040A68E /* voteUpIcon.png */; };
 		0750DB5517E1273C0040A68E /* voteUpIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0750DB5117E1273C0040A68E /* voteUpIcon@2x.png */; };
+		0761951417EAB6CF00ABFD11 /* icon120.png in Resources */ = {isa = PBXBuildFile; fileRef = 0761951317EAB6CF00ABFD11 /* icon120.png */; };
 		076B7ACB16130A0000DF6BA5 /* 72FestBanner.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7AC916130A0000DF6BA5 /* 72FestBanner.png */; };
 		076B7ACC16130A0000DF6BA5 /* 72FestBanner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */; };
 		076DB9E317E617AF00D0E1F6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076DB9E217E617AF00D0E1F6 /* MessageUI.framework */; };
@@ -194,6 +195,7 @@
 		0750DB4F17E1273C0040A68E /* voteDownIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "voteDownIcon@2x.png"; sourceTree = "<group>"; };
 		0750DB5017E1273C0040A68E /* voteUpIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = voteUpIcon.png; sourceTree = "<group>"; };
 		0750DB5117E1273C0040A68E /* voteUpIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "voteUpIcon@2x.png"; sourceTree = "<group>"; };
+		0761951317EAB6CF00ABFD11 /* icon120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon120.png; sourceTree = "<group>"; };
 		076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		076B7AC916130A0000DF6BA5 /* 72FestBanner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 72FestBanner.png; sourceTree = "<group>"; };
 		076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "72FestBanner@2x.png"; sourceTree = "<group>"; };
@@ -515,6 +517,7 @@
 				8A53BBEB15A2CC080007998A /* Icon-Small@2x.png */,
 				8A430B06142BFDBD007B72F5 /* icon114.png */,
 				8A430B04142BFDB5007B72F5 /* icon57.png */,
+				0761951317EAB6CF00ABFD11 /* icon120.png */,
 				8AC0A301141D773800F0E4B0 /* FrederickFilmFestPOC */,
 				8AC0A2FA141D773800F0E4B0 /* Frameworks */,
 				8AC0A2F8141D773800F0E4B0 /* Products */,
@@ -813,6 +816,7 @@
 				8A25800015A0845E00E9BBB6 /* gallery@2x.png in Resources */,
 				8A25800515A0977000E9BBB6 /* loadingBox.png in Resources */,
 				8A25800615A0977000E9BBB6 /* loadingBox@2x.png in Resources */,
+				0761951417EAB6CF00ABFD11 /* icon120.png in Resources */,
 				8A25800B15A097AD00E9BBB6 /* LoaderBoxViewController.xib in Resources */,
 				8A53BBEC15A2CC080007998A /* Icon-Small.png in Resources */,
 				8A53BBED15A2CC080007998A /* Icon-Small@2x.png in Resources */,
@@ -1021,9 +1025,9 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution: Lonny Gomes (388ZK63Z83)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Lonny Gomes (388ZK63Z83)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FrederickFilmFestPOC/FrederickFilmFestPOC-Prefix.pch";
@@ -1032,8 +1036,9 @@
 				INFOPLIST_FILE = "FrederickFilmFestPOC/FrederickFilmFestPOC-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = 72Fest;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=*]" = "";
+				PROVISIONING_PROFILE = "96B00225-6E4B-47B8-9BF5-F6EA6CE9D4CE";
+				"PROVISIONING_PROFILE[sdk=*]" = "96B00225-6E4B-47B8-9BF5-F6EA6CE9D4CE";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "96B00225-6E4B-47B8-9BF5-F6EA6CE9D4CE";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7 armv7s";
