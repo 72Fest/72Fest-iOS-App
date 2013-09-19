@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CountDownView.h"
 
-#define LABEL_FONT [UIFont fontWithName:@"Archive" size:20];
+#define LABEL_FONT [UIFont fontWithName:@"Archive" size:20]
 @interface PhotoUploadViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate> {
     BOOL cameraWasUsed;
 }
@@ -62,5 +62,6 @@
 @property (nonatomic, strong) UITabBar *parentTabBar;
 @property (strong, nonatomic) IBOutlet UITextView *uploadTextView;
 @property (weak, nonatomic) IBOutlet UIView *uploadContainer;
+@property (weak, nonatomic) IBOutlet UILabel *uploadTextLabel;
 
 @end
