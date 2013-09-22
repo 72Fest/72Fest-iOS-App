@@ -19,3 +19,18 @@
     height:100px;
     margin:3px;
 }
+
+.expander {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 16px;
+    height: 16px;
+    padding: 4px;
+    background: white url(../assets/heart.png) center center no-repeat;
+    z-index: 99999;   
+    cursor: pointer;
+}
+.expander.liked {
+	border: 3px solid red;
+}

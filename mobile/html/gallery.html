@@ -16,12 +16,15 @@
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/gallery.css">
         <link rel="stylesheet" href="js/vendor/fancybox/jquery.fancybox.css"  media="screen" />
+       
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
         <script src="js/vendor/jquery.min.js"></script>
         <script src="js/vendor/jquery.mobile.min.js"></script>
         <script src="js/vendor/jquery.lazyload.min.js"></script>
         <script src="js/vendor/fancybox/jquery.fancybox.js"></script>
-        <script src="js/vendor/socket.io.js"></script>
+        <script src="js/vendor/jquery.cookie.js"></script>
+        <script src="js/vendor/json2.js"></script>
+        
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -49,46 +52,87 @@
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
         <script>
+        
+        var getCurrentImageLikes = function() {
+            var likes = [];
+            try {
+                var likeCookieContents = $.cookie('72fest_image_likes'); 
+                likes = JSON.parse(likeCookieContents);
+            } catch (e) {
+                //failed to parse, leave as empty list
+            }
+            if (!$.isArray(likes)) { //if not an array, leave as empty list too
+                likes = [];
+            }
+            return likes;
+        };
+        
+        var baseURL = "http://phoshow.me/photoapp/";
             $(document).ready(function() {
                 //setup image popup
-                $(".galleryPhotoLink").fancybox();
+                $(".galleryPhotoLink").fancybox({afterShow: function() { 
+                    $('<div id="'+$(this.element).attr('id') + '" class="expander"></div>').appendTo(this.inner).click(function() {
+                    	var imageId = $(this).attr('id');
+                    	var isCurrentlyLiked = true;
+                    	var likes = getCurrentImageLikes();
 
-
-                var url="/list?no_cache=" + new Date().getTime();
-                $.post(url, function(data) {
-                    var curData;
-                    var curElement;
-                    for (idx = 0; idx < data.length; idx++) {
-                        curData = data[idx];
-                        curElement = genPhotoDiv(curData, true);
+                    	//is this image already liked?
+                        if ($.inArray(imageId,likes) >= 0) {
+                        	isCurrentlyLiked = true;
+                        	$(this).removeClass("liked");
+                            likes = $.grep(likes,function(item) { return item != imageId});
+                        } else {
+                            isCurrentlyLiked = false;
+                            likes.push(imageId);
+                            $(this).addClass("liked");
                             
-                        $("#galleryContainer").append(curElement);
-                    }
-                    //setup lazy loading
-                    $(".galleryPhoto").lazyload();
-                });
+                        }
+                        
+                        var postParams = {id:imageId};
+                        if (isCurrentlyLiked) {
+                        	postParams['unlike'] = 1;
+                        }
+                        $.post(baseURL + "vote.php", postParams,$.proxy(function () {
+                        
+                        
+                        $.getJSON(baseURL+"getVotes.php?id="+imageId).done($.proxy(function (data) {
+                        	 
+                        	 $(this).parents(".fancybox-wrap").find(".fancybox-title .child").html("Likes: "+data[0].votes);
+                             
+                        },this))},this));
+                        
+                       
+                    	//update the cookie
+                    	$.cookie('72fest_image_likes', JSON.stringify(likes,null,2));
 
-                //set up web socket
-                var socket = io.connect('http://' + window.location.hostname + ':8080');
-                socket.on('photoUpdateEvent', function (data) {
-                    console.log("we got a new photo");
-                    newPhoto = genPhotoDiv(data, false);
-                    //add photo to begining of the gallery
-                    $("#galleryContainer").prepend(newPhoto);
-                    //alert("This is a new photo!" + data.thumb_path);
-                });
+                    });
+                }});
+ 
+                var photoURL = baseURL + "getImagesJs.php";
+                $.getJSON( photoURL, {
+                })
+                  .done(function (data) {
+                      
+                      for ( var i = 0; i < data.Photos.length; i++) {
+                    	  newPhoto = genPhotoDiv(data.Meta, data.Photos[i], false);
+                          //add photo to begining of the gallery
+                          $("#galleryContainer").prepend(newPhoto);
+                      }
+                     
+                  });
+
             });
-
-            function genPhotoDiv(photoData, isLazy) {
+           
+            function genPhotoDiv(meta, photoData, isLazy) {
                 photoDiv = "<div class='galleryPhotoContainer'>" +
-                           "<a href='/photos/" + photoData.large_thumb_path  + 
-                           "' data-ajax='false' class='galleryPhotoLink'>" +
+                           "<a href='" + meta.url + "/" + photoData.id + meta.extension +"'"  + 
+                           "' data-ajax='false' class='galleryPhotoLink' title='Likes: " + photoData.likes +"'  rel='gallery1' id='"+ photoData.id+"'>" +
                            "<img class='galleryPhoto' " +
                            ((isLazy) ?
-                           "src='assets/loadingAnimation.gif' data-original='/photos/" :
-                           "src='/photos/" 
+                           "src='assets/loadingAnimation.gif' data-original='" :
+                           "src='" 
                            ) + 
-                           photoData.thumb_path + "'/>" + "</a></div>";
+                           meta.url + "/" + photoData.id + meta.thumb + meta.extension +"'" + "'/>" + "</a></div>";
 
                 return photoDiv;
             }
