@@ -1,0 +1,17 @@
+<Files ~ "^\.(htaccess|htpasswd)$">
+deny from all
+</Files>
+AuthUserFile /home/putpocket/.htpasswd
+AuthGroupFile /dev/null
+AuthName "Please enter your ID and password"
+AuthType Basic
+require valid-user
+ErrorDocument 400 http://www.phoshow.me/
+ErrorDocument 401 http://www.phoshow.me/
+ErrorDocument 403 http://www.phoshow.me/
+ErrorDocument 404 http://www.phoshow.me/
+ErrorDocument 405 http://www.phoshow.me/
+ErrorDocument 406 http://www.phoshow.me/
+order deny,allow
+
+

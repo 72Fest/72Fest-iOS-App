@@ -42,8 +42,8 @@
             <div data-role="footer" data-id="footerId" data-position="fixed">
                <div data-role="navbar">
                    <ul>
-                       <li><a href="gallery.html" rel="external"  data-theme="b">Gallery</a></li>
                        <li><a href="submitPhoto.html" rel="external" data-theme="a">Share</a></li>
+                       <li><a href="gallery.html" rel="external"  data-theme="b">Gallery</a></li>
                    </ul>
                </div>
             </div>
@@ -67,11 +67,14 @@
             return likes;
         };
         
-        var baseURL = "http://phoshow.me/photoapp/";
+        var baseURL = "/photoapp/";
             $(document).ready(function() {
                 //setup image popup
                 $(".galleryPhotoLink").fancybox({afterShow: function() { 
-                    $('<div id="'+$(this.element).attr('id') + '" class="expander"></div>').appendTo(this.inner).click(function() {
+                	 
+                	var likes = getCurrentImageLikes();
+                	var likebox = $('<div id="'+$(this.element).attr('id') + '" class="expander"></div>');
+                	likebox.appendTo(this.inner).click(function() {
                     	var imageId = $(this).attr('id');
                     	var isCurrentlyLiked = true;
                     	var likes = getCurrentImageLikes();
@@ -106,6 +109,19 @@
                     	$.cookie('72fest_image_likes', JSON.stringify(likes,null,2));
 
                     });
+                    
+                    var imageId = $(this.element).attr('id');
+                    
+                    $.getJSON(baseURL+"getVotes.php?id="+imageId).done($.proxy(function (data) {
+                        
+                        likebox.parents(".fancybox-wrap").find(".fancybox-title .child").html("Likes: "+data[0].votes);
+                        
+                   },this));
+                    
+                    if ($.inArray(imageId,likes) >= 0) {
+                        likebox.addClass("liked"); 
+                    }
+                    
                 }});
  
                 var photoURL = baseURL + "getImagesJs.php";

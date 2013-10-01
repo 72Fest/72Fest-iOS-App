@@ -22,15 +22,15 @@
 
 .expander {
     position: absolute;
-    top: 5px;
-    left: 5px;
-    width: 16px;
-    height: 16px;
+    bottom: 5px;
+    left: 49%;
+    width: 20px;
+    height: 20px;
     padding: 4px;
-    background: white url(../assets/heart.png) center center no-repeat;
+    background: blue url(../assets/voteUpIcon.png) center center no-repeat;
     z-index: 99999;   
     cursor: pointer;
 }
 .expander.liked {
-	border: 3px solid red;
+	background: blue url(../assets/voteDownIcon.png) center center no-repeat;
 }
