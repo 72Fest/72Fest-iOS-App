@@ -27,10 +27,10 @@
     width: 20px;
     height: 20px;
     padding: 4px;
-    background: blue url(../assets/voteUpIcon.png) center center no-repeat;
+    background: #61B9A3 url(../assets/voteUpIcon.png) center center no-repeat;
     z-index: 99999;   
     cursor: pointer;
 }
 .expander.liked {
-	background: blue url(../assets/voteDownIcon.png) center center no-repeat;
+	background: #61B9A3 url(../assets/voteDownIcon.png) center center no-repeat;
 }
