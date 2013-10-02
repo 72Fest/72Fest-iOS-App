@@ -134,8 +134,8 @@
                       
                       for ( var i = 0; i < data.Photos.length; i++) {
                     	  newPhoto = genPhotoDiv(data.Meta, data.Photos[i], false);
-                          //add photo to begining of the gallery
-                          $("#galleryContainer").prepend(newPhoto);
+                          //add photo to end of the gallery
+                          $("#galleryContainer").append(newPhoto);
                       }
                      
                   });
