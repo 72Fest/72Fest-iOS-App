@@ -36,6 +36,7 @@
             <div data-role="header">
                 <div class="header-image-div">
                     <img src="assets/72fest-logo.png"/>
+                    <a id="refreshBtn" class="header-right-btn" href="#"><img src="assets/refreshBtn.png" alt="Refresh"></a>
                 </div>
             </div>
             <div data-role="content" class="galleryContent">
@@ -129,13 +130,18 @@
                     
                 }});
  
+                $('refreshBtn').click(function() {
+                    retrieveThumbnails();
+                });
+
                 retrieveThumbnails();
             });
 
             function retrieveThumbnails() {
                $.getJSON( photoURL, {
                 }).done(function (data) {
-                      
+                      //first clear out any child elements
+                      $("#galleryContainer").empty();
                       for ( var i = 0; i < data.Photos.length; i++) {
                     	  newPhoto = genPhotoDiv(data.Meta, data.Photos[i], false);
                           //add photo to end of the gallery

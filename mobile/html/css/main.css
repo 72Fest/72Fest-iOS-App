@@ -109,6 +109,9 @@ textarea {
     border:0px;
 }
 
+.header-image-div .header-right-btn {
+    float: right;
+}
 
 .header-center {
     text-align:center;
