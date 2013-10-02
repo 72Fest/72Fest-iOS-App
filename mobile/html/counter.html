@@ -38,24 +38,25 @@
 
                 <div id="countdownContainer">
                     <div id="countdownLabel">
-                        Placeholder
+                        Loading ...
                     </div>
                     <div id="countdownCounterContainer">
                         <div id="countdownDayCounter" class="counterContainer">
                             <div class="countdownCounterLabel">Days</div>
-                            <div class="countdownCounterNumbers">00</div>
+
+                            <div class="countdownCounterNumbers">--</div>
                         </div>
-                        <div id="countdowHourCounter" class="counterContainer">
+                        <div id="countdownHourCounter" class="counterContainer">
                             <div class="countdownCounterLabel">Hours</div>
-                            <div class="countdownCounterNumbers">00</div>
+                            <div class="countdownCounterNumbers">--</div>
                         </div>
                         <div id="countdownMinuteCounter" class="counterContainer">
                             <div class="countdownCounterLabel">Minutes</div>
-                            <div class="countdownCounterNumbers">00</div>
+                            <div class="countdownCounterNumbers">--</div>
                         </div>
                         <div id="countdownSecondCounter" class="counterContainer">
                             <div class="countdownCounterLabel">Seconds</div>
-                            <div class="countdownCounterNumbers">00</div>
+                            <div class="countdownCounterNumbers">--</div>
                         </div>
                     </div>
                 </div>
@@ -65,11 +66,20 @@
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
         <script>
+            function formatTimeValue(val) {
+                if (val < 10) {
+                    return "0" + val;
+                } 
+
+                return val;
+            }
+
             var CountdownModel = Backbone.Model.extend({
-                urlRoot: 'http://phoshow.me/photoapp/countDown.php',
+                urlRoot: '/photoapp/countDown.php',
                 defaults: {
-                    caption: 'Blah',
-                    time: ""
+                    caption: "",
+                    time: "",
+                    remainingTime: ""
                 },
                 initialize:function() {
                     this.on("change", function(model){
@@ -77,15 +87,44 @@
                     });
                 },
                 startTimer:function(model) {
+                    //calc the time left
                     
-//                    setInterval(function() {
-//                        console.log("OK then for:" + model.get("time").year);
-//                    }, 1000);
+                    var t = model.get("time"); //retrieve the end time
+                    var timeLeft = {};
+                    var endDate = new Date(t.year, t.month - 1, t.day, t.hour, t.minute, t.second);
+                    var timeDiff , curSecs; 
+                    var endSecs = endDate.getTime()/1000;
+                    var secsInMin = 60;
+                    var secsInHour = secsInMin * 60;
+                    var secsInDay = secsInHour * 24;
+
+                    setInterval(function() {
+                        var curDate = new Date();
+                        timeLeft = {};
+                        curSecs = curDate.getTime()/1000;
+                        timeDiff = endSecs - curSecs;
+
+                        if (timeDiff <= 0) {
+                            //Time has expired, zero everything out
+                            timeLeft.day = "00";
+                            timeLeft.hour = "00";
+                            timeLeft.minute = "00";
+                            timeLeft.second = "00";
+                        } else {
+                            //there still is time left, caclulate the difference
+                            timeLeft.day = formatTimeValue(Math.floor(timeDiff/secsInDay));
+                            timeLeft.hour = formatTimeValue(Math.floor(timeDiff/secsInHour));
+                            timeLeft.minute = formatTimeValue(Math.floor((timeDiff/secsInMin) % 60));
+                            timeLeft.second = formatTimeValue(Math.floor(timeDiff % secsInMin));
+                        }
+                        
+                        //update the time to trigger the renderer in the view
+                        model.set({remainingTime: timeLeft});
+                    }, 1000);
                 }
             });
     
             var countDownModel = new CountdownModel();
-            
             var CountDownView = Backbone.View.extend({
                 model:CountdownModel,
                 initialize:function() {
@@ -96,7 +135,18 @@
 //                    });
                 },
                 render: function() {
+                    //update label
                     $("#countdownLabel").html(this.model.get("caption"));
+
+                    var t = this.model.get("remainingTime");
+                    if (t != '') {
+                        //update time
+                        $("#countdownDayCounter").children(".countdownCounterNumbers").html(t.day);
+                        $("#countdownHourCounter").children(".countdownCounterNumbers").html(t.hour);
+                        $("#countdownMinuteCounter").children(".countdownCounterNumbers").html(t.minute);
+                        $("#countdownSecondCounter").children(".countdownCounterNumbers").html(t.second);
+                    }
+                    
                 }
             });
             
@@ -107,10 +157,6 @@
             
             countDownModel.fetch({
                 success:function (dataModel) {
-                    //alert("data model received:" + dataModel.get("caption"));
-                    
-                    //if (!dataModel.get("caption")) return;
-                    
                     var timeObj = dataModel.get("time");
                     countDownModel.set({ 
                         caption: dataModel.caption,
@@ -125,6 +171,7 @@
                         */
                     });
                     
+                    //we got the date we needed! Start the counter
                     dataModel.startTimer(dataModel);
                 }
             });
