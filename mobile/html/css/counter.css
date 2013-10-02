@@ -1,0 +1,30 @@
+#countdownContainer {
+    background:#61BAA2;
+    border:solid;
+    border-color:#61BAA2;
+}
+
+#countdownLabel {
+    display:block;
+    text-align:center;
+}
+
+#countdownCounterContainer {
+    display:block;
+    width:90%;
+    margin-left:auto;
+    margin-right:auto;
+    text-align:center;
+}
+
+.counterContainer {
+    display:inline-block;
+    margin-right: 10px;
+}
+.countdownCounterLabel {
+    display:block;
+}
+
+.countdownCounterNumbers {
+    display:inline-block;
+}

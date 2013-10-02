@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/vendor/jquery.mobile.min.css" />
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/counter.css">
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="js/vendor/jquery.min.js"></script>
+        <script src="js/jquery.mobile.config.js"></script>
+        <script src="js/vendor/jquery.mobile.min.js"></script>
+        <script src="js/vendor/underscore-min.js"></script>
+        <script src="js/vendor/backbone-min.js"></script>
+        <script src="js/BackboneModels.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div data-role="page">
+            <div data-role="header">
+                <h1>Photo Share</h1>
+            </div>
+
+            <div data-role="content">
+
+                <div id="countdownContainer">
+                    <div id="countdownLabel">
+                        Placeholder
+                    </div>
+                    <div id="countdownCounterContainer">
+                        <div id="countdownDayCounter" class="counterContainer">
+                            <div class="countdownCounterLabel">Days</div>
+                            <div class="countdownCounterNumbers">00</div>
+                        </div>
+                        <div id="countdowHourCounter" class="counterContainer">
+                            <div class="countdownCounterLabel">Hours</div>
+                            <div class="countdownCounterNumbers">00</div>
+                        </div>
+                        <div id="countdownMinuteCounter" class="counterContainer">
+                            <div class="countdownCounterLabel">Minutes</div>
+                            <div class="countdownCounterNumbers">00</div>
+                        </div>
+                        <div id="countdownSecondCounter" class="counterContainer">
+                            <div class="countdownCounterLabel">Seconds</div>
+                            <div class="countdownCounterNumbers">00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            var CountdownModel = Backbone.Model.extend({
+                urlRoot: 'http://phoshow.me/photoapp/countDown.php',
+                defaults: {
+                    caption: 'Blah',
+                    time: ""
+                },
+                initialize:function() {
+                    this.on("change", function(model){
+                        //alert("model aption:" + model.get("caption"));
+                    });
+                },
+                startTimer:function(model) {
+                    
+//                    setInterval(function() {
+//                        console.log("OK then for:" + model.get("time").year);
+//                    }, 1000);
+                }
+            });
+    
+            var countDownModel = new CountdownModel();
+            
+            var CountDownView = Backbone.View.extend({
+                model:CountdownModel,
+                initialize:function() {
+                    this.listenTo(this.model, 'change', this.render);
+                    var self = this;
+//                    this.model.on("change", function(m) {
+//                        self.render();
+//                    });
+                },
+                render: function() {
+                    $("#countdownLabel").html(this.model.get("caption"));
+                }
+            });
+            
+            var countDownView = new CountDownView({
+                model:countDownModel,
+                el: $("#countdownContainer")
+            });
+            
+            countDownModel.fetch({
+                success:function (dataModel) {
+                    //alert("data model received:" + dataModel.get("caption"));
+                    
+                    //if (!dataModel.get("caption")) return;
+                    
+                    var timeObj = dataModel.get("time");
+                    countDownModel.set({ 
+                        caption: dataModel.caption,
+                        time: timeObj
+                        /*
+                        year: timeObj.year,
+                        month: timeObj.month,
+                        day: timeObj.day,
+                        hour: timeObj.hour,
+                        minute: timeObj.minute,
+                        second: timeObj.second
+                        */
+                    });
+                    
+                    dataModel.startTimer(dataModel);
+                }
+            });
+        </script>
+    </body>
+</html>
