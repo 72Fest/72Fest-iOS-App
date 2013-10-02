@@ -71,6 +71,8 @@
         };
         
         var baseURL = "/photoapp/";
+        var photoURL = baseURL + "getImagesJs.php";
+
             $(document).ready(function() {
                 //setup image popup
                 $(".galleryPhotoLink").fancybox({afterShow: function() { 
@@ -127,10 +129,12 @@
                     
                 }});
  
-                var photoURL = baseURL + "getImagesJs.php";
-                $.getJSON( photoURL, {
-                })
-                  .done(function (data) {
+                retrieveThumbnails();
+            });
+
+            function retrieveThumbnails() {
+               $.getJSON( photoURL, {
+                }).done(function (data) {
                       
                       for ( var i = 0; i < data.Photos.length; i++) {
                     	  newPhoto = genPhotoDiv(data.Meta, data.Photos[i], false);
@@ -139,8 +143,7 @@
                       }
                      
                   });
-
-            });
+            }
            
             function genPhotoDiv(meta, photoData, isLazy) {
                 photoDiv = "<div class='galleryPhotoContainer'>" +
