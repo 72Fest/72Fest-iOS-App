@@ -91,14 +91,17 @@
                     resetForm:true,
                     beforeSubmit:function() {
                         //display status bar
-                        $('#statusBarContainer').css("display", "none");
+                        
                         $('#statusBar').css("width", 0);
                         $('#statusBarText').html("0");
                         
                         if ($('#photo').attr("value") === '') {
                             $('#popupSubmitError').popup("open");
+                            $('#statusBarContainer').css("display", "none");
                             return false;
                         }
+                        
+                        $('#statusBarContainer').css("display", "block");
                         
                         return true;
                     }, 
