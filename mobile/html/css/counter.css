@@ -1,3 +1,5 @@
+@font-face { font-family: Archive; src: url('assets/Archive.otf'); } 
+
 #countdownContainer {
     background:#61BAA2;
     border:solid;
@@ -9,6 +11,7 @@
     text-align:center;
     color: #fff;
     text-shadow: none;
+    font-family: Archive, sans-serif;
 }
 
 #countdownCounterContainer {
@@ -19,6 +22,7 @@
     text-align:center;
     color: #fff;
     text-shadow: none;
+    font-family: Archive, sans-serif;
 }
 
 .counterContainer {
