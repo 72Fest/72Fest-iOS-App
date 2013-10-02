@@ -37,6 +37,9 @@
                 <div data-role="popup" data-position-to=window class="ui-content" id="popupSuccess">
                     <p>Your upload succeeded!<p>
                 </div>
+                <div data-role="popup" data-position-to=window class="ui-content" id="popupSubmitError">
+                    <p>Please selecte a photo to share first!<p>
+                </div>
                 <form id="photoForm" type='POST' enctype="multipart/form-data">
                     <h2>Select a photo to share:</h2> 
                     <input data-role="button" id="photo" name="file" type="file" accept="image/*;capture=camera"/>
@@ -84,11 +87,18 @@
                     url:genPostURL(),
                     target:'#statusBarText',
                     resetForm:true,
-                    beforeSend:function() {
+                    beforeSubmit:function() {
                         //display status bar
-                        $('#statusBarContainer').css("display", "block");
+                        $('#statusBarContainer').css("display", "none");
                         $('#statusBar').css("width", 0);
                         $('#statusBarText').html("0");
+                        
+                        if ($('#photo').attr("value") === '') {
+                            $('#popupSubmitError').popup("open");
+                            return false;
+                        }
+                        
+                        return true;
                     }, 
                     uploadProgress: formUploadProgress,
                     success:formSuccess 
