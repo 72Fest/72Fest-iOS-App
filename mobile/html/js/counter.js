@@ -44,7 +44,7 @@
                 } else {
                     //there still is time left, caclulate the difference
                     timeLeft.day = formatTimeValue(Math.floor(timeDiff / secsInDay));
-                    timeLeft.hour = formatTimeValue(Math.floor(timeDiff / secsInHour));
+                    timeLeft.hour = formatTimeValue(Math.floor((timeDiff / secsInHour) % 24));
                     timeLeft.minute = formatTimeValue(Math.floor((timeDiff / secsInMin) % 60));
                     timeLeft.second = formatTimeValue(Math.floor(timeDiff % secsInMin));
                 }
