@@ -40,21 +40,29 @@
         }
         
         NSError *e = nil;
-        NSArray *jsonArray = [NSJSONSerialization JSONObjectWithData: data options: NSJSONReadingMutableContainers error: &e];
+
+        NSArray *jsonDict = [NSJSONSerialization JSONObjectWithData: data options: NSJSONReadingMutableContainers error: &e];
         
-        if (!jsonArray) {
+        if (!jsonDict) {
             NSLog(@"Error parsing JSON: %@", e);
         } else {
-            NSDictionary *meta = [jsonArray valueForKey:@"Meta"];
-            NSDictionary *photos = [jsonArray valueForKey:@"Photos"];
-            
-            
-           for(NSDictionary *item in photos) {
-               NSString *fullsrc = [NSString stringWithFormat: @"%@/%@%@",[meta valueForKey:@"url"],[item valueForKey:@"id"],[meta valueForKey:@"extension"]];
-               NSString *thumbsrc = [NSString stringWithFormat: @"%@/%@%@%@",[meta valueForKey:@"url"],[item valueForKey:@"id"],[meta valueForKey:@"thumb"],[meta valueForKey:@"extension"]];
-               NSDictionary *photo = @{@"fullsrc": fullsrc, @"thumbsrc": thumbsrc};
-               
-                [self.photoList addObject:[NSDictionary dictionaryWithDictionary:photo]];
+            if ([jsonDict valueForKey:@"isSuccess"]) {
+                NSLog(@"Failed to retieve photos!");
+                
+                NSDictionary *message = [jsonDict valueForKey:@"message"];
+                NSDictionary *meta = [message valueForKey:@"metadata"];
+                NSDictionary *photos = [message valueForKey:@"photos"];
+                
+                
+                for(NSDictionary *item in photos) {
+                   NSString *fullsrc = [NSString stringWithFormat: @"%@/%@",[meta valueForKey:@"baseUrl"],[item valueForKey:@"photoUrl"]];
+                   NSString *thumbsrc = [NSString stringWithFormat: @"%@/%@",[meta valueForKey:@"baseUrl"],[item valueForKey:@"thumbUrl"]];
+                   NSDictionary *photo = @{@"fullsrc": fullsrc, @"thumbsrc": thumbsrc};
+                   
+                    [self.photoList addObject:[NSDictionary dictionaryWithDictionary:photo]];
+                }
+            } else {
+                //TODO: add an error message
             }
         }
         
