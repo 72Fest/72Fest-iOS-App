@@ -208,11 +208,11 @@
         }
         
         NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:nil error:&jsonErr];
+        NSString *messageDict = [jsonDict valueForKey:kMessageKey];
         
+        NSString *countdownCaption = (NSString *)[messageDict valueForKey:kCountdownCaption];
         
-        NSString *countdownCaption = (NSString *)[jsonDict valueForKey:kCountdownCaption];
-        
-        NSDictionary *countdownTime = (NSDictionary *)[jsonDict valueForKey:kCountdownTime];
+        NSDictionary *countdownTime = (NSDictionary *)[messageDict valueForKey:kCountdownTime];
         
         NSNumber *cdYear = (NSNumber *)[countdownTime valueForKey:kCountdownTimeYear];
         NSNumber *cdMonth = (NSNumber *)[countdownTime valueForKey:kCountdownTimeMonth];

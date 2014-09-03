@@ -16,7 +16,8 @@
 #define COUNT_DOWN_BG_IMG @"digitsBackground.png"
 
 
-
+#define kMessageKey         @"message"
+#define kIsSuccess          @"success"
 #define kCountdownCaption   @"caption"
 #define kCountdownTime      @"time"
 #define kCountdownTimeYear  @"year"
