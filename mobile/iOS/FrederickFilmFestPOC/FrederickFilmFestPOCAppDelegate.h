@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "PhotoUploadViewController.h"
 
-#define THEME_CLR [UIColor colorWithRed:113.8/255.0 green:196.0/255.0 blue:178.0/255.0 alpha:1.0]
-#define THEME_BG_CLR [UIColor colorWithRed:1.0/255.0 green:45.0/255.0 blue:58.0/255.0 alpha:1.0]
+#define THEME_CLR [UIColor colorWithRed:239.0/255.0 green:57.0/255.0 blue:60.0/255.0 alpha:1.0]
+#define THEME_BG_CLR [UIColor colorWithRed:66.0/255.0 green:146.0/255.0 blue:158.0/255.0 alpha:1.0]
 
 @interface FrederickFilmFestPOCAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate> {
     
