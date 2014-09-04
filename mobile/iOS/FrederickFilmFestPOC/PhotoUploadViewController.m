@@ -67,6 +67,9 @@
     
     // add a bg image
     CGRect frame = [[UIScreen mainScreen] bounds];
+    //push the bg down
+    frame.origin.y = self.navigationController.navigationBar.frame.size.height;
+
     UIView *v = [[UIView alloc] initWithFrame:frame];
     UIImage *i = [UIImage imageNamed:@"bkg.png"];
     UIColor *c = [[UIColor alloc] initWithPatternImage:i];
