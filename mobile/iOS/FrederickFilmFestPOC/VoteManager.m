@@ -79,7 +79,9 @@
         return [NSArray array];
     }
     
-    NSArray *totalsArray = [NSJSONSerialization JSONObjectWithData:data options: nil error: &err];
+    NSDictionary *results = [NSJSONSerialization JSONObjectWithData:data options: nil error: &err];
+    
+    NSArray *totalsArray = [results valueForKey:API_MESSAGE_KEY];
     
     //clear out the current dictionary
     [self.voteTotalsDict removeAllObjects];

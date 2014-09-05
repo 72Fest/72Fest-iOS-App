@@ -43,14 +43,20 @@
         }
         
         NSError *err = nil;
-        NSArray *totalsArray = [NSJSONSerialization JSONObjectWithData:data options: nil error: &err];
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:data options: nil error: &err];
+
+        NSString *statusStr = [results valueForKey:API_MESSAGE_STATUS_KEY];
+        int status = [statusStr intValue];
+        if (!status) {
+            NSLog(@"Could not find votes for key");
+            return;
+        }
         
+        NSDictionary *totalsArray = [results valueForKey:API_MESSAGE_KEY];
         if (self.isCancelled) return;
         
-        if (totalsArray.count) {
-            NSNumber *voteNum = [totalsArray[0] valueForKey:VOTE_TOTALS_VOTES_KEY];
-            self.voteTotal = [voteNum integerValue];
-        }
+        NSNumber *voteNum = [totalsArray valueForKey:VOTE_TOTALS_VOTES_KEY];
+        self.voteTotal = [voteNum integerValue];
         
         if (self.isCancelled) return;
 
