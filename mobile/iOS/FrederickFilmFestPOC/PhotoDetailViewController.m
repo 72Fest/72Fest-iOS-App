@@ -424,21 +424,32 @@
 #pragma mark - NSURL delegate methods
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
     NSError *error;
+    int status;
+    NSString *statusStr;
+    NSDictionary *results;
     NSDictionary *voteResults;
     
     //NSString *content = [NSString stringWithUTF8String:[data bytes]];
     if (data) {
-        voteResults = [NSJSONSerialization JSONObjectWithData:data options:nil error:&error];
-    }
-    NSLog(@"got vote status:%@ and results:%@",
-          voteResults[VOTE_RESULT_STATUS_KEY], voteResults[VOTE_REULST_TOTALS_KEY]);
+        results = [NSJSONSerialization JSONObjectWithData:data options:nil error:&error];
+        
+        statusStr = [results valueForKey:API_MESSAGE_STATUS_KEY];
+        status = [statusStr intValue];
+        
+        if (status) {
+            voteResults = [results valueForKey:API_MESSAGE_KEY];
+   
+            NSLog(@"got vote results:%@", voteResults[VOTE_REULST_TOTALS_KEY]);
+            
+            NSInteger voteTotal = [voteResults[VOTE_REULST_TOTALS_KEY] integerValue];
+            [self setVoteTitleWithTotal:voteTotal];
+        } else {
+            NSLog(@"Vote failed!");
+            //TODO: We need to reset or send a message or something???
+        }
 
-    NSInteger voteTotal = [voteResults[VOTE_REULST_TOTALS_KEY] integerValue];
-    if ([voteResults[VOTE_RESULT_STATUS_KEY] integerValue]) {
-        NSLog(@"Vote failed!");
-        //TODO: We need to reset or send a message or something???
     } else {
-        [self setVoteTitleWithTotal:voteTotal];
+        NSLog(@"Failed to receive a response for vote totals");
     }
 }
 

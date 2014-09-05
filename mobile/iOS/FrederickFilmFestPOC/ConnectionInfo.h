@@ -16,7 +16,7 @@
 #define COUNTDOWN_METADATA_URL GEN_URL(@"countDown")
 #define PHOTO_LIST_URL_STR GEN_URL(@"photos") // /api/photos endpoint
 #define UPLOAD_URL_STR GEN_URL(@"upload") // /api/upload endpoint
-#define VOTE_URL_STR  GEN_URL(@"vote.php")
+#define VOTE_URL_STR  GEN_URL(@"vote")
 #define VOTE_TOTALS_URL_STR GEN_URL(@"votes")
 //macro to generate a string to retrieve vote totals for a given id
 #define VOTE_TOTALS_URL_FOR_ID(PHOTO_ID) [NSString stringWithFormat:@"%@/%@", VOTE_TOTALS_URL_STR, PHOTO_ID]
