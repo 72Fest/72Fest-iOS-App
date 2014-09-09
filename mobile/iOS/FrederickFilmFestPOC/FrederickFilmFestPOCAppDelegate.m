@@ -8,63 +8,38 @@
 
 #import "FrederickFilmFestPOCAppDelegate.h"
 #import "PhotoUploadViewController.h"
+#import "PhotoTabBarViewController.h"
 #import "GalleryViewController.h"
 #import "UIImage+Color.h"
 #import "IOSCompatability.h"
 
-#define TAB_BAR_UPLOAD_SELECTED_IMG @"btnCameraSelectedState.png"
-#define TAB_BAR_GALLERY_SELECTED_IMG @"btnGallerySelectedState.png"
-
-#define TAB_BAR_HEIGHT 49
-#define TAB_BAR_WIDTH 320
-
 @interface FrederickFilmFestPOCAppDelegate()
 
-
-@property (nonatomic, strong) UIImageView *tabBarImg;
 @end
 @implementation FrederickFilmFestPOCAppDelegate
 
 
 @synthesize window=_window;
-@synthesize navController=_navController;
 @synthesize tabBarController=_tabBarController;
-@synthesize tabBarImg = _tabBarImg;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    //add upload view
-    self.photoUploadController = [[PhotoUploadViewController alloc] init];
-    
-    //nav controller
-    self.navController = [[UINavigationController alloc] initWithRootViewController:self.photoUploadController];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     
     //set tint for nav controller
-    if (SYSTEM_IS_IOS7) {
-        [[self.navController navigationBar] setTintColor:[UIColor whiteColor]];
-        [self.navController.navigationBar performSelector:@selector(setBarTintColor:) withObject:THEME_CLR];
-    } else {
-        [[self.navController navigationBar] setTintColor:THEME_CLR];
-        [[self.navController navigationBar] setBackgroundImage:[UIImage imageWithColor:THEME_CLR] forBarMetrics:UIBarMetricsDefault];
-    }
+    [[[UINavigationBar class] appearance] setTintColor:[UIColor whiteColor]];
+    [[[UINavigationBar class] appearance] setBarTintColor:THEME_CLR];
+    
+    //tint the tab bar as well
+    [[UITabBar appearance] setTintColor:THEME_CLR];
+    [[UITabBar appearance] setSelectedImageTintColor:[UIColor lightGrayColor]];
     
     //create menu
     self.menuViewController = [[MenuViewController alloc] initWithNibName:nil bundle:nil];
     
-    //gallery controller
-    GalleryViewController *galleryVC = [[GalleryViewController alloc] initWithNibName:nil bundle:nil];
-    
-    //create gallery nav controller
-    UINavigationController *galleryNavController = [[UINavigationController alloc] initWithRootViewController:galleryVC];
-    [[galleryNavController navigationBar] setTintColor:THEME_CLR];
-    
     //creating tab view
-    self.tabBarController = [self genTabBarWithControllers:[NSArray arrayWithObjects:self.navController, galleryNavController, nil]];
-    
-    [self.photoUploadController setParentTabBar:self.tabBarController.tabBar];
-    
+    self.tabBarController = [[PhotoTabBarViewController alloc] initWithNibName:nil bundle:nil];
     
     //create side menu that will control the content
     self.sideMenuController = [[TWTSideMenuViewController alloc] initWithMenuViewController:self.menuViewController mainViewController:self.tabBarController];
@@ -78,74 +53,10 @@
     // specify a scale to zoom the interface — the scale is 0.0 (scaled to 0% of it's size) to 1.0 (not scaled at all). The example here specifies that it zooms so that the main view is 56.34% of it's size in open mode.
     self.sideMenuController.zoomScale = 0.5634f;
 
-    
     self.window.rootViewController = self.sideMenuController;
-    
-    [self initTabBar:self.tabBarController];
     
     // Override point for customization after application launch.
     [self.window makeKeyAndVisible];
-    return YES;
-}
-
-- (UITabBarController *)genTabBar {
-    if (self.tabBarController) {
-        return self.tabBarController;
-    } else {
-        //add upload view
-        self.photoUploadController = [[PhotoUploadViewController alloc] init];
-        
-        //nav controller
-        self.navController = [[UINavigationController alloc] initWithRootViewController:self.photoUploadController];
-        
-        //gallery controller
-        GalleryViewController *galleryVC = [[GalleryViewController alloc] initWithNibName:nil bundle:nil];
-        //create gallery nav controller
-        UINavigationController *galleryNavController = [[UINavigationController alloc] initWithRootViewController:galleryVC];
-        [[galleryNavController navigationBar] setTintColor:THEME_CLR];
-        
-        return [self genTabBarWithControllers:[NSArray arrayWithObjects:self.navController, galleryNavController, nil]];
-    }
-}
-
-- (UITabBarController *)genTabBarWithControllers:(NSArray *)controllers {
-    UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    tabBarController.viewControllers = controllers;
-    
-    [self initTabBar:tabBarController];
-    return tabBarController;
-}
-
-- (void)initTabBar:(UITabBarController *)tb {
-    //if we are in iOS 5, we can tint
-    if ([[UITabBar class] respondsToSelector:@selector(appearance)]) {
-        [[UITabBar appearance] setTintColor:THEME_CLR];
-        [[UITabBar appearance] setSelectedImageTintColor:[UIColor lightGrayColor]];
-    }
-    
-    //set up tab bar img
-    tb.delegate = self;
-    
-    CGRect tbFrame = CGRectMake(0, 0, TAB_BAR_WIDTH, TAB_BAR_HEIGHT);
-    self.tabBarImg = [[UIImageView alloc] initWithFrame:tbFrame];
-    
-    [tb.tabBar addSubview:self.tabBarImg];
-    
-    self.tabBarImg.image = [UIImage imageNamed:TAB_BAR_UPLOAD_SELECTED_IMG];
-    
-}
-
-- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
-    NSUInteger index=[[tabBarController viewControllers] indexOfObject:viewController];
-    switch (index) {
-        case 0:
-            self.tabBarImg.image = [UIImage imageNamed:TAB_BAR_UPLOAD_SELECTED_IMG];
-            break;
-        case 1:
-            self.tabBarImg.image = [UIImage imageNamed:TAB_BAR_GALLERY_SELECTED_IMG];
-            break;
-    }
-    
     return YES;
 }
 

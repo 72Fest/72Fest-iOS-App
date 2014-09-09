@@ -8,6 +8,7 @@
 
 #import "MenuViewController.h"
 #import "InfoViewController.h"
+#import "PhotoTabBarViewController.h"
 #import "FrederickFilmFestPOCAppDelegate.h"
 #import "TWTSideMenuViewController.h"
 
@@ -38,14 +39,7 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)photosBtnPressed:(id)sender {
-//    [self.sideMenuViewController closeMenuAnimated:YES completion:nil];
-//    PhotoUploadViewController *photoUploadController = [[PhotoUploadViewController alloc] initWithNibName:nil bundle:nil];
-//
-//    UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:photoUploadController];
-//    
-//    [self.sideMenuViewController setMainViewController:controller animated:YES closeMenu:YES];
-    
-    UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:[(FrederickFilmFestPOCAppDelegate *)[[UIApplication sharedApplication] delegate] genTabBar]];
+    PhotoTabBarViewController *controller = [[PhotoTabBarViewController alloc] initWithNibName:nil bundle:nil];
     
     [self.sideMenuViewController setMainViewController:controller animated:YES closeMenu:YES];
 }

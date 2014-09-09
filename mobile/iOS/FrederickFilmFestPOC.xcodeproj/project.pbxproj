@@ -59,6 +59,7 @@
 		07643DFB19BE98AF00D6F9E2 /* MenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07643DF919BE98AF00D6F9E2 /* MenuViewController.xib */; };
 		07643DFE19BEA9A200D6F9E2 /* hamburgerIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 07643DFC19BEA9A200D6F9E2 /* hamburgerIcon.png */; };
 		07643DFF19BEA9A200D6F9E2 /* hamburgerIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 07643DFD19BEA9A200D6F9E2 /* hamburgerIcon@2x.png */; };
+		07643E0219BEC58D00D6F9E2 /* PhotoTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643E0119BEC58D00D6F9E2 /* PhotoTabBarViewController.m */; };
 		076B7ACB16130A0000DF6BA5 /* 72FestBanner.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7AC916130A0000DF6BA5 /* 72FestBanner.png */; };
 		076B7ACC16130A0000DF6BA5 /* 72FestBanner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */; };
 		076DB9E317E617AF00D0E1F6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076DB9E217E617AF00D0E1F6 /* MessageUI.framework */; };
@@ -208,6 +209,8 @@
 		07643DF919BE98AF00D6F9E2 /* MenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MenuViewController.xib; sourceTree = "<group>"; };
 		07643DFC19BEA9A200D6F9E2 /* hamburgerIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hamburgerIcon.png; sourceTree = "<group>"; };
 		07643DFD19BEA9A200D6F9E2 /* hamburgerIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hamburgerIcon@2x.png"; sourceTree = "<group>"; };
+		07643E0019BEC58D00D6F9E2 /* PhotoTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoTabBarViewController.h; sourceTree = "<group>"; };
+		07643E0119BEC58D00D6F9E2 /* PhotoTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoTabBarViewController.m; sourceTree = "<group>"; };
 		076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		076B7AC916130A0000DF6BA5 /* 72FestBanner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 72FestBanner.png; sourceTree = "<group>"; };
 		076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "72FestBanner@2x.png"; sourceTree = "<group>"; };
@@ -628,6 +631,8 @@
 				07643DF719BE98AF00D6F9E2 /* MenuViewController.h */,
 				07643DF819BE98AF00D6F9E2 /* MenuViewController.m */,
 				07643DF919BE98AF00D6F9E2 /* MenuViewController.xib */,
+				07643E0019BEC58D00D6F9E2 /* PhotoTabBarViewController.h */,
+				07643E0119BEC58D00D6F9E2 /* PhotoTabBarViewController.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -938,6 +943,7 @@
 				8AC6A26B17DBC23A00D634B4 /* NIError.m in Sources */,
 				8AC6A26C17DBC23A00D634B4 /* NIFoundationMethods.m in Sources */,
 				8AC6A26D17DBC23A00D634B4 /* NIImageUtilities.m in Sources */,
+				07643E0219BEC58D00D6F9E2 /* PhotoTabBarViewController.m in Sources */,
 				8AC6A26E17DBC23A00D634B4 /* NIInMemoryCache.m in Sources */,
 				8AC6A26F17DBC23A00D634B4 /* NIInvocationMethods.m in Sources */,
 				8AC6A27017DBC23A00D634B4 /* NINavigationAppearance.m in Sources */,
