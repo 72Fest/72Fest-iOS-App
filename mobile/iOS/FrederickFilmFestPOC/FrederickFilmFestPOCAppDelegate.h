@@ -18,6 +18,10 @@
     
 }
 
+- (void)initTabBar:(UITabBarController *)tb;
+- (UITabBarController *)genTabBar;
+- (UITabBarController *)genTabBarWithControllers:(NSArray *)controllers;
+
 @property (nonatomic, strong) IBOutlet UIWindow *window;
 @property (nonatomic, strong) UINavigationController *navController;
 @property (nonatomic, strong) UITabBarController *tabBarController;

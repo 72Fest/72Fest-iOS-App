@@ -8,6 +8,7 @@
 
 #import "MenuViewController.h"
 #import "InfoViewController.h"
+#import "FrederickFilmFestPOCAppDelegate.h"
 #import "TWTSideMenuViewController.h"
 
 @interface MenuViewController ()
@@ -37,13 +38,21 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)photosBtnPressed:(id)sender {
-    [self.sideMenuViewController closeMenuAnimated:YES completion:nil];
+//    [self.sideMenuViewController closeMenuAnimated:YES completion:nil];
+//    PhotoUploadViewController *photoUploadController = [[PhotoUploadViewController alloc] initWithNibName:nil bundle:nil];
+//
+//    UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:photoUploadController];
+//    
+//    [self.sideMenuViewController setMainViewController:controller animated:YES closeMenu:YES];
+    
+    UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:[(FrederickFilmFestPOCAppDelegate *)[[UIApplication sharedApplication] delegate] genTabBar]];
+    
+    [self.sideMenuViewController setMainViewController:controller animated:YES closeMenu:YES];
 }
+
 - (IBAction)infoBtnPressed:(id)sender {
-    InfoViewController *infoController = [[InfoViewController alloc] initWithNibName:nil bundle:nil];
-    
-    
-    UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:infoController];
+    InfoViewController *infoViewController = [[InfoViewController alloc] initWithNibName:nil bundle:nil];
+    UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:infoViewController];
     
     [self.sideMenuViewController setMainViewController:controller animated:YES closeMenu:YES];
 }
