@@ -89,7 +89,7 @@
     [[self navigationItem] setRightBarButtonItem:infoBtnItem];
     
     UIBarButtonItem *openItem =
-        [[UIBarButtonItem alloc] initWithTitle:@"Open" style:UIBarButtonItemStylePlain target:self action:@selector(openButtonPressed)];
+        [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburgerIcon.png"] style:UIBarButtonItemStylePlain target:self action:@selector(openButtonPressed)];
     [[self navigationItem] setLeftBarButtonItem:openItem];
     
     // attempt to retrieve the count down metata data

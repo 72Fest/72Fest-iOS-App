@@ -71,6 +71,9 @@
     self.refreshBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"01-refresh.png"] style:UIBarButtonSystemItemAction target:self action:@selector(refreshPressed:)];
     self.navigationItem.rightBarButtonItem = self.refreshBtn;
     
+    UIBarButtonItem *menuBtn =
+        [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburgerIcon.png"] style:UIBarButtonItemStylePlain target:self action:@selector(menuBtnPressed:)];
+    [[self navigationItem] setLeftBarButtonItem:menuBtn];
     
     //set up nav bar header
     UIImageView *iv = 
@@ -185,6 +188,10 @@
 - (void)photoDetailCloseBtnPressed:(id)sender {
      //UITabBarController *tbc = [(FrederickFilmFestPOCAppDelegate *)[[UIApplication sharedApplication] delegate] tabBarController];
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)menuBtnPressed:(id)sender {
+     [self.sideMenuViewController openMenuAnimated:YES completion:nil];
 }
 
 #pragma mark - Photo Galleries Protocol

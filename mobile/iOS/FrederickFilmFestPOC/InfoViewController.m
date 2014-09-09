@@ -10,6 +10,7 @@
 #import "ConnectionInfo.h"
 #import "FrederickFilmFestPOCAppDelegate.h"
 #import "IOSCompatability.h"
+#import "TWTSideMenuViewController.h"
 
 
 @implementation InfoViewController
@@ -57,8 +58,8 @@
     v.backgroundColor = c;
     [[self view] insertSubview:v atIndex:0];
     
-    UIBarButtonItem *closeBtn = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(btnPressed:)];
-    self.navigationItem.rightBarButtonItem = closeBtn;
+    UIBarButtonItem *menuBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburgerIcon.png"] style:UIBarButtonItemStylePlain target:self action:@selector(btnPressed:)];
+    self.navigationItem.leftBarButtonItem = menuBtn;
     
 }
 
@@ -100,7 +101,7 @@
 }
 
 - (void)btnPressed:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.sideMenuViewController openMenuAnimated:YES completion:nil];
 }
 
 #pragma mark - IB Actions
