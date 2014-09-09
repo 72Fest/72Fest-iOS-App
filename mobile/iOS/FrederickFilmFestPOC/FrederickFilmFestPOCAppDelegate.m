@@ -56,6 +56,9 @@
         [[self.navController navigationBar] setBackgroundImage:[UIImage imageWithColor:THEME_CLR] forBarMetrics:UIBarMetricsDefault];
     }
     
+    //create menu
+    self.menuViewController = [[MenuViewController alloc] initWithNibName:nil bundle:nil];
+    
     //gallery controller
     GalleryViewController *galleryVC = [[GalleryViewController alloc] initWithNibName:nil bundle:nil];
     
@@ -70,8 +73,24 @@
     
     [self.photoUploadController setParentTabBar:self.tabBarController.tabBar];
     
-    self.window.rootViewController = self.tabBarController;
+    //self.window.rootViewController = self.tabBarController;
     //[[self window] addSubview:[self.navController view]];
+    
+    
+    //create side menu that will control the content
+    self.sideMenuController = [[TWTSideMenuViewController alloc] initWithMenuViewController:self.menuViewController mainViewController:self.tabBarController];
+    
+    // specify the shadow color to use behind the main view controller when it is scaled down.
+    self.sideMenuController.shadowColor = [UIColor blackColor];
+    
+    // specify a UIOffset to offset the open position of the menu
+    self.sideMenuController.edgeOffset = UIOffsetMake(18.0f, 0.0f);
+    
+    // specify a scale to zoom the interface — the scale is 0.0 (scaled to 0% of it's size) to 1.0 (not scaled at all). The example here specifies that it zooms so that the main view is 56.34% of it's size in open mode.
+    self.sideMenuController.zoomScale = 0.5634f;
+
+    
+    self.window.rootViewController = self.sideMenuController;
     
     [self initTabBar];
     

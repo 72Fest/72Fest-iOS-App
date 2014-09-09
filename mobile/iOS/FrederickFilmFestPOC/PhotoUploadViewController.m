@@ -14,6 +14,7 @@
 #import "CountDownView.h"
 #import "FrederickFilmFestPOCAppDelegate.h"
 #import "IOSCompatability.h"
+#import "TWTSideMenuViewController.h"
 
 @implementation PhotoUploadViewController
 @synthesize curImage = _curImage;
@@ -87,6 +88,9 @@
     
     [[self navigationItem] setRightBarButtonItem:infoBtnItem];
     
+    UIBarButtonItem *openItem =
+        [[UIBarButtonItem alloc] initWithTitle:@"Open" style:UIBarButtonItemStylePlain target:self action:@selector(openButtonPressed)];
+    [[self navigationItem] setLeftBarButtonItem:openItem];
     
     // attempt to retrieve the count down metata data
     [self requestCountdownMetadata:COUNTDOWN_METADATA_URL];
@@ -125,6 +129,12 @@
     // Return YES for supported orientations
     return UIInterfaceOrientationIsPortrait(interfaceOrientation);
 }
+
+- (void)openButtonPressed
+{
+    [self.sideMenuViewController openMenuAnimated:YES completion:nil];
+}
+
 
 #pragma mark - Upload code
 - (void)uploadImage:(UIImage *)img {

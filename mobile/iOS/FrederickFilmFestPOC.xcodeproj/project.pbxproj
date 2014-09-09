@@ -54,6 +54,11 @@
 		0750DB5417E1273C0040A68E /* voteUpIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0750DB5017E1273C0040A68E /* voteUpIcon.png */; };
 		0750DB5517E1273C0040A68E /* voteUpIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0750DB5117E1273C0040A68E /* voteUpIcon@2x.png */; };
 		0761951417EAB6CF00ABFD11 /* icon120.png in Resources */ = {isa = PBXBuildFile; fileRef = 0761951317EAB6CF00ABFD11 /* icon120.png */; };
+		07643DF619BE97D800D6F9E2 /* TWTSideMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643DF519BE97D800D6F9E2 /* TWTSideMenuViewController.m */; };
+		07643DFA19BE98AF00D6F9E2 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643DF819BE98AF00D6F9E2 /* MenuViewController.m */; };
+		07643DFB19BE98AF00D6F9E2 /* MenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07643DF919BE98AF00D6F9E2 /* MenuViewController.xib */; };
+		07643DFE19BEA9A200D6F9E2 /* hamburgerIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 07643DFC19BEA9A200D6F9E2 /* hamburgerIcon.png */; };
+		07643DFF19BEA9A200D6F9E2 /* hamburgerIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 07643DFD19BEA9A200D6F9E2 /* hamburgerIcon@2x.png */; };
 		076B7ACB16130A0000DF6BA5 /* 72FestBanner.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7AC916130A0000DF6BA5 /* 72FestBanner.png */; };
 		076B7ACC16130A0000DF6BA5 /* 72FestBanner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */; };
 		076DB9E317E617AF00D0E1F6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076DB9E217E617AF00D0E1F6 /* MessageUI.framework */; };
@@ -196,6 +201,13 @@
 		0750DB5017E1273C0040A68E /* voteUpIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = voteUpIcon.png; sourceTree = "<group>"; };
 		0750DB5117E1273C0040A68E /* voteUpIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "voteUpIcon@2x.png"; sourceTree = "<group>"; };
 		0761951317EAB6CF00ABFD11 /* icon120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon120.png; sourceTree = "<group>"; };
+		07643DF419BE97D800D6F9E2 /* TWTSideMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TWTSideMenuViewController.h; path = TWT/TWTSideMenuViewController.h; sourceTree = SOURCE_ROOT; };
+		07643DF519BE97D800D6F9E2 /* TWTSideMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TWTSideMenuViewController.m; path = TWT/TWTSideMenuViewController.m; sourceTree = SOURCE_ROOT; };
+		07643DF719BE98AF00D6F9E2 /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
+		07643DF819BE98AF00D6F9E2 /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
+		07643DF919BE98AF00D6F9E2 /* MenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MenuViewController.xib; sourceTree = "<group>"; };
+		07643DFC19BEA9A200D6F9E2 /* hamburgerIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hamburgerIcon.png; sourceTree = "<group>"; };
+		07643DFD19BEA9A200D6F9E2 /* hamburgerIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hamburgerIcon@2x.png"; sourceTree = "<group>"; };
 		076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		076B7AC916130A0000DF6BA5 /* 72FestBanner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 72FestBanner.png; sourceTree = "<group>"; };
 		076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "72FestBanner@2x.png"; sourceTree = "<group>"; };
@@ -421,6 +433,15 @@
 			name = Voting;
 			sourceTree = "<group>";
 		};
+		07643DF319BE97BB00D6F9E2 /* TWT */ = {
+			isa = PBXGroup;
+			children = (
+				07643DF419BE97D800D6F9E2 /* TWTSideMenuViewController.h */,
+				07643DF519BE97D800D6F9E2 /* TWTSideMenuViewController.m */,
+			);
+			name = TWT;
+			sourceTree = "<group>";
+		};
 		0770B12A17E91667009C6ED5 /* Photos */ = {
 			isa = PBXGroup;
 			children = (
@@ -434,6 +455,8 @@
 		8A430ACD142ABA28007B72F5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				07643DFC19BEA9A200D6F9E2 /* hamburgerIcon.png */,
+				07643DFD19BEA9A200D6F9E2 /* hamburgerIcon@2x.png */,
 				0750DB4E17E1273C0040A68E /* voteDownIcon.png */,
 				0750DB4F17E1273C0040A68E /* voteDownIcon@2x.png */,
 				0750DB5017E1273C0040A68E /* voteUpIcon.png */,
@@ -547,6 +570,7 @@
 		8AC0A301141D773800F0E4B0 /* FrederickFilmFestPOC */ = {
 			isa = PBXGroup;
 			children = (
+				07643DF319BE97BB00D6F9E2 /* TWT */,
 				0770B12A17E91667009C6ED5 /* Photos */,
 				07446FB517DEC2D7006C3E3B /* Voting */,
 				8AFCC2D0159D51CB0067181B /* Nimbus */,
@@ -601,6 +625,9 @@
 				0772869F1603EB3300D82E29 /* CountDownView.m */,
 				077286A11604372F00D82E29 /* DigitCountView.h */,
 				077286A21604372F00D82E29 /* DigitCountView.m */,
+				07643DF719BE98AF00D6F9E2 /* MenuViewController.h */,
+				07643DF819BE98AF00D6F9E2 /* MenuViewController.m */,
+				07643DF919BE98AF00D6F9E2 /* MenuViewController.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -818,6 +845,7 @@
 				8A25800615A0977000E9BBB6 /* loadingBox@2x.png in Resources */,
 				0761951417EAB6CF00ABFD11 /* icon120.png in Resources */,
 				8A25800B15A097AD00E9BBB6 /* LoaderBoxViewController.xib in Resources */,
+				07643DFB19BE98AF00D6F9E2 /* MenuViewController.xib in Resources */,
 				8A53BBEC15A2CC080007998A /* Icon-Small.png in Resources */,
 				8A53BBED15A2CC080007998A /* Icon-Small@2x.png in Resources */,
 				0740DCBC160BE08F00A7CDAB /* digit0.png in Resources */,
@@ -839,6 +867,7 @@
 				0740DCDB160BEFED00A7CDAB /* digit8.png in Resources */,
 				0740DCDC160BEFED00A7CDAB /* digit8@2x.png in Resources */,
 				0740DCDD160BEFED00A7CDAB /* digit9.png in Resources */,
+				07643DFF19BEA9A200D6F9E2 /* hamburgerIcon@2x.png in Resources */,
 				0740DCDE160BEFED00A7CDAB /* digit9@2x.png in Resources */,
 				0740DCE2160BFA2400A7CDAB /* digitsBackground.png in Resources */,
 				0740DCE3160BFA2400A7CDAB /* digitsBackground@2x.png in Resources */,
@@ -847,6 +876,7 @@
 				0740DCF0160C040D00A7CDAB /* btnGallery.png in Resources */,
 				0740DCF1160C040D00A7CDAB /* btnGallery@2x.png in Resources */,
 				0740DCF2160C040D00A7CDAB /* btnUpload.png in Resources */,
+				07643DFE19BEA9A200D6F9E2 /* hamburgerIcon.png in Resources */,
 				0740DCF3160C040D00A7CDAB /* btnUpload@2x.png in Resources */,
 				0740DCF4160C040D00A7CDAB /* btnChoose@2x.png in Resources */,
 				0740DCF5160C040D00A7CDAB /* btnCamera@2x.png in Resources */,
@@ -879,6 +909,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8AC0A309141D773800F0E4B0 /* main.m in Sources */,
+				07643DFA19BE98AF00D6F9E2 /* MenuViewController.m in Sources */,
 				8AC0A30C141D773800F0E4B0 /* FrederickFilmFestPOCAppDelegate.m in Sources */,
 				0770B12D17E916AE009C6ED5 /* PhotoDownloadOperation.m in Sources */,
 				8AC0A31E141D7B7300F0E4B0 /* PhotoUploadViewController.m in Sources */,
@@ -930,6 +961,7 @@
 				07446FB817DEC31A006C3E3B /* VoteManager.m in Sources */,
 				07FF017E17E5158800C8BC1C /* VotingOperation.m in Sources */,
 				076DB9E617E62AAE00D0E1F6 /* UIImage+Color.m in Sources */,
+				07643DF619BE97D800D6F9E2 /* TWTSideMenuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
