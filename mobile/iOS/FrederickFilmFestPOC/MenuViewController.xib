@@ -15,6 +15,10 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="mainMenuBg.png" translatesAutoresizingMaskIntoConstraints="NO" id="kjr-NI-JsP">
+                    <rect key="frame" x="0.0" y="0.0" width="437" height="580"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U9t-rE-w5H">
                     <rect key="frame" x="93" y="103" width="134" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -47,5 +51,6 @@
     </objects>
     <resources>
         <image name="filmFestLogo.png" width="201" height="30"/>
+        <image name="mainMenuBg.png" width="909" height="568"/>
     </resources>
 </document>
