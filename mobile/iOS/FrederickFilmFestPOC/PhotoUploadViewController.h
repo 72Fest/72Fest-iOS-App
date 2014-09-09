@@ -41,10 +41,6 @@
 - (void)takePhotoBtnPressed;
 - (void)choosePhotoBtnPressed;
 
-//Nav bar item actions
-- (void)infoItemPressed:(id)sender;
-- (void)infoViewClosed:(id)sender;
-
 //IB Actions
 - (IBAction)selectPhotoFromSourcePressed:(id)sender;
 - (IBAction)uploadBtnPressed:(id)sender;

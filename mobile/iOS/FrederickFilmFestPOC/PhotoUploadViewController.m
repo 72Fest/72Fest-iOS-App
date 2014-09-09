@@ -8,7 +8,6 @@
 
 #import "PhotoUploadViewController.h"
 #import "UIImage+Resize.h"
-#import "InfoViewController.h"
 #import "Reachability.h"
 #import "ConnectionInfo.h"
 #import "CountDownView.h"
@@ -81,12 +80,7 @@
     UIImageView *iv = 
         [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"filmFestLogo.png"]];
     [[self navigationItem] setTitleView:iv];
-    
-    //set up tab item
-    UIBarButtonItem *infoBtnItem = 
-        [[UIBarButtonItem alloc] initWithTitle:@"Info" style:UIBarButtonItemStylePlain target:self action:@selector(infoItemPressed:)];
-    
-    [[self navigationItem] setRightBarButtonItem:infoBtnItem];
+
     
     UIBarButtonItem *openItem =
         [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburgerIcon.png"] style:UIBarButtonItemStylePlain target:self action:@selector(openButtonPressed)];
@@ -418,25 +412,6 @@
     [imagePicker setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
     [self presentViewController:imagePicker animated:YES completion:nil];
     
-}
-
-#pragma mark - nav bar actions
-- (void)infoItemPressed:(id)sender {
-    NSLog(@"DO SOMETHING");
-    
-    InfoViewController *newVC = [[InfoViewController alloc] init];
-    
-    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:newVC];
-    [nc.navigationBar setTintColor:THEME_CLR];
-    
-    //set up nav bar header
-    
-    
-    [self presentViewController:nc animated:YES completion:nil];
-}
-
-- (void)infoViewClosed:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - IBActions
