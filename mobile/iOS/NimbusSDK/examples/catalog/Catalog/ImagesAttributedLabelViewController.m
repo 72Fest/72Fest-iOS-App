@@ -1,5 +1,5 @@
 //
-// Copyright 2011-2012 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -36,9 +36,6 @@
 // QuartzCore.framework
 //
 
-@interface ImagesAttributedLabelViewController ()
-@end
-
 @implementation ImagesAttributedLabelViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -51,6 +48,12 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
+
+  // iOS 7-only.
+  if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
+    self.edgesForExtendedLayout = UIRectEdgeNone;
+  }
+  self.view.backgroundColor = [UIColor whiteColor];
 
   NIAttributedLabel* label = [[NIAttributedLabel alloc] initWithFrame:CGRectZero];
 
@@ -90,10 +93,6 @@
              margins:UIEdgeInsetsMake(5, 5, 5, 5)];
 
   [self.view addSubview:label];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-  return NIIsSupportedOrientation(interfaceOrientation);
 }
 
 @end

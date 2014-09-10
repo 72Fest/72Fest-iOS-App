@@ -1,5 +1,5 @@
 //
-// Copyright 2011-2013 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -58,36 +58,34 @@ NIApplyBackgroundImageSelectorToButton(@selector(backgroundImageForButtonWithSta
 /**
  * Sets the images for a button's states.
  *
- *      @param selector A selector of the form:
+ * @param selector A selector of the form:
  *                      (UIImage *)imageWithControlState:(UIControlState)controlState
- *      @param target The target upon which the selector will be invoked.
- *      @param button The button object whose properties should be modified.
+ * @param target The target upon which the selector will be invoked.
+ * @param button The button object whose properties should be modified.
  */
 void NIApplyImageSelectorToButton(SEL selector, id target, UIButton* button);
 
 /**
  * Sets the background images for a button's states.
  *
- *      @param selector A selector of the form:
+ * @param selector A selector of the form:
  *                      (UIImage *)backgroundImageWithControlState:(UIControlState)controlState
- *      @param target The target upon which the selector will be invoked.
- *      @param button The button object whose properties should be modified.
+ * @param target The target upon which the selector will be invoked.
+ * @param button The button object whose properties should be modified.
  */
 void NIApplyBackgroundImageSelectorToButton(SEL selector, id target, UIButton* button);
 
 /**
  * Sets the title colors for a button's states.
  *
- *      @param selector A selector of the form:
+ * @param selector A selector of the form:
  *                      (UIColor *)colorWithControlState:(UIControlState)controlState
- *      @param target The target upon which the selector will be invoked.
- *      @param button The button object whose properties should be modified.
+ * @param target The target upon which the selector will be invoked.
+ * @param button The button object whose properties should be modified.
  */
 void NIApplyTitleColorSelectorToButton(SEL selector, id target, UIButton* button);
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 /**@}*/// End of Button Utilities /////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #if defined __cplusplus
 };

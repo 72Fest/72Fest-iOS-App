@@ -1,5 +1,5 @@
 //
-// Copyright 2012 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 
 #import "NICellFactory.h"
 #import "NIRadioGroup.h"
+#import "NISDKAvailability.h"
 #import "NITableViewModel.h"
 
 #import "NIDebuggingTools.h"
@@ -28,29 +29,20 @@
 #endif
 
 @interface NIRadioGroupController ()
-@property (nonatomic, readonly, NI_STRONG) NIRadioGroup* radioGroup;
-@property (nonatomic, readonly, NI_STRONG) id<NICell> tappedCell;
-@property (nonatomic, readonly, NI_STRONG) NITableViewModel* model;
+@property (nonatomic, readonly, strong) NIRadioGroup* radioGroup;
+@property (nonatomic, readonly, strong) id<NICell> tappedCell;
+@property (nonatomic, readonly, strong) NITableViewModel* model;
 @end
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NIRadioGroupController
 
-@synthesize radioGroup = _radioGroup;
-@synthesize tappedCell = _tappedCell;
-@synthesize model = _model;
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dealloc {
   [_radioGroup removeForwarding:self];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithRadioGroup:(NIRadioGroup *)radioGroup tappedCell:(id<NICell>)tappedCell {
   if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
     // A valid radio group must be provided.
@@ -64,16 +56,12 @@
   return self;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStyle:(UITableViewStyle)style {
   // Use the initWithRadioGroup initializer.
   NIDASSERT(NO);
   return [self initWithRadioGroup:nil tappedCell:nil];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)viewDidLoad {
   [super viewDidLoad];
 
@@ -81,8 +69,6 @@
   self.tableView.delegate = [self.radioGroup forwardingTo:self.tableView.delegate];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < NIIOS_6_0
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
   return NIIsSupportedOrientation(toInterfaceOrientation);
@@ -90,18 +76,13 @@
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSUInteger)supportedInterfaceOrientations {
   return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - UITableViewDelegate
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
   [self.tappedCell shouldUpdateCellWithObject:self.radioGroup];
 }

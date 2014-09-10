@@ -1,5 +1,5 @@
 //
-// Copyright 2011 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,25 +16,21 @@
 
 // See: http://bit.ly/hS5nNh for unit test macros.
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 #import <UIKit/UIKit.h>
 
 #import "NINetworkActivity.h"
 
-@interface NINetworkActivityTests : SenTestCase
+@interface NINetworkActivityTests : XCTestCase
 @end
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NINetworkActivityTests
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testNetworkActivity {
-  STAssertFalse([UIApplication sharedApplication].networkActivityIndicatorVisible,
-                @"Activity indicator should be hidden.");
+  XCTAssertFalse([UIApplication sharedApplication].networkActivityIndicatorVisible,
+                 @"Activity indicator should be hidden.");
 
   // TODO (Jan 26, 2012): Swizzle out the networkActivityIndicatorVisible method so that we can
   // test when it gets changed.

@@ -1,5 +1,5 @@
 //
-// Copyright 2011-2012 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -46,14 +46,12 @@ typedef enum {
 } RadioGroup;
 
 @interface ModalRadioGroupTableModelViewController () <NIRadioGroupDelegate>
-@property (nonatomic, readwrite, retain) NITableViewModel* model;
-@property (nonatomic, readwrite, retain) NIRadioGroup* radioGroup;
+@property (nonatomic, retain) NITableViewModel* model;
+@property (nonatomic, retain) NIRadioGroup* radioGroup;
 @end
 
 @implementation ModalRadioGroupTableModelViewController
 
-@synthesize model = _model;
-@synthesize radioGroup = _radioGroup;
 
 - (id)initWithStyle:(UITableViewStyle)style {
   if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
@@ -91,7 +89,7 @@ typedef enum {
 #pragma mark - NIRadioGroupDelegate
 
 - (void)radioGroup:(NIRadioGroup *)radioGroup didSelectIdentifier:(NSInteger)identifier {
-  NSLog(@"Did select radio group option %d", identifier);
+  NSLog(@"Did select radio group option %zd", identifier);
 
   // Dismiss the modal view controller that's showing the radio group options.
   [self dismissViewControllerAnimated:YES completion:nil];

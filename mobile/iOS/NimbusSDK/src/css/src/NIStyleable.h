@@ -1,5 +1,5 @@
 //
-// Copyright 2011 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
 /**
  * The protocol used by the NIStylesheet to apply NICSSRuleSets to views.
  *
- *      @ingroup NimbusCSS
+ * @ingroup NimbusCSS
  *
  * If you implement this protocol in a category it is recommended that you implement the
  * logic as a separate method and call that method from applyStyleWithRuleSet: so as to allow

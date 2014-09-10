@@ -1,5 +1,5 @@
 //
-// Copyright 2011 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -34,19 +34,12 @@
 @end
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NICenteringScrollView
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-#pragma mark UIView
+#pragma mark - UIView
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)layoutSubviews {
   [super layoutSubviews];
 
@@ -77,35 +70,31 @@
 
 @end
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-@interface NIPhotoScrollView()
-@property (nonatomic, readwrite, assign) NIPhotoScrollViewPhotoSize photoSize;
+@interface NIPhotoScrollView ()
+@property (nonatomic, assign) NIPhotoScrollViewPhotoSize photoSize;
 - (void)setMaxMinZoomScalesForCurrentBounds;
 @end
 
+@implementation NIPhotoScrollView {
+  // The photo view to be zoomed.
+  UIImageView* _imageView;
+  // The scroll view.
+  NICenteringScrollView* _scrollView;
+  UIActivityIndicatorView* _loadingView;
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-@implementation NIPhotoScrollView
+  // Photo Information
+  NIPhotoScrollViewPhotoSize _photoSize;
+  CGSize _photoDimensions;
 
-@synthesize pageIndex  = _pageIndex;
-@synthesize reuseIdentifier = _reuseIdentifier;
-@synthesize photoSize   = _photoSize;
-@synthesize photoDimensions = _photoDimensions;
-@synthesize zoomingIsEnabled = _zoomingIsEnabled;
-@synthesize zoomingAboveOriginalSizeIsEnabled = _zoomingAboveOriginalSizeIsEnabled;
-@synthesize photoScrollViewDelegate = _photoScrollViewDelegate;
-@synthesize doubleTapToZoomIsEnabled = _doubleTapToZoomIsEnabled;
-@synthesize maximumScale = _maximumScale;
-@synthesize loading = _loading;
-@synthesize doubleTapGestureRecognizer = _doubleTapGestureRecognizer;
+  // Configurable State
+  BOOL _zoomingIsEnabled;
+  BOOL _zoomingAboveOriginalSizeIsEnabled;
 
+  UITapGestureRecognizer* _doubleTapGestureRecognizer;
+}
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+@synthesize reuseIdentifier;
+
 - (id)initWithFrame:(CGRect)frame {
   if ((self = [super initWithFrame:frame])) {
     // Default configuration.
@@ -147,34 +136,22 @@
   return self;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setBackgroundColor:(UIColor *)backgroundColor {
   [super setBackgroundColor:backgroundColor];
 
   _scrollView.backgroundColor = backgroundColor;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-#pragma mark UIScrollView
+#pragma mark - UIScrollView
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
   return _imageView;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-#pragma mark Gesture Recognizers
+#pragma mark - Gesture Recognizers
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGRect)rectAroundPoint:(CGPoint)point atZoomScale:(CGFloat)zoomScale {
   NIDASSERT(zoomScale > 0);
 
@@ -207,8 +184,6 @@
   return rect;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)didDoubleTap:(UITapGestureRecognizer *)tapGesture {
   BOOL isCompletelyZoomedIn = (_scrollView.maximumZoomScale <= _scrollView.zoomScale + FLT_EPSILON);
 
@@ -236,14 +211,9 @@
   }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-#pragma mark NIPagingScrollViewPage
+#pragma mark - NIPagingScrollViewPage
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)prepareForReuse {
   _imageView.image = nil;
   self.photoSize = NIPhotoScrollViewPhotoSizeUnknown;
@@ -251,20 +221,13 @@
   _scrollView.contentSize = self.bounds.size;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)pageDidDisappear {
   _scrollView.zoomScale = _scrollView.minimumZoomScale;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-#pragma mark Public Methods
+#pragma mark - Public
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setImage:(UIImage *)image photoSize:(NIPhotoScrollViewPhotoSize)photoSize {
   _imageView.image = image;
   [_imageView sizeToFit];
@@ -294,8 +257,6 @@
   [self setNeedsLayout];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setLoading:(BOOL)loading {
   _loading = loading;
 
@@ -306,14 +267,10 @@
   }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIImage *)image {
   return _imageView.image;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setZoomingIsEnabled:(BOOL)enabled {
   _zoomingIsEnabled = enabled;
 
@@ -335,38 +292,20 @@
   }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setDoubleTapToZoomIsEnabled:(BOOL)enabled {
-  // Only enable double-tap to zoom if the SDK supports it. This feature only works on
-  // iOS 3.2 and above.
-  if (enabled && nil == _doubleTapGestureRecognizer
-      && (nil != NIUITapGestureRecognizerClass()
-          && [self respondsToSelector:@selector(addGestureRecognizer:)])) {
-    _doubleTapGestureRecognizer =
-    [[NIUITapGestureRecognizerClass() alloc] initWithTarget: self
-                                                     action: @selector(didDoubleTap:)];
-
-    // I freaking love gesture recognizers.
-    [_doubleTapGestureRecognizer setNumberOfTapsRequired:2];
-
+  if (enabled && nil == _doubleTapGestureRecognizer) {
+    _doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didDoubleTap:)];
+    _doubleTapGestureRecognizer.numberOfTapsRequired = 2;
     [self addGestureRecognizer:_doubleTapGestureRecognizer];
   }
 
-  // If the recognizer hasn't been initialized then this will fire on nil and do nothing.
-  [_doubleTapGestureRecognizer setEnabled:enabled];
+  _doubleTapGestureRecognizer.enabled = enabled;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (BOOL)isDoubleTapToZoomIsEnabled {
-  // If the gesture recognizer hasn't been created, then _doubleTapGestureRecognizer will be
-  // nil and so calling isEnabled will return 0.
+- (BOOL)isDoubleTapToZoomEnabled {
   return [_doubleTapGestureRecognizer isEnabled];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGFloat)scaleForSize:(CGSize)size boundsSize:(CGSize)boundsSize useMinimalScale:(BOOL)minimalScale {
   CGFloat xScale = boundsSize.width / size.width;   // The scale needed to perfectly fit the image width-wise.
   CGFloat yScale = boundsSize.height / size.height; // The scale needed to perfectly fit the image height-wise.
@@ -375,8 +314,6 @@
   return minScale;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * Calculate the min and max scale for the given dimensions and photo size.
  *
@@ -393,6 +330,7 @@
  */
 - (void)minAndMaxScaleForDimensions: (CGSize)dimensions
                          boundsSize: (CGSize)boundsSize
+                         photoScale: (CGFloat)photoScale
                           photoSize: (NIPhotoScrollViewPhotoSize)photoSize
                            minScale: (CGFloat *)pMinScale
                            maxScale: (CGFloat *)pMaxScale {
@@ -413,7 +351,7 @@
   // don't want to shrink it down with the zoom because it should be a scaled image.
   CGFloat maxScale = ((NIPhotoScrollViewPhotoSizeUnknown == photoSize)
                       ? 1
-                      : (1.0f / NIScreenScale()));
+                      : (photoScale / NIScreenScale()));
 
   if (NIPhotoScrollViewPhotoSizeThumbnail != photoSize) {
     // Don't let minScale exceed maxScale. (If the image is smaller than the screen, we
@@ -437,8 +375,6 @@
   *pMaxScale = maxScale;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setMaxMinZoomScalesForCurrentBounds {
   CGSize imageSize = _imageView.bounds.size;
   
@@ -460,6 +396,7 @@
   // Calculate the min/max scale for the image to be presented.
   [self minAndMaxScaleForDimensions: imageSize
                          boundsSize: boundsSize
+                         photoScale: _imageView.image.scale
                           photoSize: self.photoSize
                            minScale: &minScale
                            maxScale: &maxScale];
@@ -474,6 +411,7 @@
     // Calculate the original-sized image's min/max scale.
     [self minAndMaxScaleForDimensions: self.photoDimensions
                            boundsSize: boundsSize
+                           photoScale: _imageView.image.scale
                             photoSize: NIPhotoScrollViewPhotoSizeOriginal
                              minScale: &scaleToFitOriginal
                              maxScale: &originalMaxScale];
@@ -497,16 +435,12 @@
   _scrollView.minimumZoomScale = minScale;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Saving/Restoring Offset and Scale
 
 // Parts of the following code are from Apple's ImageScrollView example application and
 // have been used here because they are well-documented and concise.
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 // Fetch the visual center point of this view in the image view's coordinate space.
 - (CGPoint)pointToCenterAfterRotation {
   CGRect bounds = _scrollView.bounds;
@@ -514,8 +448,6 @@
   return [self convertPoint:boundsCenter toView:_imageView];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGFloat)scaleToRestoreAfterRotation {
   CGFloat contentScale = _scrollView.zoomScale;
   
@@ -528,8 +460,6 @@
   return contentScale;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGPoint)maximumContentOffset {
   CGSize contentSize = _scrollView.contentSize;
   CGSize boundsSize = _scrollView.bounds.size;
@@ -537,17 +467,13 @@
                      contentSize.height - boundsSize.height);
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGPoint)minimumContentOffset {
   return CGPointZero;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)restoreCenterPoint:(CGPoint)oldCenter scale:(CGFloat)oldScale {
   // Step 1: restore zoom scale, making sure it is within the allowable range.
-  _scrollView.zoomScale = boundf(oldScale,
+  _scrollView.zoomScale = NIBoundf(oldScale,
                                  _scrollView.minimumZoomScale, _scrollView.maximumZoomScale);
 
   // Step 2: restore center point, making sure it is within the allowable range.
@@ -563,18 +489,14 @@
   // 2c: restore offset, adjusted to be within the allowable range
   CGPoint maxOffset = [self maximumContentOffset];
   CGPoint minOffset = [self minimumContentOffset];
-  offset.x = boundf(offset.x, minOffset.x, maxOffset.x);
-  offset.y = boundf(offset.y, minOffset.y, maxOffset.y);
+  offset.x = NIBoundf(offset.x, minOffset.x, maxOffset.x);
+  offset.y = NIBoundf(offset.y, minOffset.y, maxOffset.y);
   _scrollView.contentOffset = offset;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Saving/Restoring Offset and Scale
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setFrameAndMaintainState:(CGRect)frame {
   CGPoint restorePoint = [self pointToCenterAfterRotation];
   CGFloat restoreScale = [self scaleToRestoreAfterRotation];
@@ -584,6 +506,5 @@
 
   [_scrollView setNeedsLayout];
 }
-
 
 @end

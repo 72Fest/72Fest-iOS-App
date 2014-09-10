@@ -1,5 +1,5 @@
 //
-// Copyright 2011 Jeff Verkoeyen
+// Copyright 2011-2014 Jeff Verkoeyen
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,26 +17,20 @@
 #import "RootViewController.h"
 #import "UIView+NIStyleable.h"
 #import "NIUserInterfaceString.h"
-#import "NIInvocationMethods.h"
+#import "NIFoundationMethods.h"
 #import "NITextField.h"
 
 #import "AppDelegate.h"
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation RootViewController
 {
   BOOL animationToggle;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
   if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
     NIStylesheetCache* stylesheetCache =
@@ -53,8 +47,6 @@
   return self;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)loadView {
   [super loadView];
 
@@ -88,13 +80,13 @@
   [_dom refresh];
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)viewDidUnload {
   [_dom unregisterAllViews];
   
   _activityIndicator = nil;
   _backgroundView = nil;
   _testLabel = nil;
+  [super viewDidUnload];
 }
 
 -(void)buttonPress
@@ -106,7 +98,6 @@
   }];
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)stylesheetDidChange {
   [_dom refresh];
 }

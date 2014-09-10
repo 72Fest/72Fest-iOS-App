@@ -1,5 +1,5 @@
 //
-// Copyright 2011-2012 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // This code was originally found in Apple's WWDC Session 240 on
 // "Polishing Your Interface Rotations" and has been repurposed into a reusable class.
@@ -24,9 +24,12 @@
 #import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>
 
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < NIIOS_6_0
+#error "Nimbus Snapshot Rotation requires iOS 6 or higher."
+#endif
+
 UIImage* NISnapshotOfViewWithTransparencyOption(UIView* view, BOOL transparency);
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 UIImage* NISnapshotOfViewWithTransparencyOption(UIView* view, BOOL transparency) {
   // Passing 0 as the last argument ensures that the image context will match the current device's
   // scaling mode.
@@ -38,7 +41,15 @@ UIImage* NISnapshotOfViewWithTransparencyOption(UIView* view, BOOL transparency)
   // that is currently in the frame, so we offset by the bounds of the view accordingly.
   CGContextTranslateCTM(cx, -view.bounds.origin.x, -view.bounds.origin.y);
 
-  [view.layer renderInContext:cx];
+  BOOL didDraw = NO;
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= NIIOS_7_0
+  if ([view respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
+    didDraw = [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:YES];
+  }
+#endif
+  if (!didDraw) {
+    [view.layer renderInContext:cx];
+  }
 
   UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
   UIGraphicsEndImageContext();
@@ -46,14 +57,10 @@ UIImage* NISnapshotOfViewWithTransparencyOption(UIView* view, BOOL transparency)
   return image;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 UIImage* NISnapshotOfView(UIView* view) {
   return NISnapshotOfViewWithTransparencyOption(view, NO);
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 UIImageView* NISnapshotViewOfView(UIView* view) {
   UIImage* image = NISnapshotOfView(view);
 
@@ -63,14 +70,10 @@ UIImageView* NISnapshotViewOfView(UIView* view) {
   return snapshotView;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 UIImage* NISnapshotOfViewWithTransparency(UIView* view) {
   return NISnapshotOfViewWithTransparencyOption(view, YES);
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 UIImageView* NISnapshotViewOfViewWithTransparency(UIView* view) {
   UIImage* image = NISnapshotOfViewWithTransparency(view);
 
@@ -80,33 +83,17 @@ UIImageView* NISnapshotViewOfViewWithTransparency(UIView* view) {
   return snapshotView;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @interface NISnapshotRotation()
-@property (nonatomic, readwrite, assign) BOOL isSupportedOS;
-@property (nonatomic, readwrite, assign) CGRect frameBeforeRotation;
-@property (nonatomic, readwrite, assign) CGRect frameAfterRotation;
+@property (nonatomic, assign) BOOL isSupportedOS;
+@property (nonatomic, assign) CGRect frameBeforeRotation;
+@property (nonatomic, assign) CGRect frameAfterRotation;
 
-@property (nonatomic, readwrite, NI_STRONG) UIImageView* snapshotViewBeforeRotation;
-@property (nonatomic, readwrite, NI_STRONG) UIImageView* snapshotViewAfterRotation;
+@property (nonatomic, strong) UIImageView* snapshotViewBeforeRotation;
+@property (nonatomic, strong) UIImageView* snapshotViewAfterRotation;
 @end
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NISnapshotRotation
 
-@synthesize isSupportedOS = _isSupportedOS;
-@synthesize frameBeforeRotation = _frameBeforeRotation;
-@synthesize frameAfterRotation = _frameAfterRotation;
-@synthesize snapshotViewBeforeRotation = _snapshotViewBeforeRotation;
-@synthesize snapshotViewAfterRotation = _snapshotViewAfterRotation;
-@synthesize delegate = _delegate;
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithDelegate:(id<NISnapshotRotationDelegate>)delegate {
   if ((self = [super init])) {
     _delegate = delegate;
@@ -118,14 +105,10 @@ UIImageView* NISnapshotViewOfViewWithTransparency(UIView* view) {
   return self;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
   return [self initWithDelegate:nil];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
   if (!self.isSupportedOS) {
     return;
@@ -141,12 +124,10 @@ UIImageView* NISnapshotViewOfViewWithTransparency(UIView* view) {
   }
 
   self.frameBeforeRotation = rotationView.frame;
-  self.snapshotViewBeforeRotation = NISnapshotViewOfView(rotationView);
+  self.snapshotViewBeforeRotation = NISnapshotViewOfViewWithTransparency(rotationView);
   [containerView insertSubview:self.snapshotViewBeforeRotation aboveSubview:rotationView];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
   if (!self.isSupportedOS) {
     return;
@@ -165,7 +146,7 @@ UIImageView* NISnapshotViewOfViewWithTransparency(UIView* view) {
   
   [UIView setAnimationsEnabled:NO];
   
-  self.snapshotViewAfterRotation = NISnapshotViewOfView(rotationView);
+  self.snapshotViewAfterRotation = NISnapshotViewOfViewWithTransparency(rotationView);
   // Set the new frame while maintaining the old frame's height.
   self.snapshotViewAfterRotation.frame = CGRectMake(self.frameBeforeRotation.origin.x,
                                                     self.frameBeforeRotation.origin.y,
@@ -208,8 +189,6 @@ UIImageView* NISnapshotViewOfViewWithTransparency(UIView* view) {
   rotationView.hidden = YES;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
   if (!self.isSupportedOS) {
     return;
@@ -234,21 +213,12 @@ UIImageView* NISnapshotViewOfViewWithTransparency(UIView* view) {
 
 @end
 
-
 @interface NITableViewSnapshotRotation() <NISnapshotRotationDelegate>
-@property (nonatomic, readwrite, NI_WEAK) id<NISnapshotRotationDelegate> forwardingDelegate;
+@property (nonatomic, weak) id<NISnapshotRotationDelegate> forwardingDelegate;
 @end
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NITableViewSnapshotRotation
 
-@synthesize forwardingDelegate = _forwardingDelegate;
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setDelegate:(id<NISnapshotRotationDelegate>)delegate {
   if (delegate == self) {
     [super setDelegate:delegate];
@@ -258,8 +228,6 @@ UIImageView* NISnapshotViewOfViewWithTransparency(UIView* view) {
   }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
   if ((self = [super init])) {
     self.delegate = self;
@@ -267,13 +235,8 @@ UIImageView* NISnapshotViewOfViewWithTransparency(UIView* view) {
   return self;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Forward Invocations
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)shouldForwardSelectorToDelegate:(SEL)selector {
   struct objc_method_description description;
   // Only forward the selector if it's part of the protocol.
@@ -283,8 +246,6 @@ UIImageView* NISnapshotViewOfViewWithTransparency(UIView* view) {
   return (isSelectorInProtocol && [self.forwardingDelegate respondsToSelector:selector]);
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)respondsToSelector:(SEL)selector {
   if ([super respondsToSelector:selector] == YES) {
     return YES;
@@ -294,8 +255,6 @@ UIImageView* NISnapshotViewOfViewWithTransparency(UIView* view) {
   }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)forwardingTargetForSelector:(SEL)selector {
   if ([self shouldForwardSelectorToDelegate:selector]) {
     return self.forwardingDelegate;
@@ -305,25 +264,16 @@ UIImageView* NISnapshotViewOfViewWithTransparency(UIView* view) {
   }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - NISnapshotRotation
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIView *)containerViewForSnapshotRotation:(NISnapshotRotation *)snapshotRotation {
   return [self.forwardingDelegate containerViewForSnapshotRotation:snapshotRotation];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIView *)rotatingViewForSnapshotRotation:(NISnapshotRotation *)snapshotRotation {
   return [self.forwardingDelegate rotatingViewForSnapshotRotation:snapshotRotation];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIEdgeInsets)fixedInsetsForSnapshotRotation:(NISnapshotRotation *)snapshotRotation {
   UIEdgeInsets insets = UIEdgeInsetsZero;
 

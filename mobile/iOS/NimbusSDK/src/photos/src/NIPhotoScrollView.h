@@ -1,5 +1,5 @@
 //
-// Copyright 2011 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,38 +26,17 @@
 /**
  * A single photo view that supports zooming and rotation.
  *
- *      @ingroup NimbusPhotos
+ * @ingroup NimbusPhotos
  */
-@interface NIPhotoScrollView : UIView <
-  UIScrollViewDelegate,
-  NIPagingScrollViewPage> {
-@private
-  // The photo view to be zoomed.
-  UIImageView* _imageView;
-  // The scroll view.
-  NICenteringScrollView* _scrollView;
-  UIActivityIndicatorView* _loadingView;
-
-  // Photo Information
-  NIPhotoScrollViewPhotoSize _photoSize;
-  CGSize _photoDimensions;
-
-  // Configurable State
-  BOOL _zoomingIsEnabled;
-  BOOL _zoomingAboveOriginalSizeIsEnabled;
-  BOOL _doubleTapToZoomIsEnabled;
-
-  UITapGestureRecognizer* _doubleTapGestureRecognizer;
-
-}
+@interface NIPhotoScrollView : UIView <UIScrollViewDelegate, NIPagingScrollViewPage>
 
 #pragma mark Configuring Functionality
 
-@property (nonatomic, readwrite, assign, getter=isZoomingEnabled) BOOL zoomingIsEnabled; // default: yes
-@property (nonatomic, readwrite, assign, getter=isZoomingAboveOriginalSizeEnabled) BOOL zoomingAboveOriginalSizeIsEnabled; // default: yes
-@property (nonatomic, readwrite, assign, getter=isDoubleTapToZoomEnabled) BOOL doubleTapToZoomIsEnabled; // default: yes
-@property (nonatomic, readwrite, assign) CGFloat maximumScale; // default: 0 (autocalculate)
-@property (nonatomic, readwrite, NI_WEAK) id<NIPhotoScrollViewDelegate> photoScrollViewDelegate;
+@property (nonatomic, assign, getter=isZoomingEnabled) BOOL zoomingIsEnabled; // default: yes
+@property (nonatomic, assign, getter=isZoomingAboveOriginalSizeEnabled) BOOL zoomingAboveOriginalSizeIsEnabled; // default: yes
+@property (nonatomic, assign, getter=isDoubleTapToZoomEnabled) BOOL doubleTapToZoomIsEnabled; // default: yes
+@property (nonatomic, assign) CGFloat maximumScale; // default: 0 (autocalculate)
+@property (nonatomic, weak) id<NIPhotoScrollViewDelegate> photoScrollViewDelegate;
 
 #pragma mark State
 
@@ -66,9 +45,9 @@
 - (void)setImage:(UIImage *)image photoSize:(NIPhotoScrollViewPhotoSize)photoSize;
 @property (nonatomic, assign, getter = isLoading) BOOL loading;
 
-@property (nonatomic, readwrite, assign) NSInteger pageIndex;
-@property (nonatomic, readwrite, assign) CGSize photoDimensions;
-@property (nonatomic, readonly, NI_STRONG) UITapGestureRecognizer* doubleTapGestureRecognizer;
+@property (nonatomic, assign) NSInteger pageIndex;
+@property (nonatomic, assign) CGSize photoDimensions;
+@property (nonatomic, readonly, strong) UITapGestureRecognizer* doubleTapGestureRecognizer;
 
 @end
 
@@ -79,7 +58,7 @@
  *
  * By default this is YES.
  *
- *      @fn NIPhotoScrollView::zoomingIsEnabled
+ * @fn NIPhotoScrollView::zoomingIsEnabled
  */
 
 /**
@@ -93,13 +72,13 @@
  *
  * The default behavior in Photos.app allows small photos to be zoomed in.
  *
- *      @attention This will allow photos to be zoomed in even if they don't have any more
+ * @attention This will allow photos to be zoomed in even if they don't have any more
  *                 pixels to show, causing the photo to blur. This can look ok for photographs,
  *                 but might not look ok for software design mockups.
  *
  * By default this is YES.
  *
- *      @fn NIPhotoScrollView::zoomingAboveOriginalSizeIsEnabled
+ * @fn NIPhotoScrollView::zoomingAboveOriginalSizeIsEnabled
  */
 
 /**
@@ -109,7 +88,7 @@
  *
  * By default this is YES.
  *
- *      @fn NIPhotoScrollView::doubleTapToZoomIsEnabled
+ * @fn NIPhotoScrollView::doubleTapToZoomIsEnabled
  */
 
 /**
@@ -118,13 +97,13 @@
  * By default this is 0, meaning the view will automatically determine the maximum scale.
  * Setting this to a non-zero value will override the automatically-calculated maximum scale.
  *
- *      @fn NIPhotoScrollView::maximumScale
+ * @fn NIPhotoScrollView::maximumScale
  */
 
 /**
  * The photo scroll view delegate.
  *
- *      @fn NIPhotoScrollView::photoScrollViewDelegate
+ * @fn NIPhotoScrollView::photoScrollViewDelegate
  */
 
 
@@ -133,7 +112,7 @@
 /**
  * The currently-displayed photo.
  *
- *      @fn NIPhotoScrollView::image
+ * @fn NIPhotoScrollView::image
  */
 
 /**
@@ -143,13 +122,13 @@
  *
  * Resets the current zoom levels and zooms to fit the image.
  *
- *      @fn NIPhotoScrollView::setImage:photoSize:
+ * @fn NIPhotoScrollView::setImage:photoSize:
  */
 
 /**
  * The index of this photo within a photo album.
  *
- *      @fn NIPhotoScrollView::pageIndex
+ * @fn NIPhotoScrollView::pageIndex
  */
 
 /**
@@ -157,7 +136,7 @@
  *
  * This is used to replace the photo only with successively higher-quality versions.
  *
- *      @fn NIPhotoScrollView::photoSize
+ * @fn NIPhotoScrollView::photoSize
  */
 
 /**
@@ -171,7 +150,7 @@
  *
  * CGSizeZero is used to signify an unknown final photo dimension.
  *
- *      @fn NIPhotoScrollView::photoDimensions
+ * @fn NIPhotoScrollView::photoDimensions
  */
 
 /**
@@ -179,5 +158,5 @@
  *
  * This is used mainly for setting up dependencies between gesture recognizers.
  *
- *      @fn NIPhotoScrollView::doubleTapGestureRecognizer
+ * @fn NIPhotoScrollView::doubleTapGestureRecognizer
  */

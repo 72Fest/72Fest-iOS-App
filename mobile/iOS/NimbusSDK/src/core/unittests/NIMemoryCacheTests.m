@@ -1,5 +1,5 @@
 //
-// Copyright 2011 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 // See: http://bit.ly/hS5nNh for unit test macros.
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
 #import <UIKit/UIKit.h>
 
@@ -24,44 +24,33 @@
 #import "NIInMemoryCache.h"
 #import "NSDate+UnitTesting.h"
 
-@interface NIMemoryCacheTests : SenTestCase {
+@interface NIMemoryCacheTests : XCTestCase {
 }
 
 @end
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NIMemoryCacheTests
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-#pragma mark In-Memory Cache
+#pragma mark - In-Memory Cache
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testInitialization {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
-  STAssertEquals([cache count], (NSUInteger)0, @"Cache should be empty after initialization.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"Cache should be empty after initialization.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testSingleObjectNoExpiration {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
   id cacheObject1 = [NSArray array];
   [cache storeObject:cacheObject1 withName:@"obj1"];
 
-  STAssertEquals([cache count], (NSUInteger)1, @"Cache should have one object in it.");
-  STAssertEquals([cache objectWithName:@"obj1"], cacheObject1, @"Cache object should be equal.");
+  XCTAssertEqual([cache count], (NSUInteger)1, @"Cache should have one object in it.");
+  XCTAssertEqual([cache objectWithName:@"obj1"], cacheObject1, @"Cache object should be equal.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testMultipleObjectsNoExpiration {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
@@ -71,13 +60,11 @@
   id cacheObject2 = [NSArray array];
   [cache storeObject: cacheObject2 withName: @"obj2"];
 
-  STAssertEquals([cache count], (NSUInteger)2, @"Cache should have two objects in it.");
-  STAssertEquals([cache objectWithName:@"obj1"], cacheObject1, @"Cache object should be equal.");
-  STAssertEquals([cache objectWithName:@"obj2"], cacheObject2, @"Cache object should be equal.");
+  XCTAssertEqual([cache count], (NSUInteger)2, @"Cache should have two objects in it.");
+  XCTAssertEqual([cache objectWithName:@"obj1"], cacheObject1, @"Cache object should be equal.");
+  XCTAssertEqual([cache objectWithName:@"obj2"], cacheObject2, @"Cache object should be equal.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testRemovingSingleObject {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
@@ -86,11 +73,9 @@
 
   [cache removeObjectWithName:@"obj1"];
 
-  STAssertEquals([cache count], (NSUInteger)0, @"Cache should be empty.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"Cache should be empty.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testRemovingCachePrefixes {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
@@ -103,11 +88,9 @@
 
   [cache removeAllObjectsWithPrefix:@"obj1"];
 
-  STAssertEquals([cache count], (NSUInteger)1, @"Cache should have one object.");
+  XCTAssertEqual([cache count], (NSUInteger)1, @"Cache should have one object.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testRemovingAllObjects {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
@@ -117,13 +100,11 @@
   id cacheObject2 = [NSArray array];
   [cache storeObject:cacheObject2 withName:@"obj2"];
 
-  STAssertEquals([cache count], (NSUInteger)2, @"Cache should have two objects in it.");
+  XCTAssertEqual([cache count], (NSUInteger)2, @"Cache should have two objects in it.");
   [cache removeAllObjects];
-  STAssertEquals([cache count], (NSUInteger)0, @"Cache should now be empty.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"Cache should now be empty.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testSingleObjectWithFutureExpiration {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
@@ -132,11 +113,9 @@
             withName: @"obj1"
         expiresAfter: [NSDate dateWithTimeIntervalSinceNow:1]];
 
-  STAssertEquals([cache count], (NSUInteger)1, @"Cache should have one object in it.");
+  XCTAssertEqual([cache count], (NSUInteger)1, @"Cache should have one object in it.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testMultipleObjectsWithFutureExpiration {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
@@ -150,11 +129,9 @@
             withName: @"obj2"
         expiresAfter: [NSDate dateWithTimeIntervalSinceNow:100]];
 
-  STAssertEquals([cache count], (NSUInteger)2, @"Cache should have two objects in it.");
+  XCTAssertEqual([cache count], (NSUInteger)2, @"Cache should have two objects in it.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testSingleObjectWithPastExpiration {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
@@ -163,11 +140,9 @@
             withName: @"obj1"
         expiresAfter: [NSDate dateWithTimeIntervalSinceNow:-1]];
 
-  STAssertEquals([cache count], (NSUInteger)0, @"Cache should be empty.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"Cache should be empty.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testMultipleObjectsWithPastExpiration {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
@@ -181,11 +156,9 @@
             withName: @"obj2"
         expiresAfter: [NSDate dateWithTimeIntervalSinceNow:-100]];
 
-  STAssertEquals([cache count], (NSUInteger)0, @"Cache should be empty.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"Cache should be empty.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testSingleObjectWithExpiredUpdate {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
@@ -197,11 +170,9 @@
             withName: @"obj1"
         expiresAfter: [NSDate dateWithTimeIntervalSinceNow:-1]];
 
-  STAssertEquals([cache count], (NSUInteger)0, @"Cache should be empty.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"Cache should be empty.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testSingleObjectWithNonExpiredUpdate {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
@@ -213,11 +184,9 @@
             withName: @"obj1"
         expiresAfter: [NSDate dateWithTimeIntervalSinceNow:1]];
 
-  STAssertEquals([cache count], (NSUInteger)1, @"Cache should have one item.");
+  XCTAssertEqual([cache count], (NSUInteger)1, @"Cache should have one item.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testSingleObjectWithExpiration {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
@@ -233,19 +202,17 @@
   // expire.
   [NSDate swizzleMethodsForUnitTesting];
 
-  STAssertEquals([cache count], (NSUInteger)1, @"Cache should have one object.");
+  XCTAssertEqual([cache count], (NSUInteger)1, @"Cache should have one object.");
 
   // Accessing an expired object removes it from the cache entirely.
-  STAssertNil([cache objectWithName:@"obj1"], @"Object should have expired.");
+  XCTAssertNil([cache objectWithName:@"obj1"], @"Object should have expired.");
 
-  STAssertEquals([cache count], (NSUInteger)0, @"Cache should be empty.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"Cache should be empty.");
 
   // Reset the class implementations when we're done with them.
   [NSDate swizzleMethodsForUnitTesting];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testAccessExpiredObjectWithContains {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
@@ -261,19 +228,17 @@
   // expire.
   [NSDate swizzleMethodsForUnitTesting];
 
-  STAssertEquals([cache count], (NSUInteger)1, @"Cache should have one object.");
+  XCTAssertEqual([cache count], (NSUInteger)1, @"Cache should have one object.");
 
   // Accessing an expired object removes it from the cache entirely.
-  STAssertFalse([cache containsObjectWithName:@"obj1"], @"Object should have expired.");
+  XCTAssertFalse([cache containsObjectWithName:@"obj1"], @"Object should have expired.");
 
-  STAssertEquals([cache count], (NSUInteger)0, @"Cache should be empty.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"Cache should be empty.");
 
   // Reset the class implementations when we're done with them.
   [NSDate swizzleMethodsForUnitTesting];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testAccessExpiredObjectWithDate {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
@@ -289,19 +254,17 @@
   // expire.
   [NSDate swizzleMethodsForUnitTesting];
 
-  STAssertEquals([cache count], (NSUInteger)1, @"Cache should have one object.");
+  XCTAssertEqual([cache count], (NSUInteger)1, @"Cache should have one object.");
 
   // Accessing an expired object removes it from the cache entirely.
-  STAssertNil([cache dateOfLastAccessWithName:@"obj1"], @"Object should have expired.");
+  XCTAssertNil([cache dateOfLastAccessWithName:@"obj1"], @"Object should have expired.");
 
-  STAssertEquals([cache count], (NSUInteger)0, @"Cache should be empty.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"Cache should be empty.");
 
   // Reset the class implementations when we're done with them.
   [NSDate swizzleMethodsForUnitTesting];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testAccessExpiredObjectWithNameOfLeastRecentlyUsedObject {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
@@ -317,19 +280,17 @@
   // expire.
   [NSDate swizzleMethodsForUnitTesting];
 
-  STAssertEquals([cache count], (NSUInteger)1, @"Cache should have one object.");
+  XCTAssertEqual([cache count], (NSUInteger)1, @"Cache should have one object.");
 
   // Accessing an expired object removes it from the cache entirely.
-  STAssertNil([cache nameOfLeastRecentlyUsedObject], @"Object should have expired.");
+  XCTAssertNil([cache nameOfLeastRecentlyUsedObject], @"Object should have expired.");
 
-  STAssertEquals([cache count], (NSUInteger)0, @"Cache should be empty.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"Cache should be empty.");
 
   // Reset the class implementations when we're done with them.
   [NSDate swizzleMethodsForUnitTesting];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testAccessExpiredObjectWithNameOfMostRecentlyUsedObject {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
@@ -345,32 +306,28 @@
   // expire.
   [NSDate swizzleMethodsForUnitTesting];
 
-  STAssertEquals([cache count], (NSUInteger)1, @"Cache should have one object.");
+  XCTAssertEqual([cache count], (NSUInteger)1, @"Cache should have one object.");
 
   // Accessing an expired object removes it from the cache entirely.
-  STAssertNil([cache nameOfMostRecentlyUsedObject], @"Object should have expired.");
+  XCTAssertNil([cache nameOfMostRecentlyUsedObject], @"Object should have expired.");
 
-  STAssertEquals([cache count], (NSUInteger)0, @"Cache should be empty.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"Cache should be empty.");
 
   // Reset the class implementations when we're done with them.
   [NSDate swizzleMethodsForUnitTesting];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testHasObject {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
   id cacheObject1 = [NSArray array];
   [cache storeObject:cacheObject1 withName:@"obj1"];
 
-  STAssertTrue([cache containsObjectWithName:@"obj1"], @"obj1 should exist in the cache.");
+  XCTAssertTrue([cache containsObjectWithName:@"obj1"], @"obj1 should exist in the cache.");
 
-  STAssertFalse([cache containsObjectWithName:@"obj2"], @"obj2 should not exist in the cache.");
+  XCTAssertFalse([cache containsObjectWithName:@"obj2"], @"obj2 should not exist in the cache.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testAccessTimeModifications {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
@@ -382,25 +339,23 @@
   // Does not update the access time.
   [cache containsObjectWithName:@"obj1"];
 
-  STAssertEquals(lastAccessTime, [cache dateOfLastAccessWithName:@"obj1"],
+  XCTAssertEqual(lastAccessTime, [cache dateOfLastAccessWithName:@"obj1"],
                  @"Access time should not have been modified.");
 
   // Does update the access time.
   [cache objectWithName:@"obj1"];
 
-  STAssertFalse([lastAccessTime isEqualToDate:[cache dateOfLastAccessWithName:@"obj1"]],
+  XCTAssertFalse([lastAccessTime isEqualToDate:[cache dateOfLastAccessWithName:@"obj1"]],
                  @"Access time should have been modified.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testLeastAndMostRecentlyUsedObjects {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
-  STAssertNil([cache nameOfLeastRecentlyUsedObject],
-              @"There should not be a least-recently-used object.");
-  STAssertNil([cache nameOfMostRecentlyUsedObject],
-              @"There should not be a most-recently-used object.");
+  XCTAssertNil([cache nameOfLeastRecentlyUsedObject],
+               @"There should not be a least-recently-used object.");
+  XCTAssertNil([cache nameOfMostRecentlyUsedObject],
+               @"There should not be a most-recently-used object.");
 
   id cacheObject1 = [NSArray array];
   id cacheObject2 = [NSDictionary dictionary];
@@ -409,22 +364,20 @@
   [cache storeObject:cacheObject2 withName:@"obj2"];
   [cache storeObject:cacheObject3 withName:@"obj3"];
 
-  STAssertEquals(@"obj1", [cache nameOfLeastRecentlyUsedObject],
+  XCTAssertEqual(@"obj1", [cache nameOfLeastRecentlyUsedObject],
                  @"The least recently used object should be object 1.");
-  STAssertEquals(@"obj3", [cache nameOfMostRecentlyUsedObject],
+  XCTAssertEqual(@"obj3", [cache nameOfMostRecentlyUsedObject],
                  @"The most recently used object should be object 3.");
 
   // Make object 1 the most-recently-accessed
   [cache objectWithName:@"obj1"];
 
-  STAssertEquals(@"obj2", [cache nameOfLeastRecentlyUsedObject],
+  XCTAssertEqual(@"obj2", [cache nameOfLeastRecentlyUsedObject],
                  @"The least recently used object should be object 2.");
-  STAssertEquals(@"obj1", [cache nameOfMostRecentlyUsedObject],
+  XCTAssertEqual(@"obj1", [cache nameOfMostRecentlyUsedObject],
                  @"The most recently used object should be object 1.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testReduceMemoryUsage {
   NIMemoryCache* cache = [[NIMemoryCache alloc] init];
 
@@ -445,28 +398,23 @@
   // expire.
   [NSDate swizzleMethodsForUnitTesting];
 
-  STAssertEquals([cache count], (NSUInteger)2, @"Cache should have two objects.");
+  XCTAssertEqual([cache count], (NSUInteger)2, @"Cache should have two objects.");
 
   [cache reduceMemoryUsage];
 
-  STAssertNil([cache objectWithName:@"obj1"], @"Object 1 should have expired.");
+  XCTAssertNil([cache objectWithName:@"obj1"], @"Object 1 should have expired.");
 
-  STAssertEquals([cache count], (NSUInteger)1, @"Cache should have one object left.");
+  XCTAssertEqual([cache count], (NSUInteger)1, @"Cache should have one object left.");
 
-  STAssertNotNil([cache objectWithName:@"obj2"], @"Object 2 should still be around.");
+  XCTAssertNotNil([cache objectWithName:@"obj2"], @"Object 2 should still be around.");
 
   // Reset the class implementations when we're done with them.
   [NSDate swizzleMethodsForUnitTesting];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-#pragma mark Image In-Memory Cache
+#pragma mark - Image In-Memory Cache
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 // Create an image of a given size. The contents are undefined.
 - (UIImage *)emptyImageWithSize:(CGSize)size {
   UIGraphicsBeginImageContext(size);
@@ -476,8 +424,6 @@
   return image;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testImageCacheStoreNonImage {
   NIImageMemoryCache* cache = [[NIImageMemoryCache alloc] init];
 
@@ -485,11 +431,9 @@
   [cache storeObject:[NSArray array] withName:@"obj1"];
   NIDebugAssertionsShouldBreak = YES;
 
-  STAssertEquals(cache.count, (NSUInteger)0, @"Cache should be empty.");
+  XCTAssertEqual(cache.count, (NSUInteger)0, @"Cache should be empty.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testImageCacheNoLimit {
   NIImageMemoryCache* cache = [[NIImageMemoryCache alloc] init];
 
@@ -498,13 +442,11 @@
   [cache storeObject:img1 withName:@"obj1"];
   [cache storeObject:img2 withName:@"obj2"];
 
-  STAssertEquals(cache.count, (NSUInteger)2, @"Cache should have two objects.");
-  STAssertNotNil([cache objectWithName:@"obj1"], @"Image 1 should still be around.");
-  STAssertNotNil([cache objectWithName:@"obj2"], @"Image 2 should still be around.");
+  XCTAssertEqual(cache.count, (NSUInteger)2, @"Cache should have two objects.");
+  XCTAssertNotNil([cache objectWithName:@"obj1"], @"Image 1 should still be around.");
+  XCTAssertNotNil([cache objectWithName:@"obj2"], @"Image 2 should still be around.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testImageCacheRemoveAllObjects {
   NIImageMemoryCache* cache = [[NIImageMemoryCache alloc] init];
 
@@ -513,14 +455,12 @@
   [cache storeObject:img1 withName:@"obj1"];
   [cache storeObject:img2 withName:@"obj2"];
 
-  STAssertEquals(cache.count, (NSUInteger)2, @"Cache should have two objects in it.");
+  XCTAssertEqual(cache.count, (NSUInteger)2, @"Cache should have two objects in it.");
   [cache removeAllObjects];
-  STAssertEquals(cache.count, (NSUInteger)0, @"Cache should now be empty.");
-  STAssertEquals(cache.numberOfPixels, (NSUInteger)0, @"Cache should have zero pixels.");
+  XCTAssertEqual(cache.count, (NSUInteger)0, @"Cache should now be empty.");
+  XCTAssertEqual(cache.numberOfPixels, (unsigned long long)0, @"Cache should have zero pixels.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testImageCacheNils {
   // Disable NIDASSERTs from breaking the program execution.
   NIDebugAssertionsShouldBreak = NO;
@@ -529,51 +469,49 @@
 
   [cache storeObject: nil
             withName: @"obj1"];
-  STAssertEquals([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
 
   [cache storeObject: nil
             withName: nil];
-  STAssertEquals([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
 
   [cache storeObject: [NSDictionary dictionary]
             withName: nil];
-  STAssertEquals([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
 
   [cache storeObject: [NSDictionary dictionary]
             withName: nil
         expiresAfter: nil];
-  STAssertEquals([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
 
   [cache storeObject: [NSDictionary dictionary]
             withName: nil
         expiresAfter: [NSDate dateWithTimeIntervalSinceNow:1]];
-  STAssertEquals([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
 
   [cache storeObject: nil
             withName: @"obj1"
         expiresAfter: nil];
-  STAssertEquals([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
 
   [cache storeObject: nil
             withName: nil
         expiresAfter: [NSDate dateWithTimeIntervalSinceNow:1]];
-  STAssertEquals([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
 
   [cache storeObject: nil
             withName: nil
         expiresAfter: nil];
-  STAssertEquals([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
 
-  STAssertNil([cache objectWithName:nil], @"The result should be nil");
+  XCTAssertNil([cache objectWithName:nil], @"The result should be nil");
   [cache removeObjectWithName:nil];
 
-  STAssertEquals([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"No objects should have been stored in the cache.");
   
   NIDebugAssertionsShouldBreak = YES;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testImageCacheStoreTooMuch {
   NIImageMemoryCache* cache = [[NIImageMemoryCache alloc] init];
 
@@ -590,13 +528,11 @@
   [cache storeObject: img2
             withName: @"obj2"];
 
-  STAssertEquals([cache count], (NSUInteger)1, @"Cache should have one object.");
-  STAssertNil([cache objectWithName:@"obj1"], @"Image 1 should not still be around.");
-  STAssertNotNil([cache objectWithName:@"obj2"], @"Image 2 should still be around.");
+  XCTAssertEqual([cache count], (NSUInteger)1, @"Cache should have one object.");
+  XCTAssertNil([cache objectWithName:@"obj1"], @"Image 1 should not still be around.");
+  XCTAssertNotNil([cache objectWithName:@"obj2"], @"Image 2 should still be around.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testImageCacheReduceMemoryUsage {
   NIImageMemoryCache* cache = [[NIImageMemoryCache alloc] init];
 
@@ -613,19 +549,17 @@
   [cache storeObject: img2
             withName: @"obj2"];
 
-  STAssertEquals([cache count], (NSUInteger)2, @"Cache should have two objects.");
+  XCTAssertEqual([cache count], (NSUInteger)2, @"Cache should have two objects.");
 
   // Our "low memory" cache size will only fit one image. The first image should be the one
   // removed.
   [cache reduceMemoryUsage];
 
-  STAssertEquals([cache count], (NSUInteger)1, @"Cache should have one object.");
-  STAssertNil([cache objectWithName:@"obj1"], @"Image 1 should not still be around.");
-  STAssertNotNil([cache objectWithName:@"obj2"], @"Image 2 should still be around.");
+  XCTAssertEqual([cache count], (NSUInteger)1, @"Cache should have one object.");
+  XCTAssertNil([cache objectWithName:@"obj1"], @"Image 1 should not still be around.");
+  XCTAssertNotNil([cache objectWithName:@"obj2"], @"Image 2 should still be around.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testImageCacheReduceMemoryUsageWithAccess {
   NIImageMemoryCache* cache = [[NIImageMemoryCache alloc] init];
 
@@ -645,18 +579,16 @@
   // Update the access time for img1.
   [cache objectWithName:@"obj1"];
 
-  STAssertEquals([cache count], (NSUInteger)2, @"Cache should have two objects.");
+  XCTAssertEqual([cache count], (NSUInteger)2, @"Cache should have two objects.");
 
   // Our "low memory" cache size will only fit one image.
   [cache reduceMemoryUsage];
 
-  STAssertEquals([cache count], (NSUInteger)1, @"Cache should have one object.");
-  STAssertNotNil([cache objectWithName:@"obj1"], @"Image 1 should still be around.");
-  STAssertNil([cache objectWithName:@"obj2"], @"Image 2 should not still be around.");
+  XCTAssertEqual([cache count], (NSUInteger)1, @"Cache should have one object.");
+  XCTAssertNotNil([cache objectWithName:@"obj1"], @"Image 1 should still be around.");
+  XCTAssertNil([cache objectWithName:@"obj2"], @"Image 2 should not still be around.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testImageCacheReduceMemoryUsageWithThrashingAccess {
   NIImageMemoryCache* cache = [[NIImageMemoryCache alloc] init];
 
@@ -678,18 +610,16 @@
     [cache objectWithName:@"obj2"];
   }
 
-  STAssertEquals([cache count], (NSUInteger)2, @"Cache should have two objects.");
+  XCTAssertEqual([cache count], (NSUInteger)2, @"Cache should have two objects.");
 
   // Our "low memory" cache size will only fit one image.
   [cache reduceMemoryUsage];
 
-  STAssertEquals([cache count], (NSUInteger)1, @"Cache should have one object.");
-  STAssertNil([cache objectWithName:@"obj1"], @"Image 1 should not still be around.");
-  STAssertNotNil([cache objectWithName:@"obj2"], @"Image 2 should still be around.");
+  XCTAssertEqual([cache count], (NSUInteger)1, @"Cache should have one object.");
+  XCTAssertNil([cache objectWithName:@"obj1"], @"Image 1 should not still be around.");
+  XCTAssertNotNil([cache objectWithName:@"obj2"], @"Image 2 should still be around.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testImageCacheStoringWithTinyLimit {
   NIImageMemoryCache* cache = [[NIImageMemoryCache alloc] init];
 
@@ -701,18 +631,17 @@
   [cache storeObject: img1
             withName: @"obj1"];
 
-  STAssertEquals([cache count], (NSUInteger)0, @"Cache should have zero objects.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"Cache should have zero objects.");
 
   [cache storeObject: img2
             withName: @"obj2"];
 
-  STAssertEquals([cache count], (NSUInteger)0, @"Cache should have zero objects.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"Cache should have zero objects.");
 
   [cache reduceMemoryUsage];
 
-  STAssertEquals([cache count], (NSUInteger)0, @"Cache should have zero objects.");
+  XCTAssertEqual([cache count], (NSUInteger)0, @"Cache should have zero objects.");
 
 }
-
 
 @end

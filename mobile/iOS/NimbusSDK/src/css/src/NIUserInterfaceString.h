@@ -1,5 +1,6 @@
 //
-// Copyright 2011 Max Metral
+// Copyright 2011-2014 NimbusKit
+// Originally written by Max Metral
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@
 /**
  * The notification key for when a strings file has changed.
  *
- *      @ingroup NimbusCSS
+ * @ingroup NimbusCSS
  *
  * This notification will be sent globally at the moment.
  *

@@ -1,5 +1,5 @@
 //
-// Copyright 2011 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#import "NIPreprocessorMacros.h" /* for NI_WEAK */
+#import "NIPreprocessorMacros.h" /* for weak */
 
 @protocol NICollectionViewModelDelegate;
 
@@ -39,7 +39,7 @@
  * This model simply manages the data relationship with your collection view. It is up to you to
  * implement the collection view's layout object.
  *
- *      @ingroup CollectionViewModels
+ * @ingroup CollectionViewModels
  */
 @interface NICollectionViewModel : NSObject <UICollectionViewDataSource>
 
@@ -55,16 +55,19 @@
 
 - (id)objectAtIndexPath:(NSIndexPath *)indexPath;
 
+// This method is not appropriate for performance critical codepaths.
+- (NSIndexPath *)indexPathForObject:(id)object;
+
 #pragma mark Creating Collection View Cells
 
-@property (nonatomic, NI_WEAK) id<NICollectionViewModelDelegate> delegate;
+@property (nonatomic, weak) id<NICollectionViewModelDelegate> delegate;
 
 @end
 
 /**
  * A protocol for NICollectionViewModel to fetch rows to be displayed for the collection view.
  *
- *      @ingroup CollectionViewModels
+ * @ingroup CollectionViewModels
  */
 @protocol NICollectionViewModelDelegate <NSObject>
 @required
@@ -121,7 +124,7 @@
  *
  * This method can be used to create an empty model.
  *
- *      @fn NICollectionViewModel::initWithDelegate:
+ * @fn NICollectionViewModel::initWithDelegate:
  */
 
 /**
@@ -142,7 +145,7 @@
  * [[NICollectionViewModel alloc] initWithListArray:contents delegate:self];
  * @endcode
  *
- *      @fn NICollectionViewModel::initWithListArray:delegate:
+ * @fn NICollectionViewModel::initWithListArray:delegate:
  */
 
 /**
@@ -169,7 +172,7 @@
  * [[NICollectionViewModel alloc] initWithSectionedArray:contents delegate:self];
  * @endcode
  *
- *      @fn NICollectionViewModel::initWithSectionedArray:delegate:
+ * @fn NICollectionViewModel::initWithSectionedArray:delegate:
  */
 
 
@@ -181,7 +184,15 @@
  * If no object exists at the given index path (an invalid index path, for example) then nil
  * will be returned.
  *
- *      @fn NICollectionViewModel::objectAtIndexPath:
+ * @fn NICollectionViewModel::objectAtIndexPath:
+ */
+
+/**
+ * Returns the index path of the given object within the model.
+ *
+ * If the model does not contain the object then nil will be returned.
+ *
+ * @fn NICollectionViewModel::indexPathForObject:
  */
 
 
@@ -190,5 +201,5 @@
 /**
  * A delegate used to fetch collection view cells for the data source.
  *
- *      @fn NICollectionViewModel::delegate
+ * @fn NICollectionViewModel::delegate
  */

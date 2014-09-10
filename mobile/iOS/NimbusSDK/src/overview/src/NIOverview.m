@@ -1,5 +1,5 @@
 //
-// Copyright 2011 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,25 +23,23 @@
 #import "NIOverviewPageView.h"
 #import "NIOverviewSwizzling.h"
 #import "NIOverviewLogger.h"
+#import "NimbusCore.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
 #error "Nimbus requires ARC support."
 #endif
 
 // Static state.
-static CGFloat  sOverviewHeight   = 60;
-static BOOL     sOverviewIsAwake  = NO;
+static CGFloat  sOverviewHeight                      = 60;
+static BOOL     sOverviewIsAwake                     = NO;
+static BOOL     sOverviewHasOverridenStatusBarHeight = NO;
 
 static NIOverviewView* sOverviewView = nil;
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-#pragma mark Logging
+#pragma mark - Logging
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * @internal
  *
@@ -51,7 +49,7 @@ static NIOverviewView* sOverviewView = nil;
  *
  *   void logger(const char *message, unsigned length, BOOL withSyslogBanner)
  *
- *      @attention This method is undocumented, unsupported, and unlikely to be around
+ * @attention This method is undocumented, unsupported, and unlikely to be around
  *                 forever. Don't go using it in production code.
  *
  * Source: http://support.apple.com/kb/TA45403?viewlocale=en_US
@@ -61,7 +59,6 @@ extern void _NSSetLogCStringFunction(void(*)(const char *, unsigned, BOOL));
 void NIOverviewLogMethod(const char* message, unsigned length, BOOL withSyslogBanner);
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * Pipes NSLog messages to the Overview and stderr.
  *
@@ -97,20 +94,13 @@ void NIOverviewLogMethod(const char* message, unsigned length, BOOL withSyslogBa
 
 #endif
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NIOverview
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-#pragma mark Device Orientation Changes
+#pragma mark - Device Orientation Changes
 
 #if defined(DEBUG) || defined(NI_DEBUG)
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 + (void)didChangeOrientation {
   static UIDeviceOrientation lastOrientation = UIDeviceOrientationUnknown;
 
@@ -138,8 +128,6 @@ void NIOverviewLogMethod(const char* message, unsigned length, BOOL withSyslogBa
   }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 + (void)statusBarWillChangeFrame {
   [UIView beginAnimations:nil context:nil];
   [UIView setAnimationDuration:NIStatusBarBoundsChangeAnimationDuration()];
@@ -149,8 +137,6 @@ void NIOverviewLogMethod(const char* message, unsigned length, BOOL withSyslogBa
   [UIView commitAnimations];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 + (void)showoverviewAfterRotation {
   // Don't modify the overview's frame directly, just modify the transform/center/bounds
   // properties so that the view is rotated with the device.
@@ -183,34 +169,36 @@ void NIOverviewLogMethod(const char* message, unsigned length, BOOL withSyslogBa
   [UIView commitAnimations];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 + (void)didReceiveMemoryWarning {
   [[NIOverview logger] addEventLog:
    [[NIOverviewEventLogEntry alloc] initWithType:NIOverviewEventDidReceiveMemoryWarning]];
 }
 
-
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-#pragma mark Public Methods
+#pragma mark - Public
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 + (void)applicationDidFinishLaunching {
+#if defined(DEBUG) || defined(NI_DEBUG)
+  [self applicationDidFinishLaunchingWithStatusBarHeightOverride:YES];
+#endif
+}
+
++ (void)applicationDidFinishLaunchingWithStatusBarHeightOverride:(BOOL)overrideStatusBarHeight {
 #if defined(DEBUG) || defined(NI_DEBUG)
   if (!sOverviewIsAwake) {
     sOverviewIsAwake = YES;
+    sOverviewHasOverridenStatusBarHeight = overrideStatusBarHeight;
 
     // Set up the logger right away so that all calls to NSLog will be captured by the
     // overview.
     _NSSetLogCStringFunction(NIOverviewLogMethod);
 
-    NIOverviewSwizzleMethods();
+    if (overrideStatusBarHeight) {
+      NIOverviewSwizzleMethods();
+    }
 
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(didChangeOrientation)
@@ -229,9 +217,14 @@ void NIOverviewLogMethod(const char* message, unsigned length, BOOL withSyslogBa
 #endif
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 + (void)addOverviewToWindow:(UIWindow *)window {
+#if defined(DEBUG) || defined(NI_DEBUG)
+  [self addOverviewToWindow:window enableDraggingVertically:NO];
+#endif
+}
+
++ (void)addOverviewToWindow:(UIWindow *)window
+   enableDraggingVertically:(BOOL)enableDraggingVertically {
 #if defined(DEBUG) || defined(NI_DEBUG)
   if (nil != sOverviewView) {
     // Remove the old overview in case this gets called multiple times (not sure why you would
@@ -240,6 +233,7 @@ void NIOverviewLogMethod(const char* message, unsigned length, BOOL withSyslogBa
   }
 
   sOverviewView = [[NIOverviewView alloc] initWithFrame:[self frame]];
+  [sOverviewView setEnableDraggingVertically:enableDraggingVertically];
 
   [sOverviewView addPageView:[NIInspectionOverviewPageView page]];
   [sOverviewView addPageView:[NIOverviewMemoryPageView page]];
@@ -259,8 +253,6 @@ void NIOverviewLogMethod(const char* message, unsigned length, BOOL withSyslogBa
 #endif
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 + (NIOverviewLogger *)logger {
 #if defined(DEBUG) || defined(NI_DEBUG)
   return [NIOverviewLogger sharedLogger];
@@ -269,8 +261,6 @@ void NIOverviewLogMethod(const char* message, unsigned length, BOOL withSyslogBa
 #endif
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 + (CGFloat)height {
 #if defined(DEBUG) || defined(NI_DEBUG)
   return sOverviewHeight;
@@ -279,42 +269,39 @@ void NIOverviewLogMethod(const char* message, unsigned length, BOOL withSyslogBa
 #endif
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 + (CGRect)frame {
 #if defined(DEBUG) || defined(NI_DEBUG)
   UIInterfaceOrientation orient = NIInterfaceOrientation();
   CGFloat overviewWidth;
   CGRect frame;
+  CGFloat overviewHeight =
+      sOverviewHasOverridenStatusBarHeight ? NIOverviewStatusBarHeight() : NIStatusBarHeight();
 
   // We can't take advantage of automatic view positioning because the overview exists
   // at the topmost view level (even above the root view controller). As such, we have to
   // calculate the frame depending on the interface orientation.
   if (orient == UIInterfaceOrientationLandscapeLeft) {
     overviewWidth = [UIScreen mainScreen].bounds.size.height;
-    frame = CGRectMake(NIOverviewStatusBarHeight(), 0, sOverviewHeight, overviewWidth);
+    frame = CGRectMake(overviewHeight, 0, sOverviewHeight, overviewWidth);
 
   } else if (orient == UIInterfaceOrientationLandscapeRight) {
     overviewWidth = [UIScreen mainScreen].bounds.size.height;
     frame = CGRectMake([UIScreen mainScreen].bounds.size.width
-                       - (NIOverviewStatusBarHeight() + sOverviewHeight), 0,
-                       sOverviewHeight, overviewWidth);
+                       - (overviewHeight + sOverviewHeight), 0, sOverviewHeight, overviewWidth);
 
   } else if (orient == UIInterfaceOrientationPortraitUpsideDown) {
     overviewWidth = [UIScreen mainScreen].bounds.size.width;
     frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height
-                       - (NIOverviewStatusBarHeight() + sOverviewHeight),
-                       overviewWidth, sOverviewHeight);
+                       - (overviewHeight + sOverviewHeight), overviewWidth, sOverviewHeight);
 
   } else if (orient == UIInterfaceOrientationPortrait) {
     overviewWidth = [UIScreen mainScreen].bounds.size.width;
-    frame = CGRectMake(0, NIOverviewStatusBarHeight(), overviewWidth, sOverviewHeight);
+    frame = CGRectMake(0, overviewHeight, overviewWidth, sOverviewHeight);
 
   } else {
     overviewWidth = [UIScreen mainScreen].bounds.size.width;
-    frame = CGRectMake(0, NIOverviewStatusBarHeight(), overviewWidth, sOverviewHeight);
+    frame = CGRectMake(0, overviewHeight, overviewWidth, sOverviewHeight);
   }
-
   if ([[UIApplication sharedApplication] isStatusBarHidden]) {
     // When the status bar is hidden we want to position the overview offscreen.
     switch (orient) {
@@ -326,6 +313,10 @@ void NIOverviewLogMethod(const char* message, unsigned length, BOOL withSyslogBa
         frame = CGRectOffset(frame, frame.size.width, 0);
         break;
       }
+#if defined(__IPHONE_8_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_8_0
+        // Only defined in >= iOS8 SDK
+      case UIInterfaceOrientationUnknown:
+#endif  // defined(__IPHONE_8_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_8_0
       case UIInterfaceOrientationPortrait: {
         frame = CGRectOffset(frame, 0, -frame.size.height);
         break;
@@ -343,8 +334,6 @@ void NIOverviewLogMethod(const char* message, unsigned length, BOOL withSyslogBa
 #endif
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 + (UIView *)view {
 #if defined(DEBUG) || defined(NI_DEBUG)
   return sOverviewView;
@@ -352,6 +341,5 @@ void NIOverviewLogMethod(const char* message, unsigned length, BOOL withSyslogBa
   return nil;
 #endif
 }
-
 
 @end

@@ -1,5 +1,5 @@
 //
-// Copyright 2011 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -82,9 +82,7 @@ extern NSString* const NICSSViewBackgroundColorKey;
  */
 - (NSArray*) buildSubviews: (NSArray*) viewSpecs inDOM: (NIDOM*) dom;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// View frame and bounds manipulation helpers
-////////////////////////////////////////////////////////////////////////////////////////////////////
+/// View frame and bounds manipulation helpers
 @property (nonatomic) CGFloat frameWidth;
 @property (nonatomic) CGFloat frameHeight;
 @property (nonatomic) CGFloat frameMinX;

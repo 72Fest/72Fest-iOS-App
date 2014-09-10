@@ -1,5 +1,5 @@
 //
-// Copyright 2012 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,19 +27,13 @@
 #endif
 
 @interface NITableViewActions()
-@property (nonatomic, NI_STRONG) NSMutableSet* forwardDelegates;
+@property (nonatomic, strong) NSMutableSet* forwardDelegates;
 @end
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NITableViewActions
 
-@synthesize forwardDelegates = _forwardDelegates;
-@synthesize tableViewCellSelectionStyle = _tableViewCellSelectionStyle;
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithTarget:(id)target {
   if ((self = [super initWithTarget:target])) {
     _forwardDelegates = NICreateNonRetainingMutableSet();
@@ -48,21 +42,15 @@
   return self;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Forward Invocations
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)shouldForwardSelector:(SEL)selector {
   struct objc_method_description description;
   description = protocol_getMethodDescription(@protocol(UITableViewDelegate), selector, NO, YES);
   return (description.name != NULL && description.types != NULL);
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)respondsToSelector:(SEL)selector {
   if ([super respondsToSelector:selector]) {
     return YES;
@@ -77,8 +65,6 @@
   return NO;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)selector {
   NSMethodSignature *signature = [super methodSignatureForSelector:selector];
   if (signature == nil) {
@@ -91,8 +77,6 @@
   return signature;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)forwardInvocation:(NSInvocation *)invocation {
   BOOL didForward = NO;
   
@@ -111,26 +95,18 @@
   }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id<UITableViewDelegate>)forwardingTo:(id<UITableViewDelegate>)forwardDelegate {
   [self.forwardDelegates addObject:forwardDelegate];
   return self;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)removeForwarding:(id<UITableViewDelegate>)forwardDelegate {
   [self.forwardDelegates removeObject:forwardDelegate];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Object State
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UITableViewCellAccessoryType)accessoryTypeForObject:(id)object {
   NIObjectActions* action = [self actionForObjectOrClassOfObject:object];
   // Detail disclosure indicator takes precedence over regular disclosure indicator.
@@ -146,8 +122,6 @@
   return UITableViewCellAccessoryNone;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UITableViewCellSelectionStyle)selectionStyleForObject:(id)object {
   // If the cell is tappable, reflect that in the selection style.
   NIObjectActions* action = [self actionForObjectOrClassOfObject:object];
@@ -159,13 +133,9 @@
   return UITableViewCellSelectionStyleNone;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - UITableViewDelegate
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
   NIDASSERT([tableView.dataSource isKindOfClass:[NITableViewModel class]]);
   if ([tableView.dataSource isKindOfClass:[NITableViewModel class]]) {
@@ -188,7 +158,6 @@
   }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
   NIDASSERT([tableView.dataSource isKindOfClass:[NITableViewModel class]]);
   if ([tableView.dataSource isKindOfClass:[NITableViewModel class]]) {
@@ -253,8 +222,6 @@
   }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
   NIDASSERT([tableView.dataSource isKindOfClass:[NITableViewModel class]]);
   if ([tableView.dataSource isKindOfClass:[NITableViewModel class]]) {

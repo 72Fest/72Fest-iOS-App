@@ -1,5 +1,5 @@
 //
-// Copyright 2011-2012 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 @implementation BadgedLauncherViewObject
 
-@synthesize badgeNumber = _badgeNumber;
 
 - (id)initWithTitle:(NSString *)title image:(UIImage *)image badgeNumber:(NSInteger)badgeNumber {
   if ((self = [super initWithTitle:title image:image])) {
@@ -41,7 +40,6 @@
 
 @implementation BadgedLauncherButtonView
 
-@synthesize badgeView = _badgeView;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier {
   if ((self = [super initWithReuseIdentifier:reuseIdentifier])) {
@@ -78,10 +76,10 @@
 - (void)shouldUpdateViewWithObject:(BadgedLauncherViewObject *)object {
   [super shouldUpdateViewWithObject:object];
 
-  NSInteger badgeNumber = boundi(object.badgeNumber, 0, 100);
+  NSInteger badgeNumber = NIBoundi(object.badgeNumber, 0, 100);
   if (object.badgeNumber > 0) {
     if (badgeNumber < 100) {
-      self.badgeView.text = [NSString stringWithFormat:@"%d", badgeNumber];
+      self.badgeView.text = [NSString stringWithFormat:@"%zd", badgeNumber];
     } else {
       self.badgeView.text = @"99+";
     }

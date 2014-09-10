@@ -1,5 +1,5 @@
 //
-// Copyright 2011 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -44,19 +44,13 @@ NSString* const NIJSONDidChangeNameKey = @"NIJSONNameKey";
 @property (nonatomic,strong) NSNetService *netService;
 @end
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NIChameleonObserver
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dealloc {
   [_queue cancelAllOperations];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStylesheetCache:(NIStylesheetCache *)stylesheetCache host:(NSString *)host {
   if ((self = [super init])) {
     // You must provide a stylesheet cache.
@@ -95,8 +89,6 @@ NSString* const NIJSONDidChangeNameKey = @"NIJSONNameKey";
   return self;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)downloadStylesheetWithFilename:(NSString *)path {
   NSURL* url = [NSURL URLWithString:[_host stringByAppendingString:path]];
   NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
@@ -140,7 +132,6 @@ NSString* const NIJSONDidChangeNameKey = @"NIJSONNameKey";
   [_queue addOperation:requestOp];
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)downloadStringsWithFilename:(NSString *)path {
   NSURL* url = [NSURL URLWithString:[_host stringByAppendingString:path]];
   NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
@@ -165,7 +156,6 @@ NSString* const NIJSONDidChangeNameKey = @"NIJSONNameKey";
   [_queue addOperation:requestOp];
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)downloadJSONWithFilename:(NSString *)path {
     NSURL* url = [NSURL URLWithString:[_host stringByAppendingString:path]];
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
@@ -191,36 +181,24 @@ NSString* const NIJSONDidChangeNameKey = @"NIJSONNameKey";
     [_queue addOperation:requestOp];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSString *)pathFromPath:(NSString *)path {
-  return [path md5Hash];
+  return NIMD5HashFromString(path);
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - NICSSParserDelegate
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSString *)cssParser:(NICSSParser *)parser pathFromPath:(NSString *)path {
   return [self pathFromPath:path];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark - Public Methods
+#pragma mark - Public
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NIStylesheet *)stylesheetForPath:(NSString *)path {
   return [_stylesheetCache stylesheetWithPath:path];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)watchSkinChanges {
   NSURL* url = [NSURL URLWithString:[_host stringByAppendingString:@"watch"]];
   NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
@@ -279,7 +257,7 @@ NSString* const NIJSONDidChangeNameKey = @"NIJSONNameKey";
 
 -(void)netServiceDidResolveAddress:(NSNetService *)sender
 {
-    _host = [NSString stringWithFormat:@"http://%@:%d/", [sender hostName], [sender port]];
+    _host = [NSString stringWithFormat:@"http://%@:%zd/", [sender hostName], [sender port]];
     self.netService = nil;
     [self watchSkinChanges];
 }

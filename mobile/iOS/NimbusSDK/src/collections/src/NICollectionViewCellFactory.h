@@ -1,5 +1,5 @@
 //
-// Copyright 2011 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@
  * protocol on an object outweighs the benefit of using the factory, i.e. when you want to map
  * simple types such as NSString to cells.
  *
- *      @ingroup CollectionViewCellFactory
+ * @ingroup CollectionViewCellFactory
  */
 @interface NICollectionViewCellFactory : NSObject <NICollectionViewModelDelegate>
 
@@ -110,7 +110,7 @@ _model.delegate = (id)[NICollectionViewCellFactory class];
 /**
  * The protocol for an object that can be used in the NICollectionViewCellFactory.
  *
- *      @ingroup CollectionViewCellFactory
+ * @ingroup CollectionViewCellFactory
  */
 @protocol NICollectionViewCellObject <NSObject>
 @required
@@ -121,13 +121,27 @@ _model.delegate = (id)[NICollectionViewCellFactory class];
 @end
 
 /**
+ * The protocol for an object that can be used in the NICollectionViewCellFactory with Interface
+ * Builder nibs.
+ *
+ * @ingroup CollectionViewCellFactory
+ */
+@protocol NICollectionViewNibCellObject <NSObject>
+@required
+
+/** A nib that contains a collection view cell to display this object's contents. */
+- (UINib *)collectionViewCellNib;
+
+@end
+
+/**
  * The protocol for a cell created in the NICollectionViewCellFactory.
  *
  * Cells that implement this protocol are given the object that implemented the
  * NICollectionViewCellObject protocol and returned this cell's class name in
  * @link NICollectionViewCellObject::collectionViewCellClass collectionViewCellClass@endlink.
  *
- *      @ingroup CollectionViewCellFactory
+ * @ingroup CollectionViewCellFactory
  */
 @protocol NICollectionViewCell <NSObject>
 @required
@@ -175,12 +189,12 @@ _model.delegate = (id)[NICollectionViewCellFactory class];
 + (id)objectWithCellClass:(Class)collectionViewCellClass userInfo:(id)userInfo;
 + (id)objectWithCellClass:(Class)collectionViewCellClass;
 
-@property (nonatomic, readonly, NI_STRONG) id userInfo;
+@property (nonatomic, readonly, strong) id userInfo;
 
 @end
 
 /**
  * An object that can be used to populate information in the cell.
  *
- *      @fn NICollectionViewCellObject::userInfo
+ * @fn NICollectionViewCellObject::userInfo
  */

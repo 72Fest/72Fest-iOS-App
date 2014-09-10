@@ -1,5 +1,6 @@
 //
-// Copyright 2011 Max Metral
+// Copyright 2011-2014 NimbusKit
+// Originally written by Max Metral
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,17 +28,17 @@
  * If non-nil, this color will be used to draw the placeholder text.
  * If nil, we will use the system default.
  */
-@property (nonatomic,strong) UIColor *placeholderTextColor;
+@property (nonatomic, strong) UIColor* placeholderTextColor;
 
 /**
  * If non-nil, this font will be used to draw the placeholder text.
  * else the text field font will be used.
  */
-@property (nonatomic,strong) UIFont *placeholderFont;
+@property (nonatomic, strong) UIFont* placeholderFont;
 
 /**
  * The amount to inset the text by, or zero to use default behavior
  */
-@property (nonatomic,assign) UIEdgeInsets textInsets;
+@property (nonatomic, assign) UIEdgeInsets textInsets;
 
 @end

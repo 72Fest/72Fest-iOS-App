@@ -1,5 +1,5 @@
 //
-// Copyright 2011-2012 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -54,25 +54,21 @@
 // ensure that the container view is not equivalent to the rotating view. To solve this we simply
 // don't subclass UITableViewController and instead implement the basic UITableViewController
 // functionality ourselves.
-@property (nonatomic, readwrite, retain) UITableView* tableView;
+@property (nonatomic, retain) UITableView* tableView;
 
 // In order to implement snapshot rotations we must create a snapshot rotation object and keep it
 // around at least for the duration of the rotation. In this example we create the snapshot rotation
 // object during initialization and just keep it around forever. If you wanted to save memory you
 // could create the rotation object when a rotation is about to begin and then release it when the
 // rotation completes.
-@property (nonatomic, readwrite, retain) NISnapshotRotation* snapshotRotation;
+@property (nonatomic, retain) NISnapshotRotation* snapshotRotation;
 
-@property (nonatomic, readwrite, retain) NITableViewModel* model;
-@property (nonatomic, readwrite, retain) NITableViewActions* actions;
+@property (nonatomic, retain) NITableViewModel* model;
+@property (nonatomic, retain) NITableViewActions* actions;
 @end
 
 @implementation SnapshotRotationTableViewController
 
-@synthesize tableView = _tableView;
-@synthesize snapshotRotation = _snapshotRotation;
-@synthesize model = _model;
-@synthesize actions = _actions;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
   if ((self = [super initWithNibName:nil bundle:nil])) {

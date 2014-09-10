@@ -1,5 +1,5 @@
 //
-// Copyright 2011 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,6 +28,8 @@
 #error "Nimbus requires ARC support."
 #endif
 
+static const NSUInteger kNumberOfFingersForPanGestureRecognizer = 1;
+
 @interface NIOverviewView()
 
 - (CGFloat)pageHorizontalMargin;
@@ -35,22 +37,29 @@
 
 @end
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-@implementation NIOverviewView
+@implementation NIOverviewView {
+  UIImage*  _backgroundImage;
 
-@synthesize translucent = _translucent;
+  // State
+  BOOL            _translucent;
+  NSMutableArray* _pageViews;
+
+  // Views
+  UIScrollView* _pagingScrollView;
+
+  // Gesture recognizer
+  CGRect _initialFrame;
+  UIPanGestureRecognizer *_panGestureRecognizer;
+}
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
   if ((self = [super initWithFrame:frame])) {
     _pageViews = [[NSMutableArray alloc] init];
 
     _backgroundImage = [UIImage imageWithContentsOfFile:
                         NIPathForBundleResource(nil, @"NimbusOverviewer.bundle/gfx/blueprint.gif")];
-    self.backgroundColor = [UIColor colorWithPatternImage:_backgroundImage];
+    self.backgroundColor = NIIsTintColorGloballySupported() ? self.tintColor : [UIColor colorWithPatternImage:_backgroundImage];
 
     _pagingScrollView = [[UIScrollView alloc] initWithFrame:[self frameForPagingScrollView]];
     _pagingScrollView.pagingEnabled = YES;
@@ -68,6 +77,12 @@
                                              selector:@selector(updatePages)
                                                  name:NIOverviewLoggerDidAddDeviceLog
                                                object:nil];
+    _panGestureRecognizer =
+        [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                action:@selector(didPanMapWithGestureRecognizer:)];
+    _panGestureRecognizer.maximumNumberOfTouches = kNumberOfFingersForPanGestureRecognizer;
+    _panGestureRecognizer.minimumNumberOfTouches = kNumberOfFingersForPanGestureRecognizer;
+    [self addGestureRecognizer:_panGestureRecognizer];
   }
   return self;
 }
@@ -78,19 +93,13 @@
                                                 object:nil];
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-#pragma mark Page Layout
+#pragma mark - Page Layout
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGFloat)pageHorizontalMargin {
   return 10;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGRect)frameForPagingScrollView {
   CGRect frame = self.bounds;
 
@@ -102,15 +111,11 @@
   return frame;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGSize)contentSizeForPagingScrollView {
   CGRect bounds = _pagingScrollView.bounds;
   return CGSizeMake(bounds.size.width * [_pageViews count], bounds.size.height);
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGRect)frameForPageAtIndex:(NSInteger)pageIndex {
   // We have to use our paging scroll view's bounds, not frame, to calculate the page
   // placement. When the device is in landscape orientation, the frame will still be in
@@ -128,8 +133,6 @@
   return pageFrame;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)layoutPages {
   _pagingScrollView.contentSize = [self contentSizeForPagingScrollView];
 
@@ -139,8 +142,6 @@
   }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSInteger)visiblePageIndex {
   CGFloat offset = _pagingScrollView.contentOffset.x;
   CGFloat pageWidth = _pagingScrollView.bounds.size.width;
@@ -148,8 +149,6 @@
   return (NSInteger)(offset / pageWidth);
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setBounds:(CGRect)bounds {
   NSInteger visiblePageIndex = [self visiblePageIndex];
 
@@ -162,8 +161,6 @@
   _pagingScrollView.contentOffset = CGPointMake(newOffset, 0);
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setFrame:(CGRect)frame {
   NSInteger visiblePageIndex = [self visiblePageIndex];
   
@@ -176,14 +173,9 @@
   _pagingScrollView.contentOffset = CGPointMake(newOffset, 0);
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-#pragma mark Public Methods
+#pragma mark - Public
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setTranslucent:(BOOL)translucent {
   if (_translucent != translucent) {
     _translucent = translucent;
@@ -194,12 +186,12 @@
 
     self.backgroundColor = (_translucent
                             ? [UIColor colorWithWhite:0 alpha:0.5f]
-                            : [UIColor colorWithPatternImage:_backgroundImage]);
+                            : ((NIIsTintColorGloballySupported() && self.tintColor)
+                               ? self.tintColor
+                               : [UIColor colorWithPatternImage:_backgroundImage]));
   }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)prependPageView:(NIOverviewPageView *)page {
   [_pageViews insertObject:page atIndex:0];
   [_pagingScrollView addSubview:page];
@@ -207,8 +199,6 @@
   [self layoutPages];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)addPageView:(NIOverviewPageView *)page {
   [_pageViews addObject:page];
   [_pagingScrollView addSubview:page];
@@ -216,8 +206,6 @@
   [self layoutPages];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)removePageView:(NIOverviewPageView *)page {
   [_pageViews removeObject:page];
   [page removeFromSuperview];
@@ -225,20 +213,42 @@
   [self layoutPages];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)updatePages {
   for (NIOverviewPageView* pageView in _pageViews) {
     [pageView update];
   }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)flashScrollIndicators {
   [_pagingScrollView flashScrollIndicators];
 }
 
+#pragma mark - Gesture Recognizer
+
+
+
+- (void)didPanMapWithGestureRecognizer:(UIPanGestureRecognizer *)gestureRecognizer {
+  if (!_enableDraggingVertically || _panGestureRecognizer != gestureRecognizer) {
+    return;
+  }
+
+  if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+    _initialFrame = self.frame;
+  } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+    CGPoint translation = [gestureRecognizer translationInView:self.superview];
+    UIInterfaceOrientation orientation = NIInterfaceOrientation();
+    CGRect rect = self.frame;
+    CGRect superRect = self.superview.frame;
+    if (UIInterfaceOrientationIsPortrait(orientation)) {
+      CGFloat y = _initialFrame.origin.y + translation.y;
+      rect.origin.y = MIN(MAX(y, 0), superRect.size.height - _initialFrame.size.height);
+    } else if (UIInterfaceOrientationIsLandscape(orientation)) {
+      CGFloat x = _initialFrame.origin.x + translation.x;
+      rect.origin.x = MIN(MAX(x, 0), superRect.size.width - _initialFrame.size.width);
+    }
+    self.frame = rect;
+  }
+}
 
 @end
 

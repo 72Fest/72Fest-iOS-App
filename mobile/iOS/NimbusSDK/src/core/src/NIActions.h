@@ -1,5 +1,5 @@
 //
-// Copyright 2011-2013 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,6 +33,12 @@ typedef BOOL (^NIActionBlock)(id object, id target, NSIndexPath* indexPath);
 
 /**
  * The NIActions class provides a generic interface for attaching actions to objects.
+ *
+ * NIActions are used to implement user interaction in UITableViews and UICollectionViews via the
+ * corresponding classes (NITableViewActions and NICollectionViewActions) in the respective
+ * feature. NIActions separates the necessity
+ *
+ * <h3>Types of Actions</h3>
  *
  * The three primary types of actions are:
  *
@@ -118,7 +124,7 @@ extern "C" {
  * The target property of the NIActions instance must be an instance of UIViewController
  * with an attached navigationController.
  *
- *      @param controllerClass The class of controller to instantiate.
+ * @param controllerClass The class of controller to instantiate.
  */
 NIActionBlock NIPushControllerAction(Class controllerClass);
 
@@ -136,8 +142,8 @@ NIActionBlock NIPushControllerAction(Class controllerClass);
  *
  * The controller is stored as a weak reference internally.
  *
- *      @param controller The controller that will be used in action blocks.
- *      @fn NIActions::initWithController:
+ * @param controller The controller that will be used in action blocks.
+ * @fn NIActions::initWithController:
  */
 
 /**
@@ -147,9 +153,9 @@ NIActionBlock NIPushControllerAction(Class controllerClass);
  *
  * The target is stored as a weak reference internally.
  *
- *      @param target The target that will be provided to action blocks and on which selectors will
+ * @param target The target that will be provided to action blocks and on which selectors will
  *                    be performed.
- *      @fn NIActions::initWithTarget:
+ * @fn NIActions::initWithTarget:
  */
 
 /** @name Mapping Objects */
@@ -170,12 +176,12 @@ NIActionBlock NIPushControllerAction(Class controllerClass);
  *
  * The tap action will be invoked first, followed by the navigation action if one is attached.
  *
- *      @param object The object to attach the action to. This object must be contained within
+ * @param object The object to attach the action to. This object must be contained within
  *                    an NITableViewModel.
- *      @param action The tap action block.
- *      @returns The object that you attached this action to.
- *      @fn NIActions::attachToObject:tapBlock:
- *      @sa NIActions::attachToObject:tapSelector:
+ * @param action The tap action block.
+ * @returns The object that you attached this action to.
+ * @fn NIActions::attachToObject:tapBlock:
+ * @sa NIActions::attachToObject:tapSelector:
  */
 
 /**
@@ -187,11 +193,11 @@ NIActionBlock NIPushControllerAction(Class controllerClass);
  * When a cell's detail button is tapped, the detail action block will be executed. The return
  * value of the block is ignored.
  *
- *      @param object The object to attach the action to. This object must be contained within
+ * @param object The object to attach the action to. This object must be contained within
  *                    an NITableViewModel.
- *      @param action The detail action block.
- *      @returns The object that you attached this action to.
- *      @fn NIActions::attachToObject:detailBlock:
+ * @param action The detail action block.
+ * @returns The object that you attached this action to.
+ * @fn NIActions::attachToObject:detailBlock:
  */
 
 /**
@@ -206,11 +212,11 @@ NIActionBlock NIPushControllerAction(Class controllerClass);
  * If a tap action also exists for this object then the tap action will be executed first, followed
  * by the navigation action.
  *
- *      @param object The object to attach the action to. This object must be contained within
+ * @param object The object to attach the action to. This object must be contained within
  *                    an NITableViewModel.
- *      @param action The navigation action block.
- *      @returns The object that you attached this action to.
- *      @fn NIActions::attachToObject:navigationBlock:
+ * @param action The navigation action block.
+ * @returns The object that you attached this action to.
+ * @fn NIActions::attachToObject:navigationBlock:
  */
 
 /**
@@ -236,12 +242,12 @@ NIActionBlock NIPushControllerAction(Class controllerClass);
  *
  * The tap action will be invoked first, followed by the navigation action if one is attached.
  *
- *      @param object The object to attach the selector to. This object must be contained within
+ * @param object The object to attach the selector to. This object must be contained within
  *                    an NITableViewModel.
- *      @param selector The selector that will be invoked by this action.
- *      @returns The object that you attached this action to.
- *      @fn NIActions::attachToObject:tapSelector:
- *      @sa NIActions::attachToObject:tapBlock:
+ * @param selector The selector that will be invoked by this action.
+ * @returns The object that you attached this action to.
+ * @fn NIActions::attachToObject:tapSelector:
+ * @sa NIActions::attachToObject:tapBlock:
  */
 
 /**
@@ -260,12 +266,12 @@ NIActionBlock NIPushControllerAction(Class controllerClass);
  * accessory indicator is tapped, unless that selector does not exist on the @c target in which
  * case nothing happens.
  *
- *      @param object The object to attach the selector to. This object must be contained within
+ * @param object The object to attach the selector to. This object must be contained within
  *                    an NITableViewModel.
- *      @param selector The selector that will be invoked by this action.
- *      @returns The object that you attached this action to.
- *      @fn NIActions::attachToObject:detailSelector:
- *      @sa NIActions::attachToObject:detailBlock:
+ * @param selector The selector that will be invoked by this action.
+ * @returns The object that you attached this action to.
+ * @fn NIActions::attachToObject:detailSelector:
+ * @sa NIActions::attachToObject:detailBlock:
  */
 
 /**
@@ -286,12 +292,12 @@ NIActionBlock NIPushControllerAction(Class controllerClass);
  * selector is tapped, unless that selector does not exist on the @c target in which case nothing
  * happens.
  *
- *      @param object The object to attach the selector to. This object must be contained within
+ * @param object The object to attach the selector to. This object must be contained within
  *                    an NITableViewModel.
- *      @param selector The selector that will be invoked by this action.
- *      @returns The object that you attached this action to.
- *      @fn NIActions::attachToObject:navigationSelector:
- *      @sa NIActions::attachToObject:navigationBlock:
+ * @param selector The selector that will be invoked by this action.
+ * @returns The object that you attached this action to.
+ * @fn NIActions::attachToObject:navigationSelector:
+ * @sa NIActions::attachToObject:navigationBlock:
  */
 
 /** @name Mapping Classes */
@@ -302,9 +308,9 @@ NIActionBlock NIPushControllerAction(Class controllerClass);
  * This method behaves similarly to attachToObject:tapBlock: except it attaches a tap action to
  * all instances and subclassed instances of a given class.
  *
- *      @param aClass The class to attach the action to.
- *      @param action The tap action block.
- *      @fn NIActions::attachToClass:tapBlock:
+ * @param aClass The class to attach the action to.
+ * @param action The tap action block.
+ * @fn NIActions::attachToClass:tapBlock:
  */
 
 /**
@@ -313,9 +319,9 @@ NIActionBlock NIPushControllerAction(Class controllerClass);
  * This method behaves similarly to attachToObject:detailBlock: except it attaches a detail action
  * to all instances and subclassed instances of a given class.
  *
- *      @param aClass The class to attach the action to.
- *      @param action The detail action block.
- *      @fn NIActions::attachToClass:detailBlock:
+ * @param aClass The class to attach the action to.
+ * @param action The detail action block.
+ * @fn NIActions::attachToClass:detailBlock:
  */
 
 /**
@@ -324,9 +330,9 @@ NIActionBlock NIPushControllerAction(Class controllerClass);
  * This method behaves similarly to attachToObject:navigationBlock: except it attaches a navigation
  * action to all instances and subclassed instances of a given class.
  *
- *      @param aClass The class to attach the action to.
- *      @param action The navigation action block.
- *      @fn NIActions::attachToClass:navigationBlock:
+ * @param aClass The class to attach the action to.
+ * @param action The navigation action block.
+ * @fn NIActions::attachToClass:navigationBlock:
  */
 
 /**
@@ -335,9 +341,9 @@ NIActionBlock NIPushControllerAction(Class controllerClass);
  * This method behaves similarly to attachToObject:tapBlock: except it attaches a tap action to
  * all instances and subclassed instances of a given class.
  *
- *      @param aClass The class to attach the action to.
- *      @param selector The tap selector.
- *      @fn NIActions::attachToClass:tapSelector:
+ * @param aClass The class to attach the action to.
+ * @param selector The tap selector.
+ * @fn NIActions::attachToClass:tapSelector:
  */
 
 /**
@@ -346,9 +352,9 @@ NIActionBlock NIPushControllerAction(Class controllerClass);
  * This method behaves similarly to attachToObject:detailBlock: except it attaches a detail action
  * to all instances and subclassed instances of a given class.
  *
- *      @param aClass The class to attach the action to.
- *      @param selector The tap selector.
- *      @fn NIActions::attachToClass:detailSelector:
+ * @param aClass The class to attach the action to.
+ * @param selector The tap selector.
+ * @fn NIActions::attachToClass:detailSelector:
  */
 
 /**
@@ -357,9 +363,9 @@ NIActionBlock NIPushControllerAction(Class controllerClass);
  * This method behaves similarly to attachToObject:navigationBlock: except it attaches a navigation
  * action to all instances and subclassed instances of a given class.
  *
- *      @param aClass The class to attach the action to.
- *      @param selector The tap selector.
- *      @fn NIActions::attachToClass:navigationSelector:
+ * @param aClass The class to attach the action to.
+ * @param selector The tap selector.
+ * @fn NIActions::attachToClass:navigationSelector:
  */
 
 /** @name Object State */
@@ -367,7 +373,7 @@ NIActionBlock NIPushControllerAction(Class controllerClass);
 /**
  * Returns whether or not the object has any actions attached to it.
  *
- *      @fn NIActions::isObjectActionable:
+ * @fn NIActions::isObjectActionable:
  */
 
 /**
@@ -376,14 +382,12 @@ NIActionBlock NIPushControllerAction(Class controllerClass);
  * If the key class is a subclass of any mapped key classes, the nearest ancestor class's mapped
  * object will be returned and keyClass will be added to the map for future accesses.
  *
- *      @param keyClass The key class that will be used to find the mapping in map.
- *      @param map A map of key classes to classes. May be modified if keyClass is a subclass of
+ * @param keyClass The key class that will be used to find the mapping in map.
+ * @param map A map of key classes to classes. May be modified if keyClass is a subclass of
  *                 any existing key classes.
- *      @returns The mapped object if a match for keyClass was found in map. nil is returned
+ * @returns The mapped object if a match for keyClass was found in map. nil is returned
  *               otherwise.
- *      @fn NIActions::objectFromKeyClass:map:
+ * @fn NIActions::objectFromKeyClass:map:
  */
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 /**@}*/// End of Actions //////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////

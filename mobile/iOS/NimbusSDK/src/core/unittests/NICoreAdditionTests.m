@@ -1,5 +1,5 @@
 //
-// Copyright 2011 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Forked from Three20 June 10, 2011 - Copyright 2009-2011 Facebook
 //
@@ -18,159 +18,136 @@
 
 // See: http://bit.ly/hS5nNh for unit test macros.
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
 #import "NimbusCore+Additions.h"
 
-@interface NimbusCoreAdditionTests : SenTestCase {
+@interface NimbusCoreAdditionTests : XCTestCase {
 }
 
 @end
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NimbusCoreAdditionTests
 
+#pragma mark - NSString Additions
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-#pragma mark NSString Additions
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testNSString_queryContentsUsingEncoding {
 	NSDictionary* query;
 
-	query = [@"" queryContentsUsingEncoding:NSUTF8StringEncoding];
-	STAssertTrue([query count] == 0, @"Query: %@", query);
+	query = NIQueryDictionaryFromStringUsingEncoding(@"", NSUTF8StringEncoding);
+	XCTAssertTrue([query count] == 0, @"Query: %@", query);
 
-	query = [@"q" queryContentsUsingEncoding:NSUTF8StringEncoding];
-	STAssertTrue([[query objectForKey:@"q"] isEqual:[NSArray arrayWithObject:[NSNull null]]],
-               @"Query: %@", query);
+	query = NIQueryDictionaryFromStringUsingEncoding(@"q", NSUTF8StringEncoding);
+	XCTAssertTrue([query[@"q"] isEqual:@[[NSNull null]]],
+                @"Query: %@", query);
 
-	query = [@"q=" queryContentsUsingEncoding:NSUTF8StringEncoding];
-	STAssertTrue([[query objectForKey:@"q"] isEqual:[NSArray arrayWithObject:@""]],
-               @"Query: %@", query);
+	query = NIQueryDictionaryFromStringUsingEncoding(@"q=", NSUTF8StringEncoding);
+	XCTAssertTrue([query[@"q"] isEqual:@[@""]],
+                @"Query: %@", query);
 
-	query = [@"q=three20" queryContentsUsingEncoding:NSUTF8StringEncoding];
-	STAssertTrue([[query objectForKey:@"q"] isEqual:[NSArray arrayWithObject:@"three20"]],
-               @"Query: %@", query);
+	query = NIQueryDictionaryFromStringUsingEncoding(@"q=three20", NSUTF8StringEncoding);
+	XCTAssertTrue([query[@"q"] isEqual:@[@"three20"]],
+                @"Query: %@", query);
 
-	query = [@"q=three20%20github" queryContentsUsingEncoding:NSUTF8StringEncoding];
-	STAssertTrue([[query objectForKey:@"q"] isEqual:[NSArray arrayWithObject:@"three20 github"]],
-               @"Query: %@", query);
+	query = NIQueryDictionaryFromStringUsingEncoding(@"q=three20%20github", NSUTF8StringEncoding);
+	XCTAssertTrue([query[@"q"] isEqual:@[@"three20 github"]],
+                @"Query: %@", query);
 
-	query = [@"q=three20&hl=en" queryContentsUsingEncoding:NSUTF8StringEncoding];
-	STAssertTrue([[query objectForKey:@"q"] isEqual:[NSArray arrayWithObject:@"three20"]],
-               @"Query: %@", query);
-	STAssertTrue([[query objectForKey:@"hl"] isEqual:[NSArray arrayWithObject:@"en"]],
-               @"Query: %@", query);
+	query = NIQueryDictionaryFromStringUsingEncoding(@"q=three20&hl=en", NSUTF8StringEncoding);
+	XCTAssertTrue([query[@"q"] isEqual:@[@"three20"]],
+                @"Query: %@", query);
+	XCTAssertTrue([query[@"hl"] isEqual:@[@"en"]],
+                 @"Query: %@", query);
 
-	query = [@"q=three20&hl=" queryContentsUsingEncoding:NSUTF8StringEncoding];
-	STAssertTrue([[query objectForKey:@"q"] isEqual:[NSArray arrayWithObject:@"three20"]],
-               @"Query: %@", query);
-	STAssertTrue([[query objectForKey:@"hl"] isEqual:[NSArray arrayWithObject:@""]],
-               @"Query: %@", query);
+	query = NIQueryDictionaryFromStringUsingEncoding(@"q=three20&hl=", NSUTF8StringEncoding);
+	XCTAssertTrue([query[@"q"] isEqual:@[@"three20"]],
+                @"Query: %@", query);
+	XCTAssertTrue([query[@"hl"] isEqual:@[@""]],
+                @"Query: %@", query);
 
-	query = [@"q=&&hl=" queryContentsUsingEncoding:NSUTF8StringEncoding];
-	STAssertTrue([[query objectForKey:@"q"] isEqual:[NSArray arrayWithObject:@""]],
-               @"Query: %@", query);
-	STAssertTrue([[query objectForKey:@"hl"] isEqual:[NSArray arrayWithObject:@""]],
-               @"Query: %@", query);
+	query = NIQueryDictionaryFromStringUsingEncoding(@"q=&&hl=", NSUTF8StringEncoding);
+	XCTAssertTrue([query[@"q"] isEqual:@[@""]],
+                @"Query: %@", query);
+	XCTAssertTrue([query[@"hl"] isEqual:@[@""]],
+                @"Query: %@", query);
 
-	query = [@"q=three20=repo&hl=en" queryContentsUsingEncoding:NSUTF8StringEncoding];
-	STAssertNil([query objectForKey:@"q"], @"Query: %@", query);
-	STAssertTrue([[query objectForKey:@"hl"] isEqual:[NSArray arrayWithObject:@"en"]],
-               @"Query: %@", query);
+	query = NIQueryDictionaryFromStringUsingEncoding(@"q=three20=repo&hl=en", NSUTF8StringEncoding);
+	XCTAssertNil(query[@"q"], @"Query: %@", query);
+	XCTAssertTrue([query[@"hl"] isEqual:@[@"en"]],
+                @"Query: %@", query);
 
-	query = [@"&&" queryContentsUsingEncoding:NSUTF8StringEncoding];
-	STAssertTrue([query count] == 0, @"Query: %@", query);
+	query = NIQueryDictionaryFromStringUsingEncoding(@"&&", NSUTF8StringEncoding);
+	XCTAssertTrue([query count] == 0, @"Query: %@", query);
 
-	query = [@"q=foo&q=three20" queryContentsUsingEncoding:NSUTF8StringEncoding];
-	NSArray* qArr = [NSArray arrayWithObjects:@"foo", @"three20", nil];
-	STAssertTrue([[query objectForKey:@"q"] isEqual:qArr], @"Query: %@", query);
+	query = NIQueryDictionaryFromStringUsingEncoding(@"q=foo&q=three20", NSUTF8StringEncoding);
+	NSArray* qArr = @[@"foo", @"three20"];
+	XCTAssertTrue([query[@"q"] isEqual:qArr], @"Query: %@", query);
 
-	query = [@"q=foo&q=three20&hl=en" queryContentsUsingEncoding:NSUTF8StringEncoding];
-	qArr = [NSArray arrayWithObjects:@"foo", @"three20", nil];
-	STAssertTrue([[query objectForKey:@"q"] isEqual:qArr], @"Query: %@", query);
-	STAssertTrue([[query objectForKey:@"hl"] isEqual:[NSArray arrayWithObject:@"en"]],
-               @"Query: %@", query);
+	query = NIQueryDictionaryFromStringUsingEncoding(@"q=foo&q=three20&hl=en", NSUTF8StringEncoding);
+	qArr = @[@"foo", @"three20"];
+	XCTAssertTrue([query[@"q"] isEqual:qArr], @"Query: %@", query);
+	XCTAssertTrue([query[@"hl"] isEqual:@[@"en"]],
+                @"Query: %@", query);
 
-	query = [@"q=foo&q=three20&hl=en&g" queryContentsUsingEncoding:NSUTF8StringEncoding];
-	qArr = [NSArray arrayWithObjects:@"foo", @"three20", nil];
-	STAssertTrue([[query objectForKey:@"q"] isEqual:qArr], @"Query: %@", query);
-	STAssertTrue([[query objectForKey:@"hl"] isEqual:[NSArray arrayWithObject:@"en"]],
-               @"Query: %@", query);
-	STAssertTrue([[query objectForKey:@"g"] isEqual:[NSArray arrayWithObject:[NSNull null]]],
-               @"Query: %@", query);
+	query = NIQueryDictionaryFromStringUsingEncoding(@"q=foo&q=three20&hl=en&g", NSUTF8StringEncoding);
+	qArr = @[@"foo", @"three20"];
+	XCTAssertTrue([query[@"q"] isEqual:qArr], @"Query: %@", query);
+	XCTAssertTrue([query[@"hl"] isEqual:@[@"en"]],
+                @"Query: %@", query);
+	XCTAssertTrue([query[@"g"] isEqual:@[[NSNull null]]],
+                @"Query: %@", query);
 
-	query = [@"q&q=three20&hl=en&g" queryContentsUsingEncoding:NSUTF8StringEncoding];
-	qArr = [NSArray arrayWithObjects:[NSNull null], @"three20", nil];
-	STAssertTrue([[query objectForKey:@"q"] isEqual:qArr], @"Query: %@", query);
-	STAssertTrue([[query objectForKey:@"hl"] isEqual:[NSArray arrayWithObject:@"en"]],
-               @"Query: %@", query);
+	query = NIQueryDictionaryFromStringUsingEncoding(@"q&q=three20&hl=en&g", NSUTF8StringEncoding);
+	qArr = @[[NSNull null], @"three20"];
+	XCTAssertTrue([query[@"q"] isEqual:qArr], @"Query: %@", query);
+	XCTAssertTrue([query[@"hl"] isEqual:@[@"en"]],
+                @"Query: %@", query);
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testNSString_stringByAddingQueryDictionary {
   NSString* baseUrl = @"http://google.com/search";
-  STAssertTrue([[baseUrl stringByAddingQueryDictionary:nil] isEqualToString:
+  XCTAssertTrue([NIStringByAddingQueryDictionaryToString(baseUrl, nil) isEqualToString:
                 [baseUrl stringByAppendingString:@"?"]], @"Empty dictionary fail.");
 
-  STAssertTrue([[baseUrl stringByAddingQueryDictionary:[NSDictionary dictionary]] isEqualToString:
+  XCTAssertTrue([NIStringByAddingQueryDictionaryToString(baseUrl, @{}) isEqualToString:
                 [baseUrl stringByAppendingString:@"?"]], @"Empty dictionary fail.");
 
-  STAssertTrue([[baseUrl stringByAddingQueryDictionary:[NSDictionary
-                                                        dictionaryWithObject:@"three20"
-                                                        forKey:@"q"]] isEqualToString:
+  XCTAssertTrue([NIStringByAddingQueryDictionaryToString(baseUrl, @{@"q":@"three20"}) isEqualToString:
                 [baseUrl stringByAppendingString:@"?q=three20"]], @"Single parameter fail.");
 
-  NSDictionary* query = [NSDictionary
-                         dictionaryWithObjectsAndKeys:
-                         @"three20", @"q",
-                         @"en",      @"hl",
-                         nil];
-  NSString* baseUrlWithQuery = [baseUrl stringByAddingQueryDictionary:query];
-  STAssertTrue([baseUrlWithQuery isEqualToString:[baseUrl
+  NSDictionary* query = @{@"q": @"three20",
+                          @"hl": @"en"};
+  NSString* baseUrlWithQuery = NIStringByAddingQueryDictionaryToString(baseUrl, query);
+  XCTAssertTrue([baseUrlWithQuery isEqualToString:[baseUrl
                                                   stringByAppendingString:@"?hl=en&q=three20"]]
-               || [baseUrlWithQuery isEqualToString:[baseUrl
+                || [baseUrlWithQuery isEqualToString:[baseUrl
                                                      stringByAppendingString:@"?q=three20&hl=en"]],
-               @"Additional query parameters not correct. %@",
-               [baseUrl stringByAddingQueryDictionary:query]);
+                @"Additional query parameters not correct. %@",
+                NIStringByAddingQueryDictionaryToString(baseUrl, query));
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testNSString_versionStringCompare {
-  STAssertTrue([@"3.0"   versionStringCompare:@"3.0"]    == NSOrderedSame, @"same version");
-  STAssertTrue([@"3.0a2" versionStringCompare:@"3.0a2"]  == NSOrderedSame, @"same version alpha");
-  STAssertTrue([@"3.0"   versionStringCompare:@"2.5"]    == NSOrderedDescending, @"major no alpha");
-  STAssertTrue([@"3.1"   versionStringCompare:@"3.0"]    == NSOrderedDescending, @"minor no alpha");
-  STAssertTrue([@"3.0a1" versionStringCompare:@"3.0"]    == NSOrderedAscending, @"alpha-no alpha");
-  STAssertTrue([@"3.0a1" versionStringCompare:@"3.0a4"]  == NSOrderedAscending, @"alpha diff");
-  STAssertTrue([@"3.0a2" versionStringCompare:@"3.0a19"] == NSOrderedAscending, @"numeric alpha");
-  STAssertTrue([@"3.0a"  versionStringCompare:@"3.0a1"]  == NSOrderedAscending, @"empty alpha");
-  STAssertTrue([@"3.02"  versionStringCompare:@"3.03"]   == NSOrderedAscending, @"point diff");
-  STAssertTrue([@"3.0.2" versionStringCompare:@"3.0.3"]  == NSOrderedAscending, @"point diff");
+  XCTAssertTrue(NICompareVersionStrings(@"3.0", @"3.0")      == NSOrderedSame, @"same version");
+  XCTAssertTrue(NICompareVersionStrings(@"3.0a2", @"3.0a2")  == NSOrderedSame, @"same version alpha");
+  XCTAssertTrue(NICompareVersionStrings(@"3.0", @"2.5")      == NSOrderedDescending, @"major no alpha");
+  XCTAssertTrue(NICompareVersionStrings(@"3.1", @"3.0")      == NSOrderedDescending, @"minor no alpha");
+  XCTAssertTrue(NICompareVersionStrings(@"3.0a1", @"3.0")    == NSOrderedAscending, @"alpha-no alpha");
+  XCTAssertTrue(NICompareVersionStrings(@"3.0a1", @"3.0a4")  == NSOrderedAscending, @"alpha diff");
+  XCTAssertTrue(NICompareVersionStrings(@"3.0a2", @"3.0a19") == NSOrderedAscending, @"numeric alpha");
+  XCTAssertTrue(NICompareVersionStrings(@"3.0a", @"3.0a1")   == NSOrderedAscending, @"empty alpha");
+  XCTAssertTrue(NICompareVersionStrings(@"3.02", @"3.03")    == NSOrderedAscending, @"point diff");
+  XCTAssertTrue(NICompareVersionStrings(@"3.0.2", @"3.0.3")  == NSOrderedAscending, @"point diff");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testNSString_md5Hash {
-  STAssertTrue([[@"nimbus" md5Hash] isEqualToString:@"0e78d66f33c484a3c3b36d69bd3114cf"],
-               @"MD5 hashes don't match.");
+  XCTAssertTrue([NIMD5HashFromString(@"nimbus") isEqualToString:@"0e78d66f33c484a3c3b36d69bd3114cf"],
+                @"MD5 hashes don't match.");
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)testNSString_sha1Hash {
-  STAssertTrue([[@"nimbus" sha1Hash] isEqualToString:@"c1b42d95fd18ad8a56d4fd7bbb4105952620d857"],
-               @"SHA1 hashes don't match.");
+  XCTAssertTrue([NISHA1HashFromString(@"nimbus") isEqualToString:@"c1b42d95fd18ad8a56d4fd7bbb4105952620d857"],
+                @"SHA1 hashes don't match.");
 }
-
 
 @end

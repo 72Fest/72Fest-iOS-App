@@ -1,5 +1,5 @@
 //
-// Copyright 2011 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -44,16 +44,10 @@ int cssConsume(char* text, int token) {
   return 0;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NICSSParser
 
-@synthesize didFailToParse = _didFailToParse;
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)shutdown {
   _rulesets = nil;
   _scopesForActiveRuleset = nil;
@@ -64,8 +58,6 @@ int cssConsume(char* text, int token) {
   _lastTokenText = nil;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setFailFlag {
   if (!self.didFailToParse) {
     _didFailToParse = YES;
@@ -74,15 +66,11 @@ int cssConsume(char* text, int token) {
   }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)commitCurrentSelector {
   [_scopesForActiveRuleset addObject:[_mutatingScope componentsJoinedByString:@" "]];
   [_mutatingScope removeAllObjects];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)consumeToken:(int)token text:(char*)text {
   if (_didFailToParse) {
     return;
@@ -336,8 +324,6 @@ int cssConsume(char* text, int token) {
   _lastToken = token;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setup {
   [self shutdown];
 
@@ -347,8 +333,6 @@ int cssConsume(char* text, int token) {
   _importedFilenames = [[NSMutableArray alloc] init];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)parseFileAtPath:(NSString *)path {
   // flex is not thread-safe so we force it to be by creating a single-access lock here.
   pthread_mutex_lock(&gMutex); {
@@ -360,8 +344,6 @@ int cssConsume(char* text, int token) {
   pthread_mutex_unlock(&gMutex);
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSDictionary *)mergeCompositeRulesets:(NSMutableArray *)compositeRulesets dependencyFilenames:(NSSet *)dependencyFilenames {
   NIDASSERT([compositeRulesets count] > 0);
   if ([compositeRulesets count] == 0) {
@@ -420,26 +402,17 @@ int cssConsume(char* text, int token) {
   return result;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-#pragma mark Public
+#pragma mark - Public
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSDictionary *)dictionaryForPath:(NSString *)path {
   return [self dictionaryForPath:path pathPrefix:nil delegate:nil];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSDictionary *)dictionaryForPath:(NSString *)path pathPrefix:(NSString *)pathPrefix {
   return [self dictionaryForPath:path pathPrefix:pathPrefix delegate:nil];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSDictionary *)dictionaryForPath:(NSString *)aPath
                          pathPrefix:(NSString *)pathPrefix
                            delegate:(id<NICSSParserDelegate>)delegate {
@@ -459,13 +432,13 @@ int cssConsume(char* text, int token) {
   NSMutableSet* processedFilenames = [[NSMutableSet alloc] init];
 
   // Imported CSS files will be added to the queue.
-  NILinkedList* filenameQueue = [NILinkedList linkedList];
+  NSMutableOrderedSet* filenameQueue = [NSMutableOrderedSet orderedSet];
   [filenameQueue addObject:aPath];
 
   while ([filenameQueue count] > 0) {
     // Om nom nom
     NSString* path = [filenameQueue firstObject];
-    [filenameQueue removeFirstObject];
+    [filenameQueue removeObjectAtIndex:0];
 
     // Skip files that we've already processed in order to avoid infinite loops.
     if ([processedFilenames containsObject:path]) {

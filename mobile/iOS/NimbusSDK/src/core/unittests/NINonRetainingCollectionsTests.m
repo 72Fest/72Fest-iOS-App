@@ -1,5 +1,5 @@
 //
-// Copyright 2011 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Forked from Three20 June 9, 2011 - Copyright 2009-2011 Facebook
 //
@@ -18,20 +18,17 @@
 
 // See: http://bit.ly/hS5nNh for unit test macros.
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
 #import "NIPreprocessorMacros.h"
 #import "NINonRetainingCollections.h"
 
-@interface NINonRetainingCollectionsTests : SenTestCase {
+@interface NINonRetainingCollectionsTests : XCTestCase {
 }
 
 @end
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NINonRetainingCollectionsTests
 
 @end

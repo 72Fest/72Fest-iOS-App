@@ -1,6 +1,6 @@
 //
 // Copyright 2012 Manu Cornet
-// Copyright 2011-2012 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 @implementation SamplePageView
 
-@synthesize label = _label;
 @synthesize pageIndex = _pageIndex;
 @synthesize reuseIdentifier = _reuseIdentifier;
 
@@ -31,6 +30,8 @@
     _label.backgroundColor = [UIColor clearColor];
     
     [self addSubview:_label];
+      
+    self.reuseIdentifier = reuseIdentifier;
   }
   return self;
 }
@@ -42,7 +43,7 @@
 - (void)setPageIndex:(NSInteger)pageIndex {
   _pageIndex = pageIndex;
   
-  self.label.text = [NSString stringWithFormat:@"This is page %i", pageIndex];
+  self.label.text = [NSString stringWithFormat:@"This is page %zd", pageIndex];
   
   UIColor* bgColor;
   UIColor* textColor;

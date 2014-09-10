@@ -1,5 +1,5 @@
 //
-// Copyright 2011 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 #import "NICSSRuleset.h"
 #import "NimbusCore.h"
 #import "NIUserInterfaceString.h"
-#import "NIInvocationMethods.h"
 #import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>
 
@@ -47,7 +46,6 @@ NSString* const NICSSViewBackgroundColorKey = @"bg";
 @property (nonatomic,strong) UIView *view;
 @end
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 // We split this up because we want to add all the subviews to the DOM in the order they were created
 @interface UIView (NIStyleablePrivate)
 -(void)_buildSubviews:(NSArray *)viewSpecs inDOM:(NIDOM *)dom withViewArray: (NSMutableArray*) subviews;
@@ -58,12 +56,8 @@ NI_FIX_CATEGORY_BUG(UIView_NIStyleablePrivate)
 
 CGFloat NICSSUnitToPixels(NICSSUnit unit, CGFloat container);
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation UIView (NIStyleable)
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)applyViewStyleWithRuleSet:(NICSSRuleset *)ruleSet {
   [self applyViewStyleWithRuleSet:ruleSet inDOM:nil];
 }
@@ -78,12 +72,10 @@ CGFloat NICSSUnitToPixels(NICSSUnit unit, CGFloat container);
   return [self descriptionWithRuleSetForView:ruleSet forPseudoClass:pseudo inDOM:dom withViewName:name];
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)applyViewStyleWithRuleSet:(NICSSRuleset *)ruleSet inDOM:(NIDOM *)dom {
   [self applyOrDescribe:YES ruleSet:ruleSet inDOM:dom withViewName:nil];
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSString*)applyOrDescribe: (BOOL) apply ruleSet: (NICSSRuleset*) ruleSet inDOM: (NIDOM*)dom withViewName: (NSString*) name {
   NSMutableString *desc = apply ? nil : [[NSMutableString alloc] init];
   //      [desc appendFormat:@"%@. = %f;\n"];
@@ -130,7 +122,7 @@ CGFloat NICSSUnitToPixels(NICSSUnit unit, CGFloat container);
     if (apply) {
       self.autoresizingMask = ruleSet.autoresizing;
     } else {
-      [desc appendFormat:@"%@.autoresizingMask = (UIViewAutoresizing) %d;\n", name, ruleSet.autoresizing];
+      [desc appendFormat:@"%@.autoresizingMask = (UIViewAutoresizing) %zd;\n", name, ruleSet.autoresizing];
     }
   }
   if ([ruleSet hasVisible]) {
@@ -141,10 +133,8 @@ CGFloat NICSSUnitToPixels(NICSSUnit unit, CGFloat container);
     }
   }
   
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  // View sizing
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  // Special case auto/auto height and width
+    // View sizing
+    // Special case auto/auto height and width
   if ([ruleSet hasWidth] && [ruleSet hasHeight] &&
       ruleSet.width.type == CSS_AUTO_UNIT && ruleSet.height.type == CSS_AUTO_UNIT) {
     if (apply) {
@@ -320,10 +310,8 @@ CGFloat NICSSUnitToPixels(NICSSUnit unit, CGFloat container);
     }
   }
   
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  // Min/Max width/height enforcement
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  if ([ruleSet hasMaxWidth]) {
+    // Min/Max width/height enforcement
+    if ([ruleSet hasMaxWidth]) {
     CGFloat max = NICSSUnitToPixels(ruleSet.maxWidth,self.frameWidth);
     if (self.frameWidth > max) {
       if (apply) { self.frameWidth = max; } else { [desc appendFormat:@"%@.frameWidth = %f;\n", name, max]; }
@@ -348,10 +336,8 @@ CGFloat NICSSUnitToPixels(NICSSUnit unit, CGFloat container);
     }
   }
   
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  // "Absolute" position in superview
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  if ([ruleSet hasTop]) {
+    // "Absolute" position in superview
+    if ([ruleSet hasTop]) {
     NICSSUnit u = ruleSet.top;
     switch (u.type) {
       case CSS_PERCENTAGE_UNIT:
@@ -443,21 +429,21 @@ CGFloat NICSSUnitToPixels(NICSSUnit unit, CGFloat container);
   }
   if ([ruleSet hasFrameHorizontalAlign]) {
     switch (ruleSet.frameHorizontalAlign) {
-      case UITextAlignmentCenter:
+      case NSTextAlignmentCenter:
         if (apply) {
           self.frameMidX = self.superview.bounds.size.width / 2.0;
         } else {
           [desc appendFormat:@"%@.frameMidX = %f;\n", name, self.superview.bounds.size.width / 2.0];
         }
         break;
-      case UITextAlignmentLeft:
+      case NSTextAlignmentLeft:
         if (apply) {
           self.frameMinX = 0;
         } else {
           [desc appendFormat:@"%@.frameMinX = 0;\n", name];
         }
         break;
-      case UITextAlignmentRight:
+      case NSTextAlignmentRight:
         self.frameMaxX = self.superview.bounds.size.width;
         break;
       default:
@@ -494,10 +480,8 @@ CGFloat NICSSUnitToPixels(NICSSUnit unit, CGFloat container);
     }
   }
   
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  // Relative positioning to other identified views
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  if (ruleSet.hasRelativeToId) {
+    // Relative positioning to other identified views
+    if (ruleSet.hasRelativeToId) {
     NSString *viewSpec = ruleSet.relativeToId;
     UIView* relative = nil;
     if ([viewSpec characterAtIndex:0] == '.') {
@@ -650,13 +634,12 @@ CGFloat NICSSUnitToPixels(NICSSUnit unit, CGFloat container);
   return desc;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 -(NSArray *)buildSubviews:(NSArray *)viewSpecs inDOM:(NIDOM *)dom
 {
   NSMutableArray *subviews = [[NSMutableArray alloc] init];
   [self _buildSubviews:viewSpecs inDOM:dom withViewArray:subviews];
   
-  for (int ix = 0, ct = subviews.count; ix < ct; ix++) {
+  for (NSUInteger ix = 0, ct = subviews.count; ix < ct; ix++) {
     NIPrivateViewInfo *viewInfo = [subviews objectAtIndex:ix];
     NSString *firstClass = [viewInfo.cssClasses count] ? [viewInfo.cssClasses objectAtIndex:0] : nil;
     [dom registerView:viewInfo.view withCSSClass:firstClass andId:viewInfo.viewId];
@@ -671,7 +654,7 @@ CGFloat NICSSUnitToPixels(NICSSUnit unit, CGFloat container);
       }
     }
     if (viewInfo.cssClasses.count > 1) {
-      for (int i = 1, cct = viewInfo.cssClasses.count; i < cct; i++) {
+      for (NSUInteger i = 1, cct = viewInfo.cssClasses.count; i < cct; i++) {
         [dom addCssClass:[viewInfo.cssClasses objectAtIndex:i] toView:viewInfo.view];
       }
     }
@@ -680,7 +663,6 @@ CGFloat NICSSUnitToPixels(NICSSUnit unit, CGFloat container);
   return subviews;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)applyStyleWithRuleSet:(NICSSRuleset *)ruleSet inDOM:(NIDOM *)dom {
   [self applyViewStyleWithRuleSet:ruleSet inDOM:dom];
 }
@@ -787,7 +769,6 @@ CGFloat NICSSUnitToPixels(NICSSUnit unit, CGFloat container)
   return unit.value;
 }
 
-
 @implementation UIView (NIStyleablePrivate)
 -(void)_buildSubviews:(NSArray *)viewSpecs inDOM:(NIDOM *)dom withViewArray:(NSMutableArray *)subviews
 {
@@ -891,10 +872,11 @@ CGFloat NICSSUnitToPixels(NICSSUnit unit, CGFloat container)
         if ([directiveValue isKindOfClass:[NSInvocation class]]) {
           NSInvocation *n = (NSInvocation*) directiveValue;
           if ([active.view respondsToSelector:@selector(addTarget:action:forControlEvents:)]) {
-            [((id)active.view) addTarget: n.target action: n.selector forControlEvents: UIControlEventTouchUpInside];
+            [((id)active.view) addTarget:n.target action:n.selector forControlEvents:UIControlEventTouchUpInside];
           } else {
             NSString *error = [NSString stringWithFormat:@"Cannot apply NSInvocation to class %@", NSStringFromClass(active.class)];
             NSAssert(NO, error);
+            #pragma unused (error)
           }
         }
       }
@@ -958,6 +940,7 @@ CGFloat NICSSUnitToPixels(NICSSUnit unit, CGFloat container)
       } else {
         NSString *error = [NSString stringWithFormat:@"Cannot apply NSInvocation to class %@", NSStringFromClass(active.class)];
         NSAssert(NO, error);
+        #pragma unused (error)
       }
     } else {
       NSAssert(NO, @"Unknown directive in build specifier");

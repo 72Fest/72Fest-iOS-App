@@ -62,6 +62,8 @@
 		07643E0219BEC58D00D6F9E2 /* PhotoTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643E0119BEC58D00D6F9E2 /* PhotoTabBarViewController.m */; };
 		07643E0519BECFCE00D6F9E2 /* mainMenuBg.png in Resources */ = {isa = PBXBuildFile; fileRef = 07643E0319BECFCE00D6F9E2 /* mainMenuBg.png */; };
 		07643E0619BECFCE00D6F9E2 /* mainMenuBg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 07643E0419BECFCE00D6F9E2 /* mainMenuBg@2x.png */; };
+		07643E0919BFDD8400D6F9E2 /* UIResponder+NimbusCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643E0819BFDD8400D6F9E2 /* UIResponder+NimbusCore.m */; };
+		07643E0B19BFDE2200D6F9E2 /* NIPagingScrollViewPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643E0A19BFDE2200D6F9E2 /* NIPagingScrollViewPage.m */; };
 		076B7ACB16130A0000DF6BA5 /* 72FestBanner.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7AC916130A0000DF6BA5 /* 72FestBanner.png */; };
 		076B7ACC16130A0000DF6BA5 /* 72FestBanner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */; };
 		076DB9E317E617AF00D0E1F6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076DB9E217E617AF00D0E1F6 /* MessageUI.framework */; };
@@ -124,7 +126,6 @@
 		8AC6A26C17DBC23A00D634B4 /* NIFoundationMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC6A24217DBC23A00D634B4 /* NIFoundationMethods.m */; };
 		8AC6A26D17DBC23A00D634B4 /* NIImageUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC6A24417DBC23A00D634B4 /* NIImageUtilities.m */; };
 		8AC6A26E17DBC23A00D634B4 /* NIInMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC6A24617DBC23A00D634B4 /* NIInMemoryCache.m */; };
-		8AC6A26F17DBC23A00D634B4 /* NIInvocationMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC6A24817DBC23A00D634B4 /* NIInvocationMethods.m */; };
 		8AC6A27017DBC23A00D634B4 /* NINavigationAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC6A24C17DBC23A00D634B4 /* NINavigationAppearance.m */; };
 		8AC6A27117DBC23A00D634B4 /* NINetworkActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC6A24E17DBC23A00D634B4 /* NINetworkActivity.m */; };
 		8AC6A27217DBC23A00D634B4 /* NINonEmptyCollectionTesting.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC6A25017DBC23A00D634B4 /* NINonEmptyCollectionTesting.m */; };
@@ -136,7 +137,6 @@
 		8AC6A27817DBC23A00D634B4 /* NISnapshotRotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC6A25E17DBC23A00D634B4 /* NISnapshotRotation.m */; };
 		8AC6A27917DBC23A00D634B4 /* NIState.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC6A26017DBC23A00D634B4 /* NIState.m */; };
 		8AC6A27A17DBC23A00D634B4 /* NIViewRecycler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC6A26217DBC23A00D634B4 /* NIViewRecycler.m */; };
-		8AC6A27B17DBC23A00D634B4 /* NSString+NimbusCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC6A26417DBC23A00D634B4 /* NSString+NimbusCore.m */; };
 		8AC6A28617DBC29100D634B4 /* NIPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC6A27F17DBC29100D634B4 /* NIPageView.m */; };
 		8AC6A28717DBC29100D634B4 /* NIPagingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC6A28117DBC29100D634B4 /* NIPagingScrollView.m */; };
 		8AC6A29617DBC2CA00D634B4 /* NIPhotoAlbumScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC6A28B17DBC2CA00D634B4 /* NIPhotoAlbumScrollView.m */; };
@@ -215,6 +215,9 @@
 		07643E0119BEC58D00D6F9E2 /* PhotoTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoTabBarViewController.m; sourceTree = "<group>"; };
 		07643E0319BECFCE00D6F9E2 /* mainMenuBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mainMenuBg.png; sourceTree = "<group>"; };
 		07643E0419BECFCE00D6F9E2 /* mainMenuBg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mainMenuBg@2x.png"; sourceTree = "<group>"; };
+		07643E0719BFDD8400D6F9E2 /* UIResponder+NimbusCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+NimbusCore.h"; sourceTree = "<group>"; };
+		07643E0819BFDD8400D6F9E2 /* UIResponder+NimbusCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+NimbusCore.m"; sourceTree = "<group>"; };
+		07643E0A19BFDE2200D6F9E2 /* NIPagingScrollViewPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPagingScrollViewPage.m; sourceTree = "<group>"; };
 		076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		076B7AC916130A0000DF6BA5 /* 72FestBanner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 72FestBanner.png; sourceTree = "<group>"; };
 		076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "72FestBanner@2x.png"; sourceTree = "<group>"; };
@@ -312,8 +315,6 @@
 		8AC6A24417DBC23A00D634B4 /* NIImageUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIImageUtilities.m; path = NimbusSDK/src/core/src/NIImageUtilities.m; sourceTree = SOURCE_ROOT; };
 		8AC6A24517DBC23A00D634B4 /* NIInMemoryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIInMemoryCache.h; path = NimbusSDK/src/core/src/NIInMemoryCache.h; sourceTree = SOURCE_ROOT; };
 		8AC6A24617DBC23A00D634B4 /* NIInMemoryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIInMemoryCache.m; path = NimbusSDK/src/core/src/NIInMemoryCache.m; sourceTree = SOURCE_ROOT; };
-		8AC6A24717DBC23A00D634B4 /* NIInvocationMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIInvocationMethods.h; path = NimbusSDK/src/core/src/NIInvocationMethods.h; sourceTree = SOURCE_ROOT; };
-		8AC6A24817DBC23A00D634B4 /* NIInvocationMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIInvocationMethods.m; path = NimbusSDK/src/core/src/NIInvocationMethods.m; sourceTree = SOURCE_ROOT; };
 		8AC6A24917DBC23A00D634B4 /* NimbusCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NimbusCore.h; path = NimbusSDK/src/core/src/NimbusCore.h; sourceTree = SOURCE_ROOT; };
 		8AC6A24A17DBC23A00D634B4 /* NimbusCore+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NimbusCore+Additions.h"; path = "NimbusSDK/src/core/src/NimbusCore+Additions.h"; sourceTree = SOURCE_ROOT; };
 		8AC6A24B17DBC23A00D634B4 /* NINavigationAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NINavigationAppearance.h; path = NimbusSDK/src/core/src/NINavigationAppearance.h; sourceTree = SOURCE_ROOT; };
@@ -340,16 +341,12 @@
 		8AC6A26017DBC23A00D634B4 /* NIState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIState.m; path = NimbusSDK/src/core/src/NIState.m; sourceTree = SOURCE_ROOT; };
 		8AC6A26117DBC23A00D634B4 /* NIViewRecycler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIViewRecycler.h; path = NimbusSDK/src/core/src/NIViewRecycler.h; sourceTree = SOURCE_ROOT; };
 		8AC6A26217DBC23A00D634B4 /* NIViewRecycler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIViewRecycler.m; path = NimbusSDK/src/core/src/NIViewRecycler.m; sourceTree = SOURCE_ROOT; };
-		8AC6A26317DBC23A00D634B4 /* NSString+NimbusCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+NimbusCore.h"; path = "NimbusSDK/src/core/src/NSString+NimbusCore.h"; sourceTree = SOURCE_ROOT; };
-		8AC6A26417DBC23A00D634B4 /* NSString+NimbusCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+NimbusCore.m"; path = "NimbusSDK/src/core/src/NSString+NimbusCore.m"; sourceTree = SOURCE_ROOT; };
 		8AC6A27D17DBC29100D634B4 /* NimbusPagingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NimbusPagingScrollView.h; path = NimbusSDK/src/pagingscrollview/src/NimbusPagingScrollView.h; sourceTree = SOURCE_ROOT; };
 		8AC6A27E17DBC29100D634B4 /* NIPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIPageView.h; path = NimbusSDK/src/pagingscrollview/src/NIPageView.h; sourceTree = SOURCE_ROOT; };
 		8AC6A27F17DBC29100D634B4 /* NIPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIPageView.m; path = NimbusSDK/src/pagingscrollview/src/NIPageView.m; sourceTree = SOURCE_ROOT; };
 		8AC6A28017DBC29100D634B4 /* NIPagingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIPagingScrollView.h; path = NimbusSDK/src/pagingscrollview/src/NIPagingScrollView.h; sourceTree = SOURCE_ROOT; };
 		8AC6A28117DBC29100D634B4 /* NIPagingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NIPagingScrollView.m; path = NimbusSDK/src/pagingscrollview/src/NIPagingScrollView.m; sourceTree = SOURCE_ROOT; };
 		8AC6A28217DBC29100D634B4 /* NIPagingScrollView+Subclassing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NIPagingScrollView+Subclassing.h"; path = "NimbusSDK/src/pagingscrollview/src/NIPagingScrollView+Subclassing.h"; sourceTree = SOURCE_ROOT; };
-		8AC6A28317DBC29100D634B4 /* NIPagingScrollViewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIPagingScrollViewDataSource.h; path = NimbusSDK/src/pagingscrollview/src/NIPagingScrollViewDataSource.h; sourceTree = SOURCE_ROOT; };
-		8AC6A28417DBC29100D634B4 /* NIPagingScrollViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIPagingScrollViewDelegate.h; path = NimbusSDK/src/pagingscrollview/src/NIPagingScrollViewDelegate.h; sourceTree = SOURCE_ROOT; };
 		8AC6A28517DBC29100D634B4 /* NIPagingScrollViewPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIPagingScrollViewPage.h; path = NimbusSDK/src/pagingscrollview/src/NIPagingScrollViewPage.h; sourceTree = SOURCE_ROOT; };
 		8AC6A28917DBC2CA00D634B4 /* NimbusPhotos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NimbusPhotos.h; path = NimbusSDK/src/photos/src/NimbusPhotos.h; sourceTree = SOURCE_ROOT; };
 		8AC6A28A17DBC2CA00D634B4 /* NIPhotoAlbumScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIPhotoAlbumScrollView.h; path = NimbusSDK/src/photos/src/NIPhotoAlbumScrollView.h; sourceTree = SOURCE_ROOT; };
@@ -647,6 +644,8 @@
 			isa = PBXGroup;
 			children = (
 				8AC6A23217DBC23A00D634B4 /* NIActions.h */,
+				07643E0719BFDD8400D6F9E2 /* UIResponder+NimbusCore.h */,
+				07643E0819BFDD8400D6F9E2 /* UIResponder+NimbusCore.m */,
 				8AC6A23317DBC23A00D634B4 /* NIActions.m */,
 				8AC6A23417DBC23A00D634B4 /* NIActions+Subclassing.h */,
 				8AC6A23517DBC23A00D634B4 /* NIButtonUtilities.h */,
@@ -667,8 +666,6 @@
 				8AC6A24417DBC23A00D634B4 /* NIImageUtilities.m */,
 				8AC6A24517DBC23A00D634B4 /* NIInMemoryCache.h */,
 				8AC6A24617DBC23A00D634B4 /* NIInMemoryCache.m */,
-				8AC6A24717DBC23A00D634B4 /* NIInvocationMethods.h */,
-				8AC6A24817DBC23A00D634B4 /* NIInvocationMethods.m */,
 				8AC6A24917DBC23A00D634B4 /* NimbusCore.h */,
 				8AC6A24A17DBC23A00D634B4 /* NimbusCore+Additions.h */,
 				8AC6A24B17DBC23A00D634B4 /* NINavigationAppearance.h */,
@@ -695,8 +692,6 @@
 				8AC6A26017DBC23A00D634B4 /* NIState.m */,
 				8AC6A26117DBC23A00D634B4 /* NIViewRecycler.h */,
 				8AC6A26217DBC23A00D634B4 /* NIViewRecycler.m */,
-				8AC6A26317DBC23A00D634B4 /* NSString+NimbusCore.h */,
-				8AC6A26417DBC23A00D634B4 /* NSString+NimbusCore.m */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -704,14 +699,13 @@
 		8AC6A27C17DBC26F00D634B4 /* PagingScrollView */ = {
 			isa = PBXGroup;
 			children = (
+				07643E0A19BFDE2200D6F9E2 /* NIPagingScrollViewPage.m */,
 				8AC6A27D17DBC29100D634B4 /* NimbusPagingScrollView.h */,
 				8AC6A27E17DBC29100D634B4 /* NIPageView.h */,
 				8AC6A27F17DBC29100D634B4 /* NIPageView.m */,
 				8AC6A28017DBC29100D634B4 /* NIPagingScrollView.h */,
 				8AC6A28117DBC29100D634B4 /* NIPagingScrollView.m */,
 				8AC6A28217DBC29100D634B4 /* NIPagingScrollView+Subclassing.h */,
-				8AC6A28317DBC29100D634B4 /* NIPagingScrollViewDataSource.h */,
-				8AC6A28417DBC29100D634B4 /* NIPagingScrollViewDelegate.h */,
 				8AC6A28517DBC29100D634B4 /* NIPagingScrollViewPage.h */,
 			);
 			name = PagingScrollView;
@@ -952,8 +946,8 @@
 				8AC6A26C17DBC23A00D634B4 /* NIFoundationMethods.m in Sources */,
 				8AC6A26D17DBC23A00D634B4 /* NIImageUtilities.m in Sources */,
 				07643E0219BEC58D00D6F9E2 /* PhotoTabBarViewController.m in Sources */,
+				07643E0B19BFDE2200D6F9E2 /* NIPagingScrollViewPage.m in Sources */,
 				8AC6A26E17DBC23A00D634B4 /* NIInMemoryCache.m in Sources */,
-				8AC6A26F17DBC23A00D634B4 /* NIInvocationMethods.m in Sources */,
 				8AC6A27017DBC23A00D634B4 /* NINavigationAppearance.m in Sources */,
 				8AC6A27117DBC23A00D634B4 /* NINetworkActivity.m in Sources */,
 				8AC6A27217DBC23A00D634B4 /* NINonEmptyCollectionTesting.m in Sources */,
@@ -965,7 +959,6 @@
 				8AC6A27817DBC23A00D634B4 /* NISnapshotRotation.m in Sources */,
 				8AC6A27917DBC23A00D634B4 /* NIState.m in Sources */,
 				8AC6A27A17DBC23A00D634B4 /* NIViewRecycler.m in Sources */,
-				8AC6A27B17DBC23A00D634B4 /* NSString+NimbusCore.m in Sources */,
 				8AC6A28617DBC29100D634B4 /* NIPageView.m in Sources */,
 				8AC6A28717DBC29100D634B4 /* NIPagingScrollView.m in Sources */,
 				8AC6A29617DBC2CA00D634B4 /* NIPhotoAlbumScrollView.m in Sources */,
@@ -974,6 +967,7 @@
 				8AC6A29917DBC2CA00D634B4 /* NIToolbarPhotoViewController.m in Sources */,
 				07446FB817DEC31A006C3E3B /* VoteManager.m in Sources */,
 				07FF017E17E5158800C8BC1C /* VotingOperation.m in Sources */,
+				07643E0919BFDD8400D6F9E2 /* UIResponder+NimbusCore.m in Sources */,
 				076DB9E617E62AAE00D0E1F6 /* UIImage+Color.m in Sources */,
 				07643DF619BE97D800D6F9E2 /* TWTSideMenuViewController.m in Sources */,
 			);

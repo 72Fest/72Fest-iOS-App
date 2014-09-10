@@ -1,5 +1,5 @@
 //
-// Copyright 2011-2012 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -42,16 +42,14 @@
 //
 
 @interface ActionsTableModelViewController ()
-@property (nonatomic, readwrite, retain) NITableViewModel* model;
+@property (nonatomic, retain) NITableViewModel* model;
 
 // The actions are stored in a separate object from the model.
-@property (nonatomic, readwrite, retain) NITableViewActions* actions;
+@property (nonatomic, retain) NITableViewActions* actions;
 @end
 
 @implementation ActionsTableModelViewController
 
-@synthesize model = _model;
-@synthesize actions = _actions;
 
 - (id)initWithStyle:(UITableViewStyle)style {
   if ((self = [super initWithStyle:UITableViewStyleGrouped])) {

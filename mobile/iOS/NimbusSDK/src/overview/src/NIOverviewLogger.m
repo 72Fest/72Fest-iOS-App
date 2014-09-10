@@ -1,5 +1,5 @@
 //
-// Copyright 2011 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,18 +25,14 @@ NSString* const NIOverviewLoggerDidAddDeviceLog = @"NIOverviewLoggerDidAddDevice
 NSString* const NIOverviewLoggerDidAddConsoleLog = @"NIOverviewLoggerDidAddConsoleLog";
 NSString* const NIOverviewLoggerDidAddEventLog = @"NIOverviewLoggerDidAddEventLog";
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-@implementation NIOverviewLogger
+@implementation NIOverviewLogger {
+  NSMutableOrderedSet* _deviceLogs;
+  NSMutableOrderedSet* _consoleLogs;
+  NSMutableOrderedSet* _eventLogs;
+  NSTimeInterval _oldestLogAge;
+  NSTimer* _heartbeatTimer;
+}
 
-@synthesize oldestLogAge = _oldestLogAge;
-@synthesize deviceLogs = _deviceLogs;
-@synthesize consoleLogs = _consoleLogs;
-@synthesize eventLogs = _eventLogs;
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 + (NIOverviewLogger*)sharedLogger
 {
   static dispatch_once_t pred = 0;
@@ -49,13 +45,11 @@ NSString* const NIOverviewLoggerDidAddEventLog = @"NIOverviewLoggerDidAddEventLo
   return instance;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
   if ((self = [super init])) {
-    _deviceLogs = [[NILinkedList alloc] init];
-    _consoleLogs = [[NILinkedList alloc] init];
-    _eventLogs = [[NILinkedList alloc] init];
+    _deviceLogs = [[NSMutableOrderedSet alloc] init];
+    _consoleLogs = [[NSMutableOrderedSet alloc] init];
+    _eventLogs = [[NSMutableOrderedSet alloc] init];
     
     _oldestLogAge = 60;
     
@@ -68,14 +62,11 @@ NSString* const NIOverviewLoggerDidAddEventLog = @"NIOverviewLoggerDidAddEventLo
   return self;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dealloc {
   [_heartbeatTimer invalidate];
   _heartbeatTimer = nil;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)heartbeat {
   [NIDeviceInfo beginCachedDeviceInfo];
   NIOverviewDeviceLogEntry* logEntry =
@@ -91,66 +82,47 @@ NSString* const NIOverviewLoggerDidAddEventLog = @"NIOverviewLoggerDidAddEventLo
   [self addDeviceLog:logEntry];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)pruneEntriesFromLinkedList:(NILinkedList *)ll {
+- (void)pruneEntriesFromLinkedList:(NSMutableOrderedSet *)ll {
   NSDate* cutoffDate = [NSDate dateWithTimeIntervalSinceNow:-_oldestLogAge];
   while ([[((NIOverviewLogEntry *)[ll firstObject])
            timestamp] compare:cutoffDate] == NSOrderedAscending) {
-    [ll removeFirstObject];
+    [ll removeObjectAtIndex:0];
   }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)addDeviceLog:(NIOverviewDeviceLogEntry *)logEntry {
   [self pruneEntriesFromLinkedList:_deviceLogs];
 
   [_deviceLogs addObject:logEntry];
   
-  [[NSNotificationCenter defaultCenter] postNotificationName: NIOverviewLoggerDidAddDeviceLog
-                                                      object: nil
-                                                    userInfo:
-   [NSDictionary dictionaryWithObject:logEntry forKey:@"entry"]];
+  [[NSNotificationCenter defaultCenter] postNotificationName:NIOverviewLoggerDidAddDeviceLog
+                                                      object:nil
+                                                    userInfo:@{@"entry":logEntry}];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)addConsoleLog:(NIOverviewConsoleLogEntry *)logEntry {
   [_consoleLogs addObject:logEntry];
   
-  [[NSNotificationCenter defaultCenter] postNotificationName: NIOverviewLoggerDidAddConsoleLog
-                                                      object: nil
-                                                    userInfo:
-   [NSDictionary dictionaryWithObject:logEntry forKey:@"entry"]];
+  [[NSNotificationCenter defaultCenter] postNotificationName:NIOverviewLoggerDidAddConsoleLog
+                                                      object:nil
+                                                    userInfo:@{@"entry":logEntry}];
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)addEventLog:(NIOverviewEventLogEntry *)logEntry {
   [self pruneEntriesFromLinkedList:_eventLogs];
 
   [_eventLogs addObject:logEntry];
   
-  [[NSNotificationCenter defaultCenter] postNotificationName: NIOverviewLoggerDidAddEventLog
-                                                      object: nil
-                                                    userInfo:
-   [NSDictionary dictionaryWithObject:logEntry forKey:@"entry"]];
+  [[NSNotificationCenter defaultCenter] postNotificationName:NIOverviewLoggerDidAddEventLog
+                                                      object:nil
+                                                    userInfo:@{@"entry":logEntry}];
 }
-
 
 @end
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NIOverviewLogEntry
 
-@synthesize timestamp = _timestamp;
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithTimestamp:(NSDate *)timestamp {
   if ((self = [super init])) {
     _timestamp = timestamp;
@@ -158,34 +130,15 @@ NSString* const NIOverviewLoggerDidAddEventLog = @"NIOverviewLoggerDidAddEventLo
   return self;
 }
 
-
 @end
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NIOverviewDeviceLogEntry
-
-@synthesize bytesOfFreeMemory = _bytesOfFreeMemory;
-@synthesize bytesOfTotalMemory = _bytesOfTotalMemory;
-@synthesize bytesOfTotalDiskSpace = _bytesOfTotalDiskSpace;
-@synthesize bytesOfFreeDiskSpace = _bytesOfFreeDiskSpace;
-@synthesize batteryLevel = _batteryLevel;
-@synthesize batteryState = _batteryState;
-
 @end
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NIOverviewConsoleLogEntry
 
-@synthesize log = _log;
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithLog:(NSString *)logText {
   if ((self = [super initWithTimestamp:[NSDate date]])) {
     _log = [logText copy];
@@ -194,26 +147,17 @@ NSString* const NIOverviewLoggerDidAddEventLog = @"NIOverviewLoggerDidAddEventLo
   return self;
 }
 
-
 @end
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NIOverviewEventLogEntry
 
-@synthesize type = _eventType;
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithType:(NSInteger)type {
   if ((self = [super initWithTimestamp:[NSDate date]])) {
-    _eventType = type;
+    _type = type;
   }
   
   return self;
 }
-
 
 @end
