@@ -9,7 +9,7 @@
 #import "MenuViewController.h"
 #import "InfoViewController.h"
 #import "PhotoTabBarViewController.h"
-#import "FrederickFilmFestPOCAppDelegate.h"
+#import "TeamsViewController.h"
 #import "TWTSideMenuViewController.h"
 
 @interface MenuViewController ()
@@ -47,6 +47,13 @@
 - (IBAction)infoBtnPressed:(id)sender {
     InfoViewController *infoViewController = [[InfoViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:infoViewController];
+    
+    [self.sideMenuViewController setMainViewController:controller animated:YES closeMenu:YES];
+}
+- (IBAction)teamsBtnPressed:(id)sender {
+    TeamsViewController *teamsViewController =
+        [[TeamsViewController alloc] initWithNibName:nil bundle:nil];
+    UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:teamsViewController];
     
     [self.sideMenuViewController setMainViewController:controller animated:YES closeMenu:YES];
 }

@@ -64,6 +64,8 @@
 		07643E0619BECFCE00D6F9E2 /* mainMenuBg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 07643E0419BECFCE00D6F9E2 /* mainMenuBg@2x.png */; };
 		07643E0919BFDD8400D6F9E2 /* UIResponder+NimbusCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643E0819BFDD8400D6F9E2 /* UIResponder+NimbusCore.m */; };
 		07643E0B19BFDE2200D6F9E2 /* NIPagingScrollViewPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643E0A19BFDE2200D6F9E2 /* NIPagingScrollViewPage.m */; };
+		07643E0F19C050D000D6F9E2 /* TeamsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643E0D19C050D000D6F9E2 /* TeamsViewController.m */; };
+		07643E1019C050D000D6F9E2 /* TeamsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07643E0E19C050D000D6F9E2 /* TeamsViewController.xib */; };
 		076B7ACB16130A0000DF6BA5 /* 72FestBanner.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7AC916130A0000DF6BA5 /* 72FestBanner.png */; };
 		076B7ACC16130A0000DF6BA5 /* 72FestBanner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */; };
 		076DB9E317E617AF00D0E1F6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076DB9E217E617AF00D0E1F6 /* MessageUI.framework */; };
@@ -218,6 +220,9 @@
 		07643E0719BFDD8400D6F9E2 /* UIResponder+NimbusCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+NimbusCore.h"; sourceTree = "<group>"; };
 		07643E0819BFDD8400D6F9E2 /* UIResponder+NimbusCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+NimbusCore.m"; sourceTree = "<group>"; };
 		07643E0A19BFDE2200D6F9E2 /* NIPagingScrollViewPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPagingScrollViewPage.m; sourceTree = "<group>"; };
+		07643E0C19C050D000D6F9E2 /* TeamsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamsViewController.h; sourceTree = "<group>"; };
+		07643E0D19C050D000D6F9E2 /* TeamsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamsViewController.m; sourceTree = "<group>"; };
+		07643E0E19C050D000D6F9E2 /* TeamsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TeamsViewController.xib; sourceTree = "<group>"; };
 		076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		076B7AC916130A0000DF6BA5 /* 72FestBanner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 72FestBanner.png; sourceTree = "<group>"; };
 		076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "72FestBanner@2x.png"; sourceTree = "<group>"; };
@@ -636,6 +641,9 @@
 				07643DF919BE98AF00D6F9E2 /* MenuViewController.xib */,
 				07643E0019BEC58D00D6F9E2 /* PhotoTabBarViewController.h */,
 				07643E0119BEC58D00D6F9E2 /* PhotoTabBarViewController.m */,
+				07643E0C19C050D000D6F9E2 /* TeamsViewController.h */,
+				07643E0D19C050D000D6F9E2 /* TeamsViewController.m */,
+				07643E0E19C050D000D6F9E2 /* TeamsViewController.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -875,6 +883,7 @@
 				0740DCDD160BEFED00A7CDAB /* digit9.png in Resources */,
 				07643DFF19BEA9A200D6F9E2 /* hamburgerIcon@2x.png in Resources */,
 				0740DCDE160BEFED00A7CDAB /* digit9@2x.png in Resources */,
+				07643E1019C050D000D6F9E2 /* TeamsViewController.xib in Resources */,
 				0740DCE2160BFA2400A7CDAB /* digitsBackground.png in Resources */,
 				0740DCE3160BFA2400A7CDAB /* digitsBackground@2x.png in Resources */,
 				0740DCED160C040D00A7CDAB /* btnCamera.png in Resources */,
@@ -932,6 +941,7 @@
 				8AFCC357159D64940067181B /* GalleryCellDataItem.m in Sources */,
 				8AFCC35A159DA8850067181B /* PhotoDetailViewController.m in Sources */,
 				8AD54D5F159EA30000061418 /* ImageCache.m in Sources */,
+				07643E0F19C050D000D6F9E2 /* TeamsViewController.m in Sources */,
 				8A25800A15A097AD00E9BBB6 /* LoaderBoxViewController.m in Sources */,
 				077286A01603EB3300D82E29 /* CountDownView.m in Sources */,
 				077286A31604372F00D82E29 /* DigitCountView.m in Sources */,
