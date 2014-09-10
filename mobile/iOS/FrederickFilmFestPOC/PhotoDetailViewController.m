@@ -161,14 +161,10 @@
 
 - (void)processShareItem:(ShareItem)item {
     //first check if image is loaded yet
-    NSInteger selectedIdx = self.photoAlbumView.centerPageIndex;
-    
+
     NIPhotoScrollView *selectedPage = nil;
-    for (NIPhotoScrollView *page in self.photoAlbumView.visiblePages) {
-        if (page.pageIndex == selectedIdx) {
-            selectedPage = page;
-        }
-    }
+    
+    selectedPage = (NIPhotoScrollView *)self.photoAlbumView.centerPageView;
     
     //This should never happen but check for if the current scroll page could not be found
     if (!selectedPage) {
