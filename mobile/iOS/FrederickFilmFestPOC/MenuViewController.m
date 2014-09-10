@@ -13,7 +13,7 @@
 #import "TWTSideMenuViewController.h"
 
 @interface MenuViewController ()
-
+@property (nonatomic, assign) MainMenuItem curMenuItem;
 @end
 
 @implementation MenuViewController
@@ -22,7 +22,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.curMenuItem = MENU_ITEM_PHOTOS;
     }
     return self;
 }
@@ -39,23 +39,41 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)photosBtnPressed:(id)sender {
-    PhotoTabBarViewController *controller = [[PhotoTabBarViewController alloc] initWithNibName:nil bundle:nil];
     
-    [self.sideMenuViewController setMainViewController:controller animated:YES closeMenu:YES];
+    if (self.curMenuItem != MENU_ITEM_PHOTOS) {
+        PhotoTabBarViewController *controller = [[PhotoTabBarViewController alloc] initWithNibName:nil bundle:nil];
+        
+        self.curMenuItem = MENU_ITEM_PHOTOS;
+        [self.sideMenuViewController setMainViewController:controller animated:YES closeMenu:YES];
+    } else {
+        [self.sideMenuViewController closeMenuAnimated:YES completion:nil];
+    }
 }
 
 - (IBAction)infoBtnPressed:(id)sender {
-    InfoViewController *infoViewController = [[InfoViewController alloc] initWithNibName:nil bundle:nil];
-    UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:infoViewController];
     
-    [self.sideMenuViewController setMainViewController:controller animated:YES closeMenu:YES];
+    if (self.curMenuItem != MENU_ITEM_INFO) {
+        InfoViewController *infoViewController = [[InfoViewController alloc] initWithNibName:nil bundle:nil];
+        UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:infoViewController];
+     
+        self.curMenuItem = MENU_ITEM_INFO;
+        [self.sideMenuViewController setMainViewController:controller animated:YES closeMenu:YES];
+    } else {
+        [self.sideMenuViewController closeMenuAnimated:YES completion:nil];
+    }
 }
 - (IBAction)teamsBtnPressed:(id)sender {
-    TeamsViewController *teamsViewController =
-        [[TeamsViewController alloc] initWithNibName:nil bundle:nil];
-    UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:teamsViewController];
     
-    [self.sideMenuViewController setMainViewController:controller animated:YES closeMenu:YES];
+    if (self.curMenuItem != MENU_ITEM_TEAMS) {
+        TeamsViewController *teamsViewController =
+            [[TeamsViewController alloc] initWithNibName:nil bundle:nil];
+        UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:teamsViewController];
+        
+        self.curMenuItem = MENU_ITEM_TEAMS;
+        [self.sideMenuViewController setMainViewController:controller animated:YES closeMenu:YES];
+    } else {
+        [self.sideMenuViewController closeMenuAnimated:YES completion:nil];
+    }
 }
 
 @end

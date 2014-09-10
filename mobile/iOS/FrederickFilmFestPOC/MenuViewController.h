@@ -10,4 +10,10 @@
 
 @interface MenuViewController : UIViewController
 
+typedef enum {
+    MENU_ITEM_PHOTOS,
+    MENU_ITEM_TEAMS,
+    MENU_ITEM_INFO
+} MainMenuItem;
+
 @end
