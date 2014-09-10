@@ -50,7 +50,7 @@
     //[[galleryNavController navigationBar] setTintColor:THEME_CLR];
     
     self.viewControllers = [NSArray arrayWithObjects:self.navController, galleryNavController, nil];
-    [self.photoUploadController setParentTabBar:self.tabBarController.tabBar];
+    [self.photoUploadController setParentTabBar:self.tabBar];
     
     //set up tab bar img
     self.delegate = self;
