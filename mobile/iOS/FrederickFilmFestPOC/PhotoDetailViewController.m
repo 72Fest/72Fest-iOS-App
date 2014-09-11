@@ -87,15 +87,10 @@
     //update the vote total
     [self displayVoteTotal];
     
-    //style for iOS 7
-    if (SYSTEM_IS_IOS7) {
-        [self.navigationController.navigationBar setTintColor:THEME_CLR];
-        [self.toolbar setTintColor:THEME_CLR];
 
-    } else {
-        [self.navigationController.navigationBar setTintColor:THEME_BG_CLR];
-        [self.toolbar setTintColor:THEME_BG_CLR];
-    }
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    [self.toolbar setTintColor:[UIColor whiteColor]];
+    [self.toolbar setBarTintColor:THEME_CLR];
 }
 
 - (void)viewDidUnload
