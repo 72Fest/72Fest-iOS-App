@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+            <title>Teams Details</title>
+            <style>
+                body {
+                    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+                    font-weight: 300;
+                }
+            
+            .logo {
+                display: block;
+                height: 120px;
+                margin:  auto;
+            }
+            
+            .filmContainer {
+                width: 90%;
+                margin: auto;
+            }
+            
+            h3 {
+                margin: 20px 0px 2px 0px;
+            }
+            
+            p {
+                margin: 0px;
+            }
+            </style>
+    </head>
+    <body>
+        <div class="logoContainer">
+            <img class="logo" src="{{TeamLogoURL}}">
+                </div>
+        
+        
+        <h3>Team Name</h3>
+        <p>{{TeamName}}</p>
+        
+        <h3>Team Bio</h3>
+        <p>{{TeamBio}}</p>
+        
+        {{TeamFilms}}
+    </body>
+</html>

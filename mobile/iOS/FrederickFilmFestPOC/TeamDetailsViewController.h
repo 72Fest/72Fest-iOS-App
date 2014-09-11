@@ -11,4 +11,5 @@
 @interface TeamDetailsViewController : UIViewController
 
 @property (nonatomic, strong) NSDictionary *teamData;
+@property (weak, nonatomic) IBOutlet UIWebView *webView;
 @end
