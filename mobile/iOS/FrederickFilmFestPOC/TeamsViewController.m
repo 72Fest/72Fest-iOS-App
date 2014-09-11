@@ -12,6 +12,8 @@
 #import "TeamDetailsViewController.h"
 #import "ConnectionInfo.h"
 
+#define CELL_SELECTION_CLR [UIColor colorWithRed:144.0/255.0 green:188.0/255.0 blue:195.0/255.0 alpha:1.0]
+
 @interface TeamsViewController ()
 - (void)fetchTeamsList;
 
@@ -35,7 +37,7 @@
     // Do any additional setup after loading the view from its nib.
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)])
         self.edgesForExtendedLayout = UIRectEdgeNone;
-    
+
     UIImageView *iv =
         [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"filmFestLogo.png"]];
     [[self navigationItem] setTitleView:iv];
@@ -93,6 +95,11 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:teamPlainCellIdentifier];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
+        //Add background color to selected state of cell
+        UIView *bgColorView = [[UIView alloc] init];
+        bgColorView.backgroundColor = CELL_SELECTION_CLR;
+        [cell setSelectedBackgroundView:bgColorView];
     }
     
     NSDictionary *teamData = [self.dataProvider objectAtIndex:indexPath.row];
