@@ -72,6 +72,7 @@
 		07643E1B19C163D200D6F9E2 /* RubikMonoOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07643E1A19C163D200D6F9E2 /* RubikMonoOne-Regular.ttf */; };
 		07643E1F19C1918800D6F9E2 /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643E1D19C1918800D6F9E2 /* ContactViewController.m */; };
 		07643E2019C1918800D6F9E2 /* ContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07643E1E19C1918800D6F9E2 /* ContactViewController.xib */; };
+		07643E2319C1F2BD00D6F9E2 /* MenuBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643E2219C1F2BD00D6F9E2 /* MenuBackgroundView.m */; };
 		076B7ACB16130A0000DF6BA5 /* 72FestBanner.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7AC916130A0000DF6BA5 /* 72FestBanner.png */; };
 		076B7ACC16130A0000DF6BA5 /* 72FestBanner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */; };
 		076DB9E317E617AF00D0E1F6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076DB9E217E617AF00D0E1F6 /* MessageUI.framework */; };
@@ -238,6 +239,8 @@
 		07643E1C19C1918800D6F9E2 /* ContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactViewController.h; sourceTree = "<group>"; };
 		07643E1D19C1918800D6F9E2 /* ContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactViewController.m; sourceTree = "<group>"; };
 		07643E1E19C1918800D6F9E2 /* ContactViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactViewController.xib; sourceTree = "<group>"; };
+		07643E2119C1F2BD00D6F9E2 /* MenuBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuBackgroundView.h; sourceTree = "<group>"; };
+		07643E2219C1F2BD00D6F9E2 /* MenuBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuBackgroundView.m; sourceTree = "<group>"; };
 		076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		076B7AC916130A0000DF6BA5 /* 72FestBanner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 72FestBanner.png; sourceTree = "<group>"; };
 		076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "72FestBanner@2x.png"; sourceTree = "<group>"; };
@@ -653,6 +656,8 @@
 				0772869F1603EB3300D82E29 /* CountDownView.m */,
 				077286A11604372F00D82E29 /* DigitCountView.h */,
 				077286A21604372F00D82E29 /* DigitCountView.m */,
+				07643E2119C1F2BD00D6F9E2 /* MenuBackgroundView.h */,
+				07643E2219C1F2BD00D6F9E2 /* MenuBackgroundView.m */,
 				07643DF719BE98AF00D6F9E2 /* MenuViewController.h */,
 				07643DF819BE98AF00D6F9E2 /* MenuViewController.m */,
 				07643DF919BE98AF00D6F9E2 /* MenuViewController.xib */,
@@ -954,6 +959,7 @@
 			files = (
 				8AC0A309141D773800F0E4B0 /* main.m in Sources */,
 				07643E1F19C1918800D6F9E2 /* ContactViewController.m in Sources */,
+				07643E2319C1F2BD00D6F9E2 /* MenuBackgroundView.m in Sources */,
 				07643DFA19BE98AF00D6F9E2 /* MenuViewController.m in Sources */,
 				8AC0A30C141D773800F0E4B0 /* FrederickFilmFestPOCAppDelegate.m in Sources */,
 				0770B12D17E916AE009C6ED5 /* PhotoDownloadOperation.m in Sources */,
