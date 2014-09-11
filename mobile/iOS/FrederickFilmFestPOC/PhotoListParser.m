@@ -7,6 +7,7 @@
 //
 
 #import "PhotoListParser.h"
+#import "ConnectionInfo.h"
 
 @interface PhotoListParser()
 
@@ -46,10 +47,10 @@
         if (!jsonDict) {
             NSLog(@"Error parsing JSON: %@", e);
         } else {
-            if ([jsonDict valueForKey:@"isSuccess"]) {
+            if ([jsonDict valueForKey:API_MESSAGE_STATUS_KEY]) {
                 NSLog(@"Failed to retieve photos!");
                 
-                NSDictionary *message = [jsonDict valueForKey:@"message"];
+                NSDictionary *message = [jsonDict valueForKey:API_MESSAGE_KEY];
                 NSDictionary *meta = [message valueForKey:@"metadata"];
                 NSDictionary *photos = [message valueForKey:@"photos"];
                 

@@ -51,9 +51,10 @@
     }
     
     __block NSMutableDictionary *blockHashTable = self.hashTable;
+    __block UIImage *thumbImgCopy = [thumbImg copy];
     dispatch_async(self.thumbCacheQueue, ^{
         if (![blockHashTable objectForKey:key]){
-            [blockHashTable setObject:[thumbImg copy] forKey:key];
+            [blockHashTable setObject:thumbImgCopy forKey:key];
         }
     });
 }

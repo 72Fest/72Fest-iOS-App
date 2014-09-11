@@ -54,17 +54,6 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-
-    if (SYSTEM_IS_IOS7) {
-        //set tint for nav controller
-        [[self.navigationController navigationBar] setTintColor:[UIColor whiteColor]];
-        [self.navigationController.navigationBar performSelector:@selector(setBarTintColor:) withObject:THEME_CLR];
-        
-    } else {
-        [[self.navigationController navigationBar] setTintColor:THEME_CLR];
-        [[self.navigationController navigationBar] setBackgroundImage:[UIImage imageWithColor:THEME_CLR] forBarMetrics:UIBarMetricsDefault];
-    }
-    
     
     //set up refresh button
     //self.refreshBtn = [[UIBarButtonItem alloc] initWithTitle:@"Refresh" style:UIBarButtonSystemItemAction target:self action:@selector(refreshPressed:)];
@@ -283,8 +272,9 @@
             //image is not retrieved yet, pull it from the site
             dispatch_queue_t imageThumbCellQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
 
+            
             __block UIImage *img;
-             NSString *curFilename = [curThumbStr lastPathComponent];
+            NSString *curFilename = [curThumbStr lastPathComponent];
             dispatch_async(imageThumbCellQueue, ^{
                 if ([[DiskCacheManager defaultManager] existsInCache:curFilename]) {
                     //TODO:Seems to be a problem here
