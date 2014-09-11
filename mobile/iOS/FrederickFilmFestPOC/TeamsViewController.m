@@ -9,6 +9,7 @@
 #import "TeamsViewController.h"
 #import "TWTSideMenuViewController.h"
 #import "Teams.h"
+#import "TeamDetailsViewController.h"
 #import "ConnectionInfo.h"
 
 @interface TeamsViewController ()
@@ -32,8 +33,11 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    if ([self respondsToSelector:@selector(edgesForExtendedLayout)])
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    
     UIImageView *iv =
-    [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"filmFestLogo.png"]];
+        [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"filmFestLogo.png"]];
     [[self navigationItem] setTitleView:iv];
     
     UIBarButtonItem *menuBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburgerIcon.png"] style:UIBarButtonItemStylePlain target:self action:@selector(btnPressed:)];
@@ -88,6 +92,7 @@
     
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:teamPlainCellIdentifier];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
     NSDictionary *teamData = [self.dataProvider objectAtIndex:indexPath.row];
@@ -97,6 +102,16 @@
     return cell;
     
     return ( cell );
+}
+
+#pragma mark - TableView delegate implementations
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    TeamDetailsViewController *vc = [[TeamDetailsViewController alloc] initWithNibName:nil bundle:nil];
+
+    NSDictionary *teamData = [self.dataProvider objectAtIndex:indexPath.row];
+    [vc setTeamData:teamData];
+    
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - IB actions
