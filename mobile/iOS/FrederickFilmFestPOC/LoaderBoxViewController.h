@@ -11,5 +11,8 @@
 @interface LoaderBoxViewController : UIViewController
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 
+@property (weak, nonatomic) IBOutlet UILabel *loadingCaption;
 - (void)setLoading:(BOOL)isLoading;
+
+- (void)setCaptionText: (NSString *)str;
 @end

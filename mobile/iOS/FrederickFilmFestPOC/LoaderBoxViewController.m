@@ -38,6 +38,10 @@
     // e.g. self.myOutlet = nil;
 }
 
+- (void)setCaptionText: (NSString *)str {
+    [self.loadingCaption setText:str];
+}
+
 - (void)setLoading:(BOOL)isLoading {
     [self.view setHidden:!isLoading];
     if (isLoading) {
