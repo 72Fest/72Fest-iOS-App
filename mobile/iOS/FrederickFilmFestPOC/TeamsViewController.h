@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TeamsViewController : UIViewController
+@interface TeamsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
+@property (weak, nonatomic) IBOutlet UITableView *teamsTableView;
 @end

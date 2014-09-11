@@ -223,6 +223,7 @@
 		07643E0C19C050D000D6F9E2 /* TeamsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamsViewController.h; sourceTree = "<group>"; };
 		07643E0D19C050D000D6F9E2 /* TeamsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamsViewController.m; sourceTree = "<group>"; };
 		07643E0E19C050D000D6F9E2 /* TeamsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TeamsViewController.xib; sourceTree = "<group>"; };
+		07643E1119C11ACD00D6F9E2 /* Teams.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Teams.h; sourceTree = "<group>"; };
 		076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		076B7AC916130A0000DF6BA5 /* 72FestBanner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 72FestBanner.png; sourceTree = "<group>"; };
 		076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "72FestBanner@2x.png"; sourceTree = "<group>"; };
@@ -644,6 +645,7 @@
 				07643E0C19C050D000D6F9E2 /* TeamsViewController.h */,
 				07643E0D19C050D000D6F9E2 /* TeamsViewController.m */,
 				07643E0E19C050D000D6F9E2 /* TeamsViewController.xib */,
+				07643E1119C11ACD00D6F9E2 /* Teams.h */,
 			);
 			name = Views;
 			sourceTree = "<group>";
