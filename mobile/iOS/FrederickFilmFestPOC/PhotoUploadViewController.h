@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CountDownView.h"
 
-#define LABEL_FONT [UIFont fontWithName:@"Archive" size:20]
+#define LABEL_FONT [UIFont fontWithName:LABEL_FONT_NAME size:15]
 @interface PhotoUploadViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate> {
     BOOL cameraWasUsed;
 }

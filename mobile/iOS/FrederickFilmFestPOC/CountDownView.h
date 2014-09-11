@@ -9,10 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "ConnectionInfo.h"
 
-#define LABEL_FONT_NAME @"Archive"
-#define LABEL_FONT_SIZE 10.0
+#define LABEL_FONT_NAME @"RubikMonoOne-Regular"
+#define LABEL_FONT_SIZE 8.0
 #define LABEL_CLR [UIColor colorWithRed:232.0 green:232.0 blue:232.0 alpha:1]
-#define CAPTION_FONT_SIZE 12.0
+#define CAPTION_FONT_SIZE 11.0
 #define COUNT_DOWN_BG_IMG @"digitsBackground.png"
 
 

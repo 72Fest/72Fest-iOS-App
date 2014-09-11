@@ -48,6 +48,7 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>Archive.otf</string>
+		<string>RubikMonoOne-Regular.ttf</string>
 	</array>
 	<key>UIApplicationExitsOnSuspend</key>
 	<true/>
