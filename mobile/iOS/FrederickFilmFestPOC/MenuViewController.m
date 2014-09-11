@@ -11,6 +11,9 @@
 #import "PhotoTabBarViewController.h"
 #import "TeamsViewController.h"
 #import "TWTSideMenuViewController.h"
+#import "CountDownView.h"
+
+#define BUTTON_FONT [UIFont fontWithName:LABEL_FONT_NAME size:20]
 
 @interface MenuViewController ()
 @property (nonatomic, assign) MainMenuItem curMenuItem;
@@ -31,6 +34,9 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [self.photosBtn.titleLabel setFont:BUTTON_FONT];
+    [self.teamsBtn.titleLabel setFont:BUTTON_FONT];
+    [self.infoBtn.titleLabel setFont:BUTTON_FONT];
 }
 
 - (void)didReceiveMemoryWarning

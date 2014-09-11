@@ -16,4 +16,8 @@ typedef enum {
     MENU_ITEM_INFO
 } MainMenuItem;
 
+@property (weak, nonatomic) IBOutlet UIButton *photosBtn;
+@property (weak, nonatomic) IBOutlet UIButton *teamsBtn;
+@property (weak, nonatomic) IBOutlet UIButton *infoBtn;
+
 @end
