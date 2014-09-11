@@ -389,12 +389,14 @@
         return;
     }
     
+    
     //flag that the camera was used for this photo
     cameraWasUsed = YES;
     
     UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
     
     [imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+    [imagePicker setCameraCaptureMode:UIImagePickerControllerCameraCaptureModePhoto];
     [imagePicker setDelegate:self];
 
     [self presentViewController:imagePicker animated:YES completion:nil];
