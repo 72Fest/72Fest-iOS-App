@@ -10,6 +10,7 @@
 #import "InfoViewController.h"
 #import "PhotoTabBarViewController.h"
 #import "TeamsViewController.h"
+#import "ContactViewController.h"
 #import "TWTSideMenuViewController.h"
 #import "CountDownView.h"
 
@@ -33,10 +34,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    // Assign custom font
     [self.photosBtn.titleLabel setFont:BUTTON_FONT];
     [self.teamsBtn.titleLabel setFont:BUTTON_FONT];
     [self.infoBtn.titleLabel setFont:BUTTON_FONT];
+    [self.contactBtn.titleLabel setFont:BUTTON_FONT];
 }
 
 - (void)didReceiveMemoryWarning
@@ -82,4 +84,15 @@
     }
 }
 
+- (IBAction)contactBtnPressed:(id)sender {
+    if (self.curMenuItem != MENU_ITEM_CONTACT) {
+        ContactViewController *contactViewController = [[ContactViewController alloc] initWithNibName:nil bundle:nil];
+        UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:contactViewController];
+        
+        self.curMenuItem = MENU_ITEM_CONTACT;
+        [self.sideMenuViewController setMainViewController:controller animated:YES closeMenu:YES];
+    } else {
+        [self.sideMenuViewController closeMenuAnimated:YES completion:nil];
+    }
+}
 @end

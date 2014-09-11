@@ -70,6 +70,8 @@
 		07643E1619C1238A00D6F9E2 /* TeamDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07643E1419C1238A00D6F9E2 /* TeamDetailsViewController.xib */; };
 		07643E1819C136D700D6F9E2 /* teamDetailsTemplate.html in Resources */ = {isa = PBXBuildFile; fileRef = 07643E1719C136D700D6F9E2 /* teamDetailsTemplate.html */; };
 		07643E1B19C163D200D6F9E2 /* RubikMonoOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07643E1A19C163D200D6F9E2 /* RubikMonoOne-Regular.ttf */; };
+		07643E1F19C1918800D6F9E2 /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643E1D19C1918800D6F9E2 /* ContactViewController.m */; };
+		07643E2019C1918800D6F9E2 /* ContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07643E1E19C1918800D6F9E2 /* ContactViewController.xib */; };
 		076B7ACB16130A0000DF6BA5 /* 72FestBanner.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7AC916130A0000DF6BA5 /* 72FestBanner.png */; };
 		076B7ACC16130A0000DF6BA5 /* 72FestBanner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */; };
 		076DB9E317E617AF00D0E1F6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076DB9E217E617AF00D0E1F6 /* MessageUI.framework */; };
@@ -233,6 +235,9 @@
 		07643E1419C1238A00D6F9E2 /* TeamDetailsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TeamDetailsViewController.xib; sourceTree = "<group>"; };
 		07643E1719C136D700D6F9E2 /* teamDetailsTemplate.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = teamDetailsTemplate.html; sourceTree = "<group>"; };
 		07643E1A19C163D200D6F9E2 /* RubikMonoOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RubikMonoOne-Regular.ttf"; sourceTree = "<group>"; };
+		07643E1C19C1918800D6F9E2 /* ContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactViewController.h; sourceTree = "<group>"; };
+		07643E1D19C1918800D6F9E2 /* ContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactViewController.m; sourceTree = "<group>"; };
+		07643E1E19C1918800D6F9E2 /* ContactViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactViewController.xib; sourceTree = "<group>"; };
 		076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		076B7AC916130A0000DF6BA5 /* 72FestBanner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 72FestBanner.png; sourceTree = "<group>"; };
 		076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "72FestBanner@2x.png"; sourceTree = "<group>"; };
@@ -660,6 +665,9 @@
 				07643E1219C1238A00D6F9E2 /* TeamDetailsViewController.h */,
 				07643E1319C1238A00D6F9E2 /* TeamDetailsViewController.m */,
 				07643E1419C1238A00D6F9E2 /* TeamDetailsViewController.xib */,
+				07643E1C19C1918800D6F9E2 /* ContactViewController.h */,
+				07643E1D19C1918800D6F9E2 /* ContactViewController.m */,
+				07643E1E19C1918800D6F9E2 /* ContactViewController.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -859,6 +867,7 @@
 				8A430B07142BFDBD007B72F5 /* icon114.png in Resources */,
 				8A430B16142C0825007B72F5 /* InfoViewController.xib in Resources */,
 				8A6D08C715786FE800D2CB11 /* GalleryViewController.xib in Resources */,
+				07643E2019C1918800D6F9E2 /* ContactViewController.xib in Resources */,
 				8A6D08D1157979CE00D2CB11 /* gallery.png in Resources */,
 				8A6D08D2157979CE00D2CB11 /* upload-photo.png in Resources */,
 				8AFCC34F159D61C20067181B /* GalleryTableViewCell.xib in Resources */,
@@ -944,6 +953,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8AC0A309141D773800F0E4B0 /* main.m in Sources */,
+				07643E1F19C1918800D6F9E2 /* ContactViewController.m in Sources */,
 				07643DFA19BE98AF00D6F9E2 /* MenuViewController.m in Sources */,
 				8AC0A30C141D773800F0E4B0 /* FrederickFilmFestPOCAppDelegate.m in Sources */,
 				0770B12D17E916AE009C6ED5 /* PhotoDownloadOperation.m in Sources */,
