@@ -11,10 +11,12 @@
 #import "PhotoTabBarViewController.h"
 #import "TeamsViewController.h"
 #import "ContactViewController.h"
+#import "NewsViewController.h"
 #import "TWTSideMenuViewController.h"
 #import "CountDownView.h"
+#import "ConnectionInfo.h"
 
-#define BUTTON_FONT [UIFont fontWithName:LABEL_FONT_NAME size:20]
+#define BUTTON_FONT [UIFont fontWithName:LABEL_FONT_NAME size:16]
 
 @interface MenuViewController ()
 @property (nonatomic, assign) MainMenuItem curMenuItem;
@@ -39,6 +41,7 @@
     [self.teamsBtn.titleLabel setFont:BUTTON_FONT];
     [self.infoBtn.titleLabel setFont:BUTTON_FONT];
     [self.contactBtn.titleLabel setFont:BUTTON_FONT];
+    [self.newsBtn.titleLabel setFont:BUTTON_FONT];
 }
 
 - (void)didReceiveMemoryWarning
@@ -86,7 +89,8 @@
 
 - (IBAction)contactBtnPressed:(id)sender {
     if (self.curMenuItem != MENU_ITEM_CONTACT) {
-        ContactViewController *contactViewController = [[ContactViewController alloc] initWithNibName:nil bundle:nil];
+        ContactViewController *contactViewController =
+            [[ContactViewController alloc] initWithURL:[NSURL URLWithString:CONTACT_URL_STR] andLoadingCaption:@"Loading contact form ..."];
         UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:contactViewController];
         
         self.curMenuItem = MENU_ITEM_CONTACT;
@@ -95,4 +99,18 @@
         [self.sideMenuViewController closeMenuAnimated:YES completion:nil];
     }
 }
+
+- (IBAction)newsBtnPressed:(id)sender {
+    if (self.curMenuItem != NEMU_ITEM_NEWS) {
+        NewsViewController *newsViewController =
+        [[NewsViewController alloc] initWithURL:[NSURL URLWithString:NEWS_URL_STR] andLoadingCaption:@"Loading news feed ..."];
+        UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:newsViewController];
+        
+        self.curMenuItem = NEMU_ITEM_NEWS;
+        [self.sideMenuViewController setMainViewController:controller animated:YES closeMenu:YES];
+    } else {
+        [self.sideMenuViewController closeMenuAnimated:YES completion:nil];
+    }
+}
+
 @end

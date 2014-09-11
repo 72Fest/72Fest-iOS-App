@@ -1,19 +1,18 @@
 //
-//  ContactViewController.m
+//  NewsViewController.m
 //  FrederickFilmFestPOC
 //
 //  Created by Carpe Lucem Media Group on 9/11/14.
 //
 //
 
-#import "ContactViewController.h"
-#import "TWTSideMenuViewController.h"
-#import "LoaderBoxViewController.h"
+#import "NewsViewController.h"
 
-@interface ContactViewController ()
+@interface NewsViewController ()
+
 @end
 
-@implementation ContactViewController
+@implementation NewsViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -27,6 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
 }
 
 - (void)didReceiveMemoryWarning

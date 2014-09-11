@@ -9,7 +9,7 @@
 #ifndef FrederickFilmFestPOC_ConnectionInfo_h
 #define FrederickFilmFestPOC_ConnectionInfo_h
 //URL Macros
-#define BASE_URL @"http://localhost:3000/api"
+#define BASE_URL @"http://api.phoshow.me:3000/api"
 #define GEN_URL(URL) [NSString stringWithFormat:@"%@/%@", BASE_URL, URL]
 
 //URL definitions
@@ -18,6 +18,7 @@
 #define UPLOAD_URL_STR GEN_URL(@"upload") // /api/upload endpoint
 #define VOTE_URL_STR  GEN_URL(@"vote")
 #define VOTE_TOTALS_URL_STR GEN_URL(@"votes")
+#define TEAM_LIST_URL_STR GEN_URL(@"teams") // /api/photos endpoint
 //macro to generate a string to retrieve vote totals for a given id
 #define VOTE_TOTALS_URL_FOR_ID(PHOTO_ID) [NSString stringWithFormat:@"%@/%@", VOTE_TOTALS_URL_STR, PHOTO_ID]
 #define API_MESSAGE_STATUS_KEY @"isSuccess"
@@ -27,5 +28,7 @@
 #define EMAIL_URL_STR @"http://www.72fest.com/about/contact/"
 #define DESIGN_URL_STR @"http://www.jbokim.com"
 #define MAIN_URL_STR @"http://www.72fest.com"
+#define CONTACT_URL_STR @"http://www.72fest.com/about/contact/"
+#define NEWS_URL_STR @"http://api.phoshow.me:3000/news"
 
 #endif

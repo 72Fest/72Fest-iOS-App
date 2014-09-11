@@ -73,6 +73,9 @@
 		07643E1F19C1918800D6F9E2 /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643E1D19C1918800D6F9E2 /* ContactViewController.m */; };
 		07643E2019C1918800D6F9E2 /* ContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07643E1E19C1918800D6F9E2 /* ContactViewController.xib */; };
 		07643E2319C1F2BD00D6F9E2 /* MenuBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643E2219C1F2BD00D6F9E2 /* MenuBackgroundView.m */; };
+		07643E2719C21CD400D6F9E2 /* NewsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643E2519C21CD400D6F9E2 /* NewsViewController.m */; };
+		07643E2819C21CD400D6F9E2 /* NewsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07643E2619C21CD400D6F9E2 /* NewsViewController.xib */; };
+		07643E2B19C21E3D00D6F9E2 /* GenericWebContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643E2A19C21E3D00D6F9E2 /* GenericWebContentViewController.m */; };
 		076B7ACB16130A0000DF6BA5 /* 72FestBanner.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7AC916130A0000DF6BA5 /* 72FestBanner.png */; };
 		076B7ACC16130A0000DF6BA5 /* 72FestBanner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */; };
 		076DB9E317E617AF00D0E1F6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076DB9E217E617AF00D0E1F6 /* MessageUI.framework */; };
@@ -241,6 +244,11 @@
 		07643E1E19C1918800D6F9E2 /* ContactViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactViewController.xib; sourceTree = "<group>"; };
 		07643E2119C1F2BD00D6F9E2 /* MenuBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuBackgroundView.h; sourceTree = "<group>"; };
 		07643E2219C1F2BD00D6F9E2 /* MenuBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuBackgroundView.m; sourceTree = "<group>"; };
+		07643E2419C21CD400D6F9E2 /* NewsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsViewController.h; sourceTree = "<group>"; };
+		07643E2519C21CD400D6F9E2 /* NewsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsViewController.m; sourceTree = "<group>"; };
+		07643E2619C21CD400D6F9E2 /* NewsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewsViewController.xib; sourceTree = "<group>"; };
+		07643E2919C21E3D00D6F9E2 /* GenericWebContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericWebContentViewController.h; sourceTree = "<group>"; };
+		07643E2A19C21E3D00D6F9E2 /* GenericWebContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenericWebContentViewController.m; sourceTree = "<group>"; };
 		076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		076B7AC916130A0000DF6BA5 /* 72FestBanner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 72FestBanner.png; sourceTree = "<group>"; };
 		076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "72FestBanner@2x.png"; sourceTree = "<group>"; };
@@ -673,6 +681,11 @@
 				07643E1C19C1918800D6F9E2 /* ContactViewController.h */,
 				07643E1D19C1918800D6F9E2 /* ContactViewController.m */,
 				07643E1E19C1918800D6F9E2 /* ContactViewController.xib */,
+				07643E2419C21CD400D6F9E2 /* NewsViewController.h */,
+				07643E2519C21CD400D6F9E2 /* NewsViewController.m */,
+				07643E2619C21CD400D6F9E2 /* NewsViewController.xib */,
+				07643E2919C21E3D00D6F9E2 /* GenericWebContentViewController.h */,
+				07643E2A19C21E3D00D6F9E2 /* GenericWebContentViewController.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -930,6 +943,7 @@
 				07643E1819C136D700D6F9E2 /* teamDetailsTemplate.html in Resources */,
 				0740DCF9160C141700A7CDAB /* filmFestLogo@2x.png in Resources */,
 				0740DCFC160C1BF400A7CDAB /* bkg.png in Resources */,
+				07643E2819C21CD400D6F9E2 /* NewsViewController.xib in Resources */,
 				0740DCFD160C1BF400A7CDAB /* bkg@2x.png in Resources */,
 				076B7ACB16130A0000DF6BA5 /* 72FestBanner.png in Resources */,
 				076B7ACC16130A0000DF6BA5 /* 72FestBanner@2x.png in Resources */,
@@ -967,6 +981,7 @@
 				8A430AD5142ABB32007B72F5 /* UINavigationBar+CustomBackground.m in Sources */,
 				8A430B0B142C0070007B72F5 /* UIImage+Resize.m in Sources */,
 				8A430B10142C00C6007B72F5 /* UIImage+Alpha.m in Sources */,
+				07643E2B19C21E3D00D6F9E2 /* GenericWebContentViewController.m in Sources */,
 				8A430B11142C00C6007B72F5 /* UIImage+RoundedCorner.m in Sources */,
 				8A430B15142C0825007B72F5 /* InfoViewController.m in Sources */,
 				8A430B23142C29EA007B72F5 /* Reachability.m in Sources */,
@@ -984,6 +999,7 @@
 				8AC6A26517DBC23A00D634B4 /* NIActions.m in Sources */,
 				8AC6A26617DBC23A00D634B4 /* NIButtonUtilities.m in Sources */,
 				8AC6A26717DBC23A00D634B4 /* NICommonMetrics.m in Sources */,
+				07643E2719C21CD400D6F9E2 /* NewsViewController.m in Sources */,
 				8AC6A26817DBC23A00D634B4 /* NIDataStructures.m in Sources */,
 				8AC6A26917DBC23A00D634B4 /* NIDebuggingTools.m in Sources */,
 				8AC6A26A17DBC23A00D634B4 /* NIDeviceOrientation.m in Sources */,

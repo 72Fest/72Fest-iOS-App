@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="contactBtn" destination="0BJ-Et-DNs" id="U38-ue-3ZC"/>
                 <outlet property="infoBtn" destination="Pvb-WB-3Qh" id="55r-dQ-ckO"/>
+                <outlet property="newsBtn" destination="efK-jh-TjG" id="8OW-Zk-OId"/>
                 <outlet property="photosBtn" destination="U9t-rE-w5H" id="epY-Dn-v37"/>
                 <outlet property="teamsBtn" destination="qLE-fC-2Pw" id="IRB-8z-uq0"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -24,11 +25,11 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CVr-KE-hv4" customClass="MenuBackgroundView">
-                    <rect key="frame" x="0.0" y="93" width="174" height="50"/>
+                    <rect key="frame" x="0.0" y="89" width="174" height="45"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U9t-rE-w5H">
-                            <rect key="frame" x="20" y="10" width="154" height="30"/>
+                            <rect key="frame" x="20" y="7" width="154" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="Photos">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -42,11 +43,11 @@
                     <color key="backgroundColor" red="0.93725490196078431" green="0.22352941176470587" blue="0.23529411764705882" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CZD-cR-eAI" customClass="MenuBackgroundView">
-                    <rect key="frame" x="0.0" y="170" width="174" height="50"/>
+                    <rect key="frame" x="0.0" y="207" width="174" height="45"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qLE-fC-2Pw">
-                            <rect key="frame" x="19" y="10" width="155" height="30"/>
+                            <rect key="frame" x="19" y="7" width="155" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="Teams">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -60,11 +61,11 @@
                     <color key="backgroundColor" red="0.93725490199999995" green="0.22352941179999999" blue="0.23529411759999999" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IcP-V1-tiw" customClass="MenuBackgroundView">
-                    <rect key="frame" x="0.0" y="331" width="174" height="50"/>
+                    <rect key="frame" x="0.0" y="331" width="174" height="45"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pvb-WB-3Qh">
-                            <rect key="frame" x="19" y="10" width="155" height="30"/>
+                            <rect key="frame" x="19" y="7" width="155" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="Credits">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -82,11 +83,11 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TAP-R8-Fvu" customClass="MenuBackgroundView">
-                    <rect key="frame" x="0.0" y="251" width="174" height="50"/>
+                    <rect key="frame" x="0.0" y="266" width="174" height="45"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0BJ-Et-DNs">
-                            <rect key="frame" x="19" y="10" width="155" height="30"/>
+                            <rect key="frame" x="19" y="7" width="155" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="Contact">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -94,6 +95,24 @@
                             </state>
                             <connections>
                                 <action selector="contactBtnPressed:" destination="-1" eventType="touchUpInside" id="AiP-Vl-cNL"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.93725490199999995" green="0.22352941179999999" blue="0.23529411759999999" alpha="1" colorSpace="calibratedRGB"/>
+                </view>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pVT-uX-sXU" customClass="MenuBackgroundView">
+                    <rect key="frame" x="0.0" y="149" width="174" height="45"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="efK-jh-TjG">
+                            <rect key="frame" x="19" y="7" width="155" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="News">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="newsBtnPressed:" destination="-1" eventType="touchUpInside" id="uPk-qI-oYg"/>
                             </connections>
                         </button>
                     </subviews>
