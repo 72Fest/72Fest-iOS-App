@@ -17,7 +17,7 @@
 
 -(void)btnPressed:(id)sender;
 //IB actions
-- (IBAction)dismissPressed:(id)sender;
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 - (IBAction)bannerPressed:(id)sender;
 

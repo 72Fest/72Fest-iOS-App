@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <deployment defaultVersion="1536" identifier="iOS"/>
+        <deployment version="1792" defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="InfoViewController">
             <connections>
-                <outlet property="designUrlLabel" destination="23" id="24"/>
-                <outlet property="urlLabel" destination="20" id="21"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -22,63 +20,76 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" red="0.60334398690000002" green="0.7437824811" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                 </imageView>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Contact us if you encounter problems or have questions" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" minimumFontSize="10" id="20">
-                    <rect key="frame" x="64" y="371" width="191" height="42"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="-14" maxX="0.0" maxY="14"/>
-                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="11"/>
-                    <color key="textColor" red="0.4431372549" green="0.77647058820000003" blue="0.69803921570000005" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                    <size key="shadowOffset" width="0.0" height="0.0"/>
-                </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="www.jbokim.com" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="23">
-                    <rect key="frame" x="172" y="345" width="120" height="31"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="11"/>
-                    <color key="textColor" red="0.44313725490196076" green="0.77647058823529413" blue="0.69803921568627447" alpha="1" colorSpace="calibratedRGB"/>
-                    <color key="highlightedColor" red="0.46304087570000002" green="0.67751860799999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <size key="shadowOffset" width="0.0" height="0.0"/>
-                </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Developed by" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="18">
-                    <rect key="frame" x="24" y="294" width="272" height="22"/>
+                    <rect key="frame" x="24" y="424" width="272" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
+                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="12"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                     <size key="shadowOffset" width="0.0" height="0.0"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text=" Lonny Gomes, Chris Howell and Tim DeFoggi" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="37">
-                    <rect key="frame" x="25" y="309" width="269" height="29"/>
+                    <rect key="frame" x="25" y="436" width="269" height="29"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                    <size key="shadowOffset" width="0.0" height="0.0"/>
-                </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Designed by Jennifer Kim" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="22">
-                    <rect key="frame" x="22" y="351" width="182" height="18"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
+                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="12"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                     <size key="shadowOffset" width="0.0" height="0.0"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Visit 72fest.com for more information" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="34">
-                    <rect key="frame" x="6" y="254" width="306" height="45"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="18"/>
+                    <rect key="frame" x="7" y="5" width="306" height="45"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="18"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                     <size key="shadowOffset" width="0.0" height="0.0"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="35">
-                    <rect key="frame" x="77" y="9" width="166" height="250"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                    <rect key="frame" x="88" y="50" width="145" height="219"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                     <state key="normal" backgroundImage="72FestBanner.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
                         <action selector="bannerPressed:" destination="-1" eventType="touchUpInside" id="36"/>
+                    </connections>
+                </button>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="2014 Sponsors" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" id="cwf-lK-Uxy">
+                    <rect key="frame" x="6" y="285" width="306" height="45"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="22"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                    <size key="shadowOffset" width="0.0" height="0.0"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="mwa-1D-E5M">
+                    <rect key="frame" x="25" y="332" width="118" height="33"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="sponsorWeGetMusic.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="sponsor1BtnPressed:" destination="-1" eventType="touchUpInside" id="tta-wy-6fP"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="u5L-yl-dDu">
+                    <rect key="frame" x="171" y="333" width="136" height="25"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="sponsorRedGiant.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="sponsor2BtnPressed:" destination="-1" eventType="touchUpInside" id="r1u-Bg-8En"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="jCb-Oe-8ZM">
+                    <rect key="frame" x="105" y="374" width="134" height="27"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                    <state key="normal" image="sponsorMusicSupervisor.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="sponsor3BtnPressed:" destination="-1" eventType="touchUpInside" id="uEV-ZZ-aeN"/>
                     </connections>
                 </button>
             </subviews>
@@ -89,5 +100,8 @@
     <resources>
         <image name="72FestBanner.png" width="371" height="529"/>
         <image name="bkg.png" width="320" height="480"/>
+        <image name="sponsorMusicSupervisor.png" width="200" height="41"/>
+        <image name="sponsorRedGiant.png" width="200" height="38"/>
+        <image name="sponsorWeGetMusic.png" width="200" height="65"/>
     </resources>
 </document>

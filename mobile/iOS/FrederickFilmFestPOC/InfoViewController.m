@@ -39,17 +39,17 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    if ([self respondsToSelector:@selector(edgesForExtendedLayout)])
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    
     UIImageView *iv =
     [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"filmFestLogo.png"]];
     [[self navigationItem] setTitleView:iv];
     
-    if (SYSTEM_IS_IOS7) {
-        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-        [self.navigationController.navigationBar performSelector:@selector(setBarTintColor:) withObject:THEME_CLR];
-    } else {
-        self.navigationController.navigationBar.tintColor = THEME_CLR;
-    }
-    
+
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.barTintColor = THEME_CLR;
+
     //set background
     CGRect frame = self.view.frame;
     UIView *v = [[UIView alloc] initWithFrame:frame];
@@ -105,8 +105,16 @@
 }
 
 #pragma mark - IB Actions
-- (IBAction)dismissPressed:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+- (IBAction)sponsor1BtnPressed:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:SPONSOR_1_URL_STR]];
+}
+
+- (IBAction)sponsor2BtnPressed:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:SPONSOR_2_URL_STR]];
+}
+
+- (IBAction)sponsor3BtnPressed:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:SPONSOR_3_URL_STR]];
 }
 
 @end

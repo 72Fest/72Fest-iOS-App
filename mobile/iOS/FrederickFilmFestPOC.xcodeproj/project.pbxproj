@@ -76,6 +76,9 @@
 		07643E2719C21CD400D6F9E2 /* NewsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643E2519C21CD400D6F9E2 /* NewsViewController.m */; };
 		07643E2819C21CD400D6F9E2 /* NewsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07643E2619C21CD400D6F9E2 /* NewsViewController.xib */; };
 		07643E2B19C21E3D00D6F9E2 /* GenericWebContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07643E2A19C21E3D00D6F9E2 /* GenericWebContentViewController.m */; };
+		07643E2F19C2CB4300D6F9E2 /* sponsorMusicSupervisor.png in Resources */ = {isa = PBXBuildFile; fileRef = 07643E2C19C2CB4300D6F9E2 /* sponsorMusicSupervisor.png */; };
+		07643E3019C2CB4300D6F9E2 /* sponsorRedGiant.png in Resources */ = {isa = PBXBuildFile; fileRef = 07643E2D19C2CB4300D6F9E2 /* sponsorRedGiant.png */; };
+		07643E3119C2CB4300D6F9E2 /* sponsorWeGetMusic.png in Resources */ = {isa = PBXBuildFile; fileRef = 07643E2E19C2CB4300D6F9E2 /* sponsorWeGetMusic.png */; };
 		076B7ACB16130A0000DF6BA5 /* 72FestBanner.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7AC916130A0000DF6BA5 /* 72FestBanner.png */; };
 		076B7ACC16130A0000DF6BA5 /* 72FestBanner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */; };
 		076DB9E317E617AF00D0E1F6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076DB9E217E617AF00D0E1F6 /* MessageUI.framework */; };
@@ -249,6 +252,9 @@
 		07643E2619C21CD400D6F9E2 /* NewsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewsViewController.xib; sourceTree = "<group>"; };
 		07643E2919C21E3D00D6F9E2 /* GenericWebContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericWebContentViewController.h; sourceTree = "<group>"; };
 		07643E2A19C21E3D00D6F9E2 /* GenericWebContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenericWebContentViewController.m; sourceTree = "<group>"; };
+		07643E2C19C2CB4300D6F9E2 /* sponsorMusicSupervisor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sponsorMusicSupervisor.png; sourceTree = "<group>"; };
+		07643E2D19C2CB4300D6F9E2 /* sponsorRedGiant.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sponsorRedGiant.png; sourceTree = "<group>"; };
+		07643E2E19C2CB4300D6F9E2 /* sponsorWeGetMusic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sponsorWeGetMusic.png; sourceTree = "<group>"; };
 		076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		076B7AC916130A0000DF6BA5 /* 72FestBanner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 72FestBanner.png; sourceTree = "<group>"; };
 		076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "72FestBanner@2x.png"; sourceTree = "<group>"; };
@@ -490,6 +496,9 @@
 		8A430ACD142ABA28007B72F5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				07643E2C19C2CB4300D6F9E2 /* sponsorMusicSupervisor.png */,
+				07643E2D19C2CB4300D6F9E2 /* sponsorRedGiant.png */,
+				07643E2E19C2CB4300D6F9E2 /* sponsorWeGetMusic.png */,
 				07643E1A19C163D200D6F9E2 /* RubikMonoOne-Regular.ttf */,
 				07643E1719C136D700D6F9E2 /* teamDetailsTemplate.html */,
 				07643E0319BECFCE00D6F9E2 /* mainMenuBg.png */,
@@ -922,14 +931,17 @@
 				0740DCD8160BEFED00A7CDAB /* digit6@2x.png in Resources */,
 				0740DCD9160BEFED00A7CDAB /* digit7.png in Resources */,
 				0740DCDA160BEFED00A7CDAB /* digit7@2x.png in Resources */,
+				07643E3019C2CB4300D6F9E2 /* sponsorRedGiant.png in Resources */,
 				0740DCDB160BEFED00A7CDAB /* digit8.png in Resources */,
 				0740DCDC160BEFED00A7CDAB /* digit8@2x.png in Resources */,
 				0740DCDD160BEFED00A7CDAB /* digit9.png in Resources */,
 				07643DFF19BEA9A200D6F9E2 /* hamburgerIcon@2x.png in Resources */,
 				0740DCDE160BEFED00A7CDAB /* digit9@2x.png in Resources */,
 				07643E1019C050D000D6F9E2 /* TeamsViewController.xib in Resources */,
+				07643E3119C2CB4300D6F9E2 /* sponsorWeGetMusic.png in Resources */,
 				0740DCE2160BFA2400A7CDAB /* digitsBackground.png in Resources */,
 				0740DCE3160BFA2400A7CDAB /* digitsBackground@2x.png in Resources */,
+				07643E2F19C2CB4300D6F9E2 /* sponsorMusicSupervisor.png in Resources */,
 				0740DCED160C040D00A7CDAB /* btnCamera.png in Resources */,
 				0740DCEF160C040D00A7CDAB /* btnChoose.png in Resources */,
 				0740DCF0160C040D00A7CDAB /* btnGallery.png in Resources */,
