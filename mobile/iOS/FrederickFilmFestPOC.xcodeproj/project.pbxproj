@@ -79,6 +79,7 @@
 		07643E2F19C2CB4300D6F9E2 /* sponsorMusicSupervisor.png in Resources */ = {isa = PBXBuildFile; fileRef = 07643E2C19C2CB4300D6F9E2 /* sponsorMusicSupervisor.png */; };
 		07643E3019C2CB4300D6F9E2 /* sponsorRedGiant.png in Resources */ = {isa = PBXBuildFile; fileRef = 07643E2D19C2CB4300D6F9E2 /* sponsorRedGiant.png */; };
 		07643E3119C2CB4300D6F9E2 /* sponsorWeGetMusic.png in Resources */ = {isa = PBXBuildFile; fileRef = 07643E2E19C2CB4300D6F9E2 /* sponsorWeGetMusic.png */; };
+		07643E3319C2E78800D6F9E2 /* icon80.png in Resources */ = {isa = PBXBuildFile; fileRef = 07643E3219C2E78800D6F9E2 /* icon80.png */; };
 		076B7ACB16130A0000DF6BA5 /* 72FestBanner.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7AC916130A0000DF6BA5 /* 72FestBanner.png */; };
 		076B7ACC16130A0000DF6BA5 /* 72FestBanner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */; };
 		076DB9E317E617AF00D0E1F6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 076DB9E217E617AF00D0E1F6 /* MessageUI.framework */; };
@@ -255,6 +256,7 @@
 		07643E2C19C2CB4300D6F9E2 /* sponsorMusicSupervisor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sponsorMusicSupervisor.png; sourceTree = "<group>"; };
 		07643E2D19C2CB4300D6F9E2 /* sponsorRedGiant.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sponsorRedGiant.png; sourceTree = "<group>"; };
 		07643E2E19C2CB4300D6F9E2 /* sponsorWeGetMusic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sponsorWeGetMusic.png; sourceTree = "<group>"; };
+		07643E3219C2E78800D6F9E2 /* icon80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon80.png; sourceTree = "<group>"; };
 		076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		076B7AC916130A0000DF6BA5 /* 72FestBanner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 72FestBanner.png; sourceTree = "<group>"; };
 		076B7ACA16130A0000DF6BA5 /* 72FestBanner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "72FestBanner@2x.png"; sourceTree = "<group>"; };
@@ -577,6 +579,7 @@
 		8AC0A2EC141D773800F0E4B0 = {
 			isa = PBXGroup;
 			children = (
+				07643E3219C2E78800D6F9E2 /* icon80.png */,
 				076DB9E217E617AF00D0E1F6 /* MessageUI.framework */,
 				07443BF717E5E6C500D77C76 /* Social.framework */,
 				0703D11616131508004870A5 /* Default.png */,
@@ -913,6 +916,7 @@
 				8A25800B15A097AD00E9BBB6 /* LoaderBoxViewController.xib in Resources */,
 				07643E0519BECFCE00D6F9E2 /* mainMenuBg.png in Resources */,
 				07643DFB19BE98AF00D6F9E2 /* MenuViewController.xib in Resources */,
+				07643E3319C2E78800D6F9E2 /* icon80.png in Resources */,
 				8A53BBEC15A2CC080007998A /* Icon-Small.png in Resources */,
 				8A53BBED15A2CC080007998A /* Icon-Small@2x.png in Resources */,
 				0740DCBC160BE08F00A7CDAB /* digit0.png in Resources */,
@@ -1081,7 +1085,7 @@
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "72 Fest";
 				PROVISIONING_PROFILE = "F022A5AF-B781-44CE-ADA8-D8B0C1B6E2B7";
@@ -1100,7 +1104,7 @@
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PRODUCT_NAME = "72 Fest";
 				PROVISIONING_PROFILE = "F022A5AF-B781-44CE-ADA8-D8B0C1B6E2B7";
@@ -1124,7 +1128,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "FrederickFilmFestPOC/FrederickFilmFestPOC-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = 72Fest;
 				PROVISIONING_PROFILE = "";
@@ -1149,7 +1153,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "FrederickFilmFestPOC/FrederickFilmFestPOC-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = 72Fest;
 				PROVISIONING_PROFILE = "96B00225-6E4B-47B8-9BF5-F6EA6CE9D4CE";
