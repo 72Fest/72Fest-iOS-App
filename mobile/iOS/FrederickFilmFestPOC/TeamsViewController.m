@@ -35,9 +35,8 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    if ([self respondsToSelector:@selector(edgesForExtendedLayout)])
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-
+    //self.edgesForExtendedLayout = UIRectEdgeNone;
+    
     UIImageView *iv =
         [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"filmFestLogo.png"]];
     [[self navigationItem] setTitleView:iv];
@@ -119,6 +118,30 @@
     [vc setTeamData:teamData];
     
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        //we want to get the current year to incorporate into the title
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"yyyy"];
+        NSString *yearString = [formatter stringFromDate:[NSDate date]];
+        
+        UIColor *bgColor = [UIColor colorWithRed:128.0/255.0 green:128.0/255.0 blue:128.0/255.0 alpha:.9];
+        UILabel *label = [[UILabel alloc] init];
+        [label setText:[NSString stringWithFormat:@"%@ Teams List", yearString]];
+        [label setTextAlignment:NSTextAlignmentCenter];
+        [label setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:22.0]];
+        
+        [label setBackgroundColor:bgColor];
+        return label;
+    }
+    
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 30.0;
 }
 
 #pragma mark - IB actions
