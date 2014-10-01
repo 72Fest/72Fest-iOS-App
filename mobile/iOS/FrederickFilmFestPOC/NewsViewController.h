@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "GenericWebContentViewController.h"
 
-@interface NewsViewController : GenericWebContentViewController
+@interface NewsViewController : GenericWebContentViewController <UIWebViewDelegate>
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 @end

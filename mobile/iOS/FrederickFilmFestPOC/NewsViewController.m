@@ -26,7 +26,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    self.webView.delegate = self;
+}
+
+#pragma mark - web view delegate methods
+- (BOOL)webView:(UIWebView *)wv shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    
+    if (navigationType == UIWebViewNavigationTypeLinkClicked) {
+        [[UIApplication sharedApplication] openURL:[request URL]];
+        
+        return NO;
+    }
+    
+    return YES;
 }
 
 - (void)didReceiveMemoryWarning
