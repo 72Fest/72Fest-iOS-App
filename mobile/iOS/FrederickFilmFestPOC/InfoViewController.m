@@ -39,8 +39,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    if ([self respondsToSelector:@selector(edgesForExtendedLayout)])
-        self.edgesForExtendedLayout = UIRectEdgeNone;
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     
     UIImageView *iv =
     [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"filmFestLogo.png"]];
@@ -61,6 +60,11 @@
     UIBarButtonItem *menuBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"hamburgerIcon.png"] style:UIBarButtonItemStylePlain target:self action:@selector(btnPressed:)];
     self.navigationItem.leftBarButtonItem = menuBtn;
     
+    //make content bg transparent and add to scroll pane
+    [self.contentView setBackgroundColor:[UIColor clearColor]];
+    [self.scrollView addSubview:self.contentView];
+    
+    self.scrollView.contentSize = self.contentView.frame.size;
 }
 
 - (void)viewDidUnload
@@ -115,6 +119,34 @@
 
 - (IBAction)sponsor3BtnPressed:(id)sender {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:SPONSOR_3_URL_STR]];
+}
+
+
+- (IBAction)sponsor4BtnPressed:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:SPONSOR_4_URL_STR]];
+}
+
+
+- (IBAction)sponsor5BtnPressed:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:SPONSOR_5_URL_STR]];
+}
+
+
+- (IBAction)sponsor6BtnPressed:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:SPONSOR_6_URL_STR]];
+}
+
+
+- (IBAction)sponsor7BtnPressed:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:SPONSOR_7_URL_STR]];
+}
+
+- (IBAction)sponsor8BtnPressed:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:SPONSOR_8_URL_STR]];
+}
+
+- (IBAction)sponsor9BtnPressed:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:SPONSOR_9_URL_STR]];
 }
 
 @end

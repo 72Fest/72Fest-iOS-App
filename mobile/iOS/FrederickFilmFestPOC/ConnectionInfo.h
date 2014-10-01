@@ -33,5 +33,12 @@
 #define SPONSOR_1_URL_STR @"http://www.wegetmusic.com"
 #define SPONSOR_2_URL_STR @"http://www.redgiant.com"
 #define SPONSOR_3_URL_STR @"http://www.wegetmusic.com"
+#define SPONSOR_4_URL_STR @"http://www.cafe611.com"
+#define SPONSOR_5_URL_STR @"http://www.area-31.com"
+#define SPONSOR_6_URL_STR @"http://www.mbsdirect.com"
+#define SPONSOR_7_URL_STR @"http://www.wonderbook.com"
+#define SPONSOR_8_URL_STR @"http://www.archaimedia.com"
+#define SPONSOR_9_URL_STR @"http://www.frederick.edu"
+
 
 #endif

@@ -22,5 +22,7 @@
 - (IBAction)bannerPressed:(id)sender;
 
 @property (strong, nonatomic) IBOutlet UIImageView *siteBannerBtn;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) IBOutlet UIView *contentView;
 
 @end

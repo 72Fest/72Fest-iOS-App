@@ -87,6 +87,12 @@
 		0770B12D17E916AE009C6ED5 /* PhotoDownloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0770B12C17E916AE009C6ED5 /* PhotoDownloadOperation.m */; };
 		077286A01603EB3300D82E29 /* CountDownView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0772869F1603EB3300D82E29 /* CountDownView.m */; };
 		077286A31604372F00D82E29 /* DigitCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 077286A21604372F00D82E29 /* DigitCountView.m */; };
+		07AFDF7319DBA19000F67B0F /* sponsorArchai.png in Resources */ = {isa = PBXBuildFile; fileRef = 07AFDF6D19DBA19000F67B0F /* sponsorArchai.png */; };
+		07AFDF7419DBA19000F67B0F /* sponsorArea31.png in Resources */ = {isa = PBXBuildFile; fileRef = 07AFDF6E19DBA19000F67B0F /* sponsorArea31.png */; };
+		07AFDF7519DBA19000F67B0F /* sponsorCafe611.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 07AFDF6F19DBA19000F67B0F /* sponsorCafe611.jpg */; };
+		07AFDF7619DBA19000F67B0F /* sponsorFCC.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 07AFDF7019DBA19000F67B0F /* sponsorFCC.jpg */; };
+		07AFDF7719DBA19000F67B0F /* sponsorMBS.png in Resources */ = {isa = PBXBuildFile; fileRef = 07AFDF7119DBA19000F67B0F /* sponsorMBS.png */; };
+		07AFDF7819DBA19000F67B0F /* sponsorWonderBooks.png in Resources */ = {isa = PBXBuildFile; fileRef = 07AFDF7219DBA19000F67B0F /* sponsorWonderBooks.png */; };
 		07EFDC921614517E00F54BE4 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 076B7AC31612735F00DF6BA5 /* Default-568h@2x.png */; };
 		07FF017E17E5158800C8BC1C /* VotingOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 07FF017D17E5158800C8BC1C /* VotingOperation.m */; };
 		8A257FF315A06AB800E9BBB6 /* 01-refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A257FF115A06AB800E9BBB6 /* 01-refresh.png */; };
@@ -271,6 +277,12 @@
 		077286A11604372F00D82E29 /* DigitCountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DigitCountView.h; sourceTree = "<group>"; };
 		077286A21604372F00D82E29 /* DigitCountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DigitCountView.m; sourceTree = "<group>"; };
 		078CB36C17E7D05F009DBFF6 /* IOSCompatability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOSCompatability.h; sourceTree = "<group>"; };
+		07AFDF6D19DBA19000F67B0F /* sponsorArchai.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sponsorArchai.png; sourceTree = "<group>"; };
+		07AFDF6E19DBA19000F67B0F /* sponsorArea31.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sponsorArea31.png; sourceTree = "<group>"; };
+		07AFDF6F19DBA19000F67B0F /* sponsorCafe611.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sponsorCafe611.jpg; sourceTree = "<group>"; };
+		07AFDF7019DBA19000F67B0F /* sponsorFCC.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sponsorFCC.jpg; sourceTree = "<group>"; };
+		07AFDF7119DBA19000F67B0F /* sponsorMBS.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sponsorMBS.png; sourceTree = "<group>"; };
+		07AFDF7219DBA19000F67B0F /* sponsorWonderBooks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sponsorWonderBooks.png; sourceTree = "<group>"; };
 		07FF017C17E5158800C8BC1C /* VotingOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VotingOperation.h; sourceTree = "<group>"; };
 		07FF017D17E5158800C8BC1C /* VotingOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VotingOperation.m; sourceTree = "<group>"; };
 		07FF017F17E517C500C8BC1C /* VotingOperationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VotingOperationDelegate.h; sourceTree = "<group>"; };
@@ -498,6 +510,12 @@
 		8A430ACD142ABA28007B72F5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				07AFDF6D19DBA19000F67B0F /* sponsorArchai.png */,
+				07AFDF6E19DBA19000F67B0F /* sponsorArea31.png */,
+				07AFDF6F19DBA19000F67B0F /* sponsorCafe611.jpg */,
+				07AFDF7019DBA19000F67B0F /* sponsorFCC.jpg */,
+				07AFDF7119DBA19000F67B0F /* sponsorMBS.png */,
+				07AFDF7219DBA19000F67B0F /* sponsorWonderBooks.png */,
 				07643E2C19C2CB4300D6F9E2 /* sponsorMusicSupervisor.png */,
 				07643E2D19C2CB4300D6F9E2 /* sponsorRedGiant.png */,
 				07643E2E19C2CB4300D6F9E2 /* sponsorWeGetMusic.png */,
@@ -927,6 +945,7 @@
 				0740DCC1160BE08F00A7CDAB /* digit2@2x.png in Resources */,
 				0740DCD1160BEFED00A7CDAB /* digit3.png in Resources */,
 				0740DCD2160BEFED00A7CDAB /* digit3@2x.png in Resources */,
+				07AFDF7619DBA19000F67B0F /* sponsorFCC.jpg in Resources */,
 				0740DCD3160BEFED00A7CDAB /* digit4.png in Resources */,
 				0740DCD4160BEFED00A7CDAB /* digit4@2x.png in Resources */,
 				0740DCD5160BEFED00A7CDAB /* digit5.png in Resources */,
@@ -951,6 +970,7 @@
 				0740DCF0160C040D00A7CDAB /* btnGallery.png in Resources */,
 				0740DCF1160C040D00A7CDAB /* btnGallery@2x.png in Resources */,
 				0740DCF2160C040D00A7CDAB /* btnUpload.png in Resources */,
+				07AFDF7819DBA19000F67B0F /* sponsorWonderBooks.png in Resources */,
 				07643DFE19BEA9A200D6F9E2 /* hamburgerIcon.png in Resources */,
 				0740DCF3160C040D00A7CDAB /* btnUpload@2x.png in Resources */,
 				0740DCF4160C040D00A7CDAB /* btnChoose@2x.png in Resources */,
@@ -958,6 +978,7 @@
 				0740DCF8160C141700A7CDAB /* filmFestLogo.png in Resources */,
 				07643E1819C136D700D6F9E2 /* teamDetailsTemplate.html in Resources */,
 				0740DCF9160C141700A7CDAB /* filmFestLogo@2x.png in Resources */,
+				07AFDF7319DBA19000F67B0F /* sponsorArchai.png in Resources */,
 				0740DCFC160C1BF400A7CDAB /* bkg.png in Resources */,
 				07643E2819C21CD400D6F9E2 /* NewsViewController.xib in Resources */,
 				0740DCFD160C1BF400A7CDAB /* bkg@2x.png in Resources */,
@@ -965,15 +986,18 @@
 				076B7ACC16130A0000DF6BA5 /* 72FestBanner@2x.png in Resources */,
 				07643E1619C1238A00D6F9E2 /* TeamDetailsViewController.xib in Resources */,
 				0703D11516131500004870A5 /* Default@2x.png in Resources */,
+				07AFDF7719DBA19000F67B0F /* sponsorMBS.png in Resources */,
 				0703D11716131508004870A5 /* Default.png in Resources */,
 				07643E0619BECFCE00D6F9E2 /* mainMenuBg@2x.png in Resources */,
 				07EFDC921614517E00F54BE4 /* Default-568h@2x.png in Resources */,
+				07AFDF7419DBA19000F67B0F /* sponsorArea31.png in Resources */,
 				072176E2162245BD00A65C50 /* photoBacker.png in Resources */,
 				072176E3162245BD00A65C50 /* photoBacker@2x.png in Resources */,
 				072176E6162247D400A65C50 /* Archive.otf in Resources */,
 				8AC527CE17DB8AD700D970FE /* btnCameraSelectedState.png in Resources */,
 				8AC527CF17DB8AD700D970FE /* btnGallerySelectedState.png in Resources */,
 				0750DB5217E1273C0040A68E /* voteDownIcon.png in Resources */,
+				07AFDF7519DBA19000F67B0F /* sponsorCafe611.jpg in Resources */,
 				0750DB5317E1273C0040A68E /* voteDownIcon@2x.png in Resources */,
 				0750DB5417E1273C0040A68E /* voteUpIcon.png in Resources */,
 				0750DB5517E1273C0040A68E /* voteUpIcon@2x.png in Resources */,
