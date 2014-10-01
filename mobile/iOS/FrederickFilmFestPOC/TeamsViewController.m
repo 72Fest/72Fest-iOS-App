@@ -12,7 +12,10 @@
 #import "TeamDetailsViewController.h"
 #import "ConnectionInfo.h"
 
-#define CELL_SELECTION_CLR [UIColor colorWithRed:144.0/255.0 green:188.0/255.0 blue:195.0/255.0 alpha:1.0]
+#define CELL_SELECTION_CLR [UIColor colorWithRed:100.0/255.0 green:155.0/255.0 blue:164.0/255.0 alpha:1.0]
+
+#define CELL_HEADER_CLR [UIColor colorWithRed:144.0/255.0 green:188.0/255.0 blue:195.0/255.0 alpha:0.9]
+
 
 @interface TeamsViewController ()
 - (void)fetchTeamsList;
@@ -93,6 +96,9 @@
     
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:teamPlainCellIdentifier];
+
+        [cell.textLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:18.0]];
+        
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
         //Add background color to selected state of cell
@@ -127,11 +133,12 @@
         [formatter setDateFormat:@"yyyy"];
         NSString *yearString = [formatter stringFromDate:[NSDate date]];
         
-        UIColor *bgColor = [UIColor colorWithRed:128.0/255.0 green:128.0/255.0 blue:128.0/255.0 alpha:.9];
+        UIColor *bgColor = CELL_HEADER_CLR;
         UILabel *label = [[UILabel alloc] init];
         [label setText:[NSString stringWithFormat:@"%@ Teams List", yearString]];
         [label setTextAlignment:NSTextAlignmentCenter];
-        [label setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:22.0]];
+        [label setTextColor:[UIColor whiteColor]];
+        [label setFont:[UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:22.0]];
         
         [label setBackgroundColor:bgColor];
         return label;
