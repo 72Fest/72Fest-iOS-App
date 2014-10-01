@@ -26,7 +26,7 @@
 
 //Other links
 #define EMAIL_URL_STR @"http://www.72fest.com/about/contact/"
-#define DESIGN_URL_STR @"http://www.jbokim.com"
+#define DESIGN_URL_STR @"http://goodloebyron.tumblr.com"
 #define MAIN_URL_STR @"http://www.72fest.com"
 #define CONTACT_URL_STR @"http://www.72fest.com/about/contact/"
 #define NEWS_URL_STR @"http://api.phoshow.me:3000/news"

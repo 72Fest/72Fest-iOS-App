@@ -109,6 +109,10 @@
 }
 
 #pragma mark - IB Actions
+- (IBAction)artistBtnPressed:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:DESIGN_URL_STR]];
+}
+
 - (IBAction)sponsor1BtnPressed:(id)sender {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:SPONSOR_1_URL_STR]];
 }
