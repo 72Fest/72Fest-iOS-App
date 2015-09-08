@@ -30,6 +30,7 @@
 #define MAIN_URL_STR @"http://www.72fest.com"
 #define CONTACT_URL_STR @"http://www.72fest.com/about/contact/"
 #define NEWS_URL_STR @"http://api.phoshow.me:3000/news"
+#define SPONSORS_URL_STR @"http://api.phoshow.me:3000/sponsors"
 #define SPONSOR_1_URL_STR @"http://www.wegetmusic.com"
 #define SPONSOR_2_URL_STR @"http://www.redgiant.com"
 #define SPONSOR_3_URL_STR @"http://www.wegetmusic.com"
