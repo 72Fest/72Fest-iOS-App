@@ -7,11 +7,11 @@
 //
 
 #import "MenuViewController.h"
-#import "InfoViewController.h"
 #import "PhotoTabBarViewController.h"
 #import "TeamsViewController.h"
 #import "ContactViewController.h"
 #import "NewsViewController.h"
+#import "SponsorsViewController.h"
 #import "TWTSideMenuViewController.h"
 #import "CountDownView.h"
 #import "ConnectionInfo.h"
@@ -64,9 +64,10 @@
 - (IBAction)infoBtnPressed:(id)sender {
     
     if (self.curMenuItem != MENU_ITEM_INFO) {
-        InfoViewController *infoViewController = [[InfoViewController alloc] initWithNibName:nil bundle:nil];
-        UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:infoViewController];
-     
+        SponsorsViewController *sponsorsViewController =
+        [[SponsorsViewController alloc] initWithURL:[NSURL URLWithString:SPONSORS_URL_STR] andLoadingCaption:@"Loading sponsors ..."];
+        UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:sponsorsViewController];
+
         self.curMenuItem = MENU_ITEM_INFO;
         [self.sideMenuViewController setMainViewController:controller animated:YES closeMenu:YES];
     } else {
