@@ -64,7 +64,7 @@
                     </button>
                 </subviews>
             </tableViewCellContentView>
-            <color key="backgroundColor" red="0.25882352939999997" green="0.57254901960000004" blue="0.61960784310000006" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.8784313725490196" green="0.87450980392156863" blue="0.83921568627450982" alpha="1" colorSpace="calibratedRGB"/>
             <connections>
                 <outlet property="dataItem0" destination="16" id="26"/>
                 <outlet property="dataItem1" destination="15" id="27"/>
