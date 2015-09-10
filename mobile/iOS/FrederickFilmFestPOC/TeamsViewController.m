@@ -12,9 +12,9 @@
 #import "TeamDetailsViewController.h"
 #import "ConnectionInfo.h"
 
-#define CELL_SELECTION_CLR [UIColor colorWithRed:100.0/255.0 green:155.0/255.0 blue:164.0/255.0 alpha:1.0]
+#define CELL_SELECTION_CLR [UIColor colorWithRed:176.0/255.0 green:183.0/255.0 blue:229.0/255.0 alpha:9.0]
 
-#define CELL_HEADER_CLR [UIColor colorWithRed:144.0/255.0 green:188.0/255.0 blue:195.0/255.0 alpha:0.9]
+#define CELL_HEADER_CLR [UIColor colorWithRed:97.0/255.0 green:103.0/255.0 blue:145.0/255.0 alpha:0.9]
 
 
 @interface TeamsViewController ()
