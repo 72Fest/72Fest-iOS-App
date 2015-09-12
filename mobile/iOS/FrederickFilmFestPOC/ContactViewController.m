@@ -14,6 +14,7 @@
 @end
 
 @implementation ContactViewController
+@dynamic webView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

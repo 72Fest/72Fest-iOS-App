@@ -11,6 +11,5 @@
 
 @interface ContactViewController : GenericWebContentViewController <UIWebViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIWebView *webView;
 
 @end
