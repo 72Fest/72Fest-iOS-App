@@ -11,7 +11,7 @@
 #import "TWTSideMenuViewController.h"
 
 #define THEME_CLR [UIColor colorWithRed:102.0/255.0 green:142.0/255.0 blue:91.0/255.0 alpha:1.0]
-#define THEME_BG_CLR [UIColor colorWithRed:66.0/255.0 green:146.0/255.0 blue:158.0/255.0 alpha:1.0]
+#define THEME_BG_CLR [UIColor colorWithRed:96.0/255.0 green:103.0/255.0 blue:144.0/255.0 alpha:1.0]
 
 @interface FrederickFilmFestPOCAppDelegate : NSObject <UIApplicationDelegate> {
     
