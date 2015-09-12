@@ -1129,7 +1129,7 @@
 				PROVISIONING_PROFILE = "F022A5AF-B781-44CE-ADA8-D8B0C1B6E2B7";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;
 		};
@@ -1148,7 +1148,7 @@
 				PROVISIONING_PROFILE = "F022A5AF-B781-44CE-ADA8-D8B0C1B6E2B7";
 				"PROVISIONING_PROFILE[sdk=*]" = "";
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Release;
 		};
@@ -1174,7 +1174,7 @@
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = 1;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7s armv7 arm64";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1186,9 +1186,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution: Lonny Gomes (388ZK63Z83)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Lonny Gomes (388ZK63Z83)";
+				CODE_SIGN_IDENTITY = "iOS Development: Lonny Gomes (X534P2CWMA)";
+				"CODE_SIGN_IDENTITY[sdk=*]" = "iOS Development: Lonny Gomes (X534P2CWMA)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iOS Development: Lonny Gomes (X534P2CWMA)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FrederickFilmFestPOC/FrederickFilmFestPOC-Prefix.pch";
@@ -1198,12 +1198,12 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = 72Fest;
-				PROVISIONING_PROFILE = "96B00225-6E4B-47B8-9BF5-F6EA6CE9D4CE";
-				"PROVISIONING_PROFILE[sdk=*]" = "96B00225-6E4B-47B8-9BF5-F6EA6CE9D4CE";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "96B00225-6E4B-47B8-9BF5-F6EA6CE9D4CE";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=*]" = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7s armv7 arm64";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
