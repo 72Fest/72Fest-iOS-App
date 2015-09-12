@@ -50,6 +50,7 @@
 		0740DCFC160C1BF400A7CDAB /* bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0740DCFA160C1BF300A7CDAB /* bkg.png */; };
 		0740DCFD160C1BF400A7CDAB /* bkg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0740DCFB160C1BF300A7CDAB /* bkg@2x.png */; };
 		07443BF817E5E6C600D77C76 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07443BF717E5E6C500D77C76 /* Social.framework */; };
+		07444D151BA4982D004D5B89 /* Images-2.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07444D141BA4982D004D5B89 /* Images-2.xcassets */; };
 		07446FB817DEC31A006C3E3B /* VoteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07446FB717DEC31A006C3E3B /* VoteManager.m */; };
 		0750DB5217E1273C0040A68E /* voteDownIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0750DB4E17E1273C0040A68E /* voteDownIcon.png */; };
 		0750DB5317E1273C0040A68E /* voteDownIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0750DB4F17E1273C0040A68E /* voteDownIcon@2x.png */; };
@@ -224,6 +225,7 @@
 		0740DCFA160C1BF300A7CDAB /* bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bkg.png; sourceTree = "<group>"; };
 		0740DCFB160C1BF300A7CDAB /* bkg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bkg@2x.png"; sourceTree = "<group>"; };
 		07443BF717E5E6C500D77C76 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		07444D141BA4982D004D5B89 /* Images-2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Images-2.xcassets"; sourceTree = "<group>"; };
 		07446FB617DEC31A006C3E3B /* VoteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoteManager.h; sourceTree = "<group>"; };
 		07446FB717DEC31A006C3E3B /* VoteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoteManager.m; sourceTree = "<group>"; };
 		0750DB4E17E1273C0040A68E /* voteDownIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = voteDownIcon.png; sourceTree = "<group>"; };
@@ -660,6 +662,7 @@
 				8AC0A30D141D773800F0E4B0 /* MainWindow.xib */,
 				8A53BBE815A290C40007998A /* ConnectionInfo.h */,
 				8A430ACD142ABA28007B72F5 /* Resources */,
+				07444D141BA4982D004D5B89 /* Images-2.xcassets */,
 				8AC0A302141D773800F0E4B0 /* Supporting Files */,
 			);
 			path = FrederickFilmFestPOC;
@@ -939,6 +942,7 @@
 				8A25800515A0977000E9BBB6 /* loadingBox.png in Resources */,
 				8A25800615A0977000E9BBB6 /* loadingBox@2x.png in Resources */,
 				0761951417EAB6CF00ABFD11 /* icon120.png in Resources */,
+				07444D151BA4982D004D5B89 /* Images-2.xcassets in Resources */,
 				8A25800B15A097AD00E9BBB6 /* LoaderBoxViewController.xib in Resources */,
 				07643E0519BECFCE00D6F9E2 /* mainMenuBg.png in Resources */,
 				07643DFB19BE98AF00D6F9E2 /* MenuViewController.xib in Resources */,
@@ -1152,6 +1156,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1177,6 +1183,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution: Lonny Gomes (388ZK63Z83)";
